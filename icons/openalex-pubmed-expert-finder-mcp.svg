@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D0A26"/>
+      <stop offset="55%" stop-color="#1D1348"/>
+      <stop offset="100%" stop-color="#351149"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="46%" r="54%">
+      <stop offset="0%" stop-color="#EC4899" stop-opacity="0.34"/>
+      <stop offset="65%" stop-color="#22D3EE" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0D0A26" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F472B6" stop-opacity="0.78"/>
+      <stop offset="50%" stop-color="#22D3EE" stop-opacity="0.40"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0.78"/>
+    </linearGradient>
+    <linearGradient id="helixA" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F9A8D4"/>
+    </linearGradient>
+    <linearGradient id="helixB" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle geometric grid / ring depth -->
+  <g stroke="#F472B6" stroke-opacity="0.13" stroke-width="2" fill="none">
+    <circle cx="256" cy="244" r="196"/>
+    <ellipse cx="256" cy="244" rx="184" ry="84" transform="rotate(-35 256 244)"/>
+    <ellipse cx="256" cy="244" rx="184" ry="84" transform="rotate(35 256 244)"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- Central Iconography -->
+  <!-- DNA Base-Pair Rungs -->
+  <g stroke="#E2E8F0" stroke-width="11" stroke-linecap="round">
+    <line x1="202" y1="142" x2="310" y2="142"/>
+    <line x1="220" y1="190" x2="292" y2="190"/>
+    <line x1="220" y1="298" x2="292" y2="298"/>
+    <line x1="202" y1="346" x2="310" y2="346"/>
+  </g>
+
+  <!-- DNA Double Helix Strand A (Magenta) -->
+  <path d="M 184 96 C 184 176 328 210 328 244 C 328 278 184 312 184 392"
+        fill="none" stroke="url(#helixA)" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- DNA Double Helix Strand B (Cyan) -->
+  <path d="M 328 96 C 328 176 184 210 184 244 C 184 278 328 312 328 392"
+        fill="none" stroke="url(#helixB)" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- Clinical Research Network Nodes + Links -->
+  <g stroke="#22D3EE" stroke-opacity="0.70" stroke-width="9" stroke-linecap="round">
+    <line x1="112" y1="174" x2="210" y2="226"/>
+    <line x1="400" y1="174" x2="302" y2="226"/>
+    <line x1="112" y1="318" x2="210" y2="262"/>
+    <line x1="400" y1="318" x2="302" y2="262"/>
+  </g>
+  <g stroke="#0D0A26" stroke-width="8">
+    <circle cx="108" cy="174" r="26" fill="#22D3EE"/>
+    <circle cx="404" cy="174" r="26" fill="#F472B6"/>
+    <circle cx="108" cy="318" r="26" fill="#F472B6"/>
+    <circle cx="404" cy="318" r="26" fill="#22D3EE"/>
+  </g>
+  <circle cx="108" cy="174" r="9" fill="#ECFEFF"/>
+  <circle cx="404" cy="174" r="9" fill="#FDF2F8"/>
+  <circle cx="108" cy="318" r="9" fill="#FDF2F8"/>
+  <circle cx="404" cy="318" r="9" fill="#ECFEFF"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#0A071E" fill-opacity="0.86" stroke="#F472B6" stroke-opacity="0.70" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#FBCFE8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#FBCFE8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#FBCFE8" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071913"/>
+      <stop offset="55%" stop-color="#0F2E22"/>
+      <stop offset="100%" stop-color="#17422A"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="46%" r="54%">
+      <stop offset="0%" stop-color="#84CC16" stop-opacity="0.32"/>
+      <stop offset="65%" stop-color="#22C55E" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#071913" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A3E635" stop-opacity="0.78"/>
+      <stop offset="50%" stop-color="#34D399" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22C55E" stop-opacity="0.78"/>
+    </linearGradient>
+    <linearGradient id="limeEmerald" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#16A34A"/>
+      <stop offset="55%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#BEF264"/>
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67E8F9"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle geometric grid / ring depth -->
+  <g stroke="#A3E635" stroke-opacity="0.12" stroke-width="2" fill="none">
+    <circle cx="256" cy="244" r="196"/>
+    <circle cx="256" cy="244" r="144" stroke-dasharray="10 10"/>
+    <line x1="76" y1="244" x2="436" y2="244"/>
+    <line x1="256" y1="64" x2="256" y2="424"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- Central Iconography -->
+  <!-- Compliance Outer Ring -->
+  <circle cx="256" cy="244" r="168" fill="#0B2219" fill-opacity="0.80" stroke="url(#limeEmerald)" stroke-width="14"/>
+
+  <!-- Industrial Plant / Smokestacks -->
+  <rect x="134" y="138" width="34" height="114" rx="6" fill="#E2E8F0"/>
+  <rect x="188" y="156" width="34" height="96" rx="6" fill="#CBD5E1"/>
+  <!-- Sawtooth factory building -->
+  <path d="M 118 244 L 184 202 L 184 244 L 250 202 L 250 244 L 306 244 L 306 340 L 118 340 Z"
+        fill="#F8FAFC"/>
+  <!-- Factory windows -->
+  <rect x="142" y="276" width="32" height="32" rx="6" fill="#0F2E22"/>
+  <rect x="194" y="276" width="32" height="32" rx="6" fill="#0F2E22"/>
+  <rect x="246" y="276" width="32" height="32" rx="6" fill="#0F2E22"/>
+
+  <!-- Clean Water Droplet + Leaf Badge overlapping right -->
+  <path d="M 358 148 C 358 148 416 226 416 270 C 416 306 390 332 358 332 C 326 332 300 306 300 270 C 300 226 358 148 358 148 Z"
+        fill="url(#waterGrad)" stroke="#071913" stroke-width="12" stroke-linejoin="round"/>
+  <!-- Leaf vein inside droplet -->
+  <path d="M 358 214 L 358 302 M 358 268 L 382 246 M 358 282 L 336 260"
+        fill="none" stroke="#052E16" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#06140F" fill-opacity="0.86" stroke="#84CC16" stroke-opacity="0.70" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#D9F99D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#D9F99D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#D9F99D" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

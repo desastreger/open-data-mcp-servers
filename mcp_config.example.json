@@ -1,0 +1,64 @@
+{
+  "mcpServers": {
+    "sec-form-d-funding-leads": {
+      "url": "https://desastreger--sec-form-d-funding-leads.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "us-kyb-compliance-dossier": {
+      "url": "https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "federal-govcon-recompete-radar": {
+      "url": "https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "us-metro-building-trade-permits": {
+      "url": "https://desastreger--us-metro-building-trade-permits.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "cross-border-tariff-eu-trade-mcp": {
+      "url": "https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "us-healthcare-practice-owners": {
+      "url": "https://desastreger--us-healthcare-practice-owners.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "b2b-domain-mail-security-posture": {
+      "url": "https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "us-municipal-code-violation-distressed-leads": {
+      "url": "https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "epa-echo-industrial-facility-compliance": {
+      "url": "https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    },
+    "openalex-pubmed-expert-finder-mcp": {
+      "url": "https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    }
+  }
+}

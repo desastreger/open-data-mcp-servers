@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D1624"/>
+      <stop offset="55%" stop-color="#1B283E"/>
+      <stop offset="100%" stop-color="#302016"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="56%" cy="40%" r="52%">
+      <stop offset="0%" stop-color="#F97316" stop-opacity="0.34"/>
+      <stop offset="65%" stop-color="#EA580C" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#0D1624" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C" stop-opacity="0.78"/>
+      <stop offset="50%" stop-color="#94A3B8" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" gradientUnits="userSpaceOnUse" x1="90" y1="392" x2="420" y2="96">
+      <stop offset="0%" stop-color="#EA580C"/>
+      <stop offset="55%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#FDBA74"/>
+    </linearGradient>
+    <linearGradient id="bldgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle geometric grid / ring depth -->
+  <g stroke="#FB923C" stroke-opacity="0.12" stroke-width="2" fill="none">
+    <line x1="60" y1="112" x2="452" y2="112"/>
+    <line x1="60" y1="184" x2="452" y2="184"/>
+    <line x1="60" y1="256" x2="452" y2="256"/>
+    <line x1="60" y1="328" x2="452" y2="328"/>
+    <line x1="60" y1="400" x2="452" y2="400"/>
+    <line x1="112" y1="60" x2="112" y2="452"/>
+    <line x1="184" y1="60" x2="184" y2="452"/>
+    <line x1="256" y1="60" x2="256" y2="452"/>
+    <line x1="328" y1="60" x2="328" y2="452"/>
+    <line x1="400" y1="60" x2="400" y2="452"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- Central Iconography -->
+  <!-- Solar / Sun energy badge top-left -->
+  <circle cx="130" cy="128" r="30" fill="url(#orangeGrad)"/>
+  <g stroke="#FED7AA" stroke-width="9" stroke-linecap="round">
+    <line x1="130" y1="76" x2="130" y2="86"/>
+    <line x1="130" y1="170" x2="130" y2="180"/>
+    <line x1="78" y1="128" x2="88" y2="128"/>
+    <line x1="172" y1="128" x2="182" y2="128"/>
+    <line x1="93" y1="91" x2="100" y2="98"/>
+    <line x1="160" y1="158" x2="167" y2="165"/>
+    <line x1="167" y1="91" x2="160" y2="98"/>
+    <line x1="93" y1="165" x2="100" y2="158"/>
+  </g>
+
+  <!-- Metro Skyline Buildings -->
+  <!-- Left building with pitched solar roof -->
+  <path d="M 96 238 L 154 196 L 212 238 L 212 392 L 96 392 Z" fill="url(#bldgGrad)"/>
+  <path d="M 114 236 L 154 208 L 194 236 Z" fill="#0F172A"/>
+  <rect x="120" y="264" width="24" height="24" rx="4" fill="#1E293B"/>
+  <rect x="164" y="264" width="24" height="24" rx="4" fill="#1E293B"/>
+  <rect x="120" y="308" width="24" height="24" rx="4" fill="#1E293B"/>
+  <rect x="164" y="308" width="24" height="24" rx="4" fill="#1E293B"/>
+  <rect x="142" y="352" width="24" height="40" rx="4" fill="#F97316"/>
+
+  <!-- Center taller tower -->
+  <rect x="208" y="176" width="96" height="216" rx="10" fill="#E2E8F0" stroke="#0D1624" stroke-width="8"/>
+  <rect x="228" y="204" width="22" height="26" rx="4" fill="#1E293B"/>
+  <rect x="262" y="204" width="22" height="26" rx="4" fill="#FB923C"/>
+  <rect x="228" y="248" width="22" height="26" rx="4" fill="#FB923C"/>
+  <rect x="262" y="248" width="22" height="26" rx="4" fill="#1E293B"/>
+  <rect x="228" y="292" width="22" height="26" rx="4" fill="#1E293B"/>
+  <rect x="262" y="292" width="22" height="26" rx="4" fill="#1E293B"/>
+
+  <!-- Construction Tower Crane (userSpaceOnUse gradient so axis-aligned strokes render cleanly) -->
+  <g stroke="url(#orangeGrad)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <line x1="364" y1="392" x2="364" y2="98"/>
+    <line x1="202" y1="128" x2="430" y2="128"/>
+    <line x1="364" y1="98" x2="246" y2="128" stroke-width="8"/>
+    <line x1="226" y1="128" x2="226" y2="174" stroke-width="9"/>
+  </g>
+  <!-- Crane hook & counterweight -->
+  <rect x="390" y="132" width="42" height="26" rx="6" fill="#EA580C"/>
+  <circle cx="226" cy="176" r="10" fill="#FED7AA"/>
+  <!-- Ground baseline -->
+  <line x1="78" y1="392" x2="424" y2="392" stroke="#FB923C" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#0B121E" fill-opacity="0.86" stroke="#FB923C" stroke-opacity="0.70" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#FED7AA" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#FED7AA" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#FED7AA" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

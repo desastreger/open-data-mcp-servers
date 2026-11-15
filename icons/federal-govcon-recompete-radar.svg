@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B111E"/>
+      <stop offset="55%" stop-color="#172235"/>
+      <stop offset="100%" stop-color="#271E12"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="46%" r="54%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.34"/>
+      <stop offset="65%" stop-color="#D97706" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#0B111E" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#94A3B8" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#D97706" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="55%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="sweepGrad" x1="20%" y1="10%" x2="90%" y2="90%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.46"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle geometric grid / ring depth -->
+  <g stroke="#FBBF24" stroke-opacity="0.16" stroke-width="2" fill="none">
+    <circle cx="256" cy="244" r="196"/>
+    <circle cx="256" cy="244" r="144"/>
+    <circle cx="256" cy="244" r="92"/>
+    <line x1="60" y1="244" x2="452" y2="244"/>
+    <line x1="256" y1="48" x2="256" y2="440"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- Central Iconography -->
+  <!-- Radar sweep wedge -->
+  <path d="M 256 244 L 256 64 A 180 180 0 0 1 426 184 Z" fill="url(#sweepGrad)"/>
+  <line x1="256" y1="244" x2="416" y2="188" stroke="#FDE68A" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Outer radar ring -->
+  <circle cx="256" cy="244" r="180" fill="none" stroke="url(#goldGrad)" stroke-width="12"/>
+
+  <!-- Radar target blip -->
+  <circle cx="364" cy="148" r="20" fill="#F59E0B" fill-opacity="0.35"/>
+  <circle cx="364" cy="148" r="11" fill="#FEF3C7"/>
+
+  <!-- Bold US Capitol Dome Silhouette -->
+  <!-- Cupola & lantern -->
+  <line x1="256" y1="88" x2="256" y2="112" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round"/>
+  <rect x="242" y="112" width="28" height="22" rx="6" fill="#F8FAFC"/>
+  <!-- Upper dome -->
+  <path d="M 192 214 C 192 162 218 134 256 134 C 294 134 320 162 320 214 Z" fill="#F8FAFC"/>
+  <!-- Dome ribs -->
+  <path d="M 256 136 L 256 214 M 224 146 C 218 170 218 194 218 214 M 288 146 C 294 170 294 194 294 214"
+        fill="none" stroke="#1E293B" stroke-width="6" stroke-linecap="round"/>
+  <!-- Drum / peristyle -->
+  <rect x="174" y="212" width="164" height="44" rx="6" fill="#E2E8F0"/>
+  <g stroke="#0F172A" stroke-width="7">
+    <line x1="196" y1="216" x2="196" y2="252"/>
+    <line x1="220" y1="216" x2="220" y2="252"/>
+    <line x1="244" y1="216" x2="244" y2="252"/>
+    <line x1="268" y1="216" x2="268" y2="252"/>
+    <line x1="292" y1="216" x2="292" y2="252"/>
+    <line x1="316" y1="216" x2="316" y2="252"/>
+  </g>
+  <!-- Base wings & pediment -->
+  <rect x="128" y="256" width="256" height="58" rx="8" fill="#F8FAFC"/>
+  <path d="M 110 314 L 402 314 L 402 338 L 110 338 Z" fill="url(#goldGrad)"/>
+  <path d="M 206 256 L 256 232 L 306 256 Z" fill="#FBBF24"/>
+  <!-- Contract badge check dot -->
+  <rect x="238" y="274" width="36" height="32" rx="6" fill="#0F172A"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#0A0F1A" fill-opacity="0.86" stroke="#F59E0B" stroke-opacity="0.70" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#FDE68A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#FDE68A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#FDE68A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

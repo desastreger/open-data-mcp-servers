@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0F2E"/>
+      <stop offset="55%" stop-color="#191D56"/>
+      <stop offset="100%" stop-color="#0E345E"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="46%" r="54%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.32"/>
+      <stop offset="60%" stop-color="#6366F1" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#0B0F2E" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#818CF8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#06B6D4" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="50%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    <linearGradient id="shieldInner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#162354"/>
+      <stop offset="100%" stop-color="#0C1436"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle geometric grid / ring depth -->
+  <g stroke="#38BDF8" stroke-opacity="0.13" stroke-width="2" fill="none">
+    <circle cx="256" cy="244" r="194"/>
+    <circle cx="256" cy="244" r="144" stroke-dasharray="12 10"/>
+    <polygon points="256,64 412,154 412,334 256,424 100,334 100,154" stroke-opacity="0.09"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- Central Iconography -->
+  <!-- Interconnected entity network links -->
+  <g stroke="#22D3EE" stroke-width="12" stroke-linecap="round">
+    <line x1="120" y1="138" x2="256" y2="232"/>
+    <line x1="392" y1="138" x2="256" y2="232"/>
+    <line x1="116" y1="354" x2="256" y2="262"/>
+    <line x1="396" y1="354" x2="256" y2="262"/>
+  </g>
+
+  <!-- Entity nodes -->
+  <g stroke="#0B0F2E" stroke-width="8">
+    <circle cx="116" cy="136" r="30" fill="#22D3EE"/>
+    <circle cx="396" cy="136" r="30" fill="#818CF8"/>
+    <circle cx="112" cy="356" r="28" fill="#818CF8"/>
+    <circle cx="400" cy="356" r="28" fill="#22D3EE"/>
+  </g>
+  <circle cx="116" cy="136" r="11" fill="#ECFEFF"/>
+  <circle cx="396" cy="136" r="11" fill="#EEF2FF"/>
+  <circle cx="112" cy="356" r="10" fill="#EEF2FF"/>
+  <circle cx="400" cy="356" r="10" fill="#ECFEFF"/>
+
+  <!-- Corporate shield -->
+  <path d="M 256 92 L 368 134 L 368 238 C 368 318 320 374 256 406 C 192 374 144 318 144 238 L 144 134 Z"
+        fill="url(#shieldInner)" stroke="url(#shieldGrad)" stroke-width="16" stroke-linejoin="round"/>
+  <!-- Inner shield accent line -->
+  <path d="M 256 122 L 340 154 L 340 236 C 340 298 304 344 256 372 C 208 344 172 298 172 236 L 172 154 Z"
+        fill="none" stroke="#38BDF8" stroke-opacity="0.28" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- Bold verified checkmark -->
+  <path d="M 206 246 L 242 282 L 314 202"
+        fill="none" stroke="#A5F3FC" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#080C24" fill-opacity="0.86" stroke="#22D3EE" stroke-opacity="0.70" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#A5F3FC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#A5F3FC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#A5F3FC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

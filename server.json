@@ -1,0 +1,401 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.desastreger/open-data-mcp-servers",
+  "title": "Open Data B2B & Compliance MCP Servers",
+  "description": "10 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/desastreger/open-data-mcp-servers",
+    "source": "github"
+  },
+  "servers": [
+    {
+      "id": "sec-form-d-funding-leads",
+      "name": "SEC Form D Scraper — Startup Funding & EIN ($1/1k)",
+      "description": "Real-time US startup venture & Reg D private placement rounds directly from SEC EDGAR Form D XML filings. Filters out pooled hedge/PE funds automatically and extracts CEO/founder names, phones, HQ addresses, EINs, and federal grant history.",
+      "storeUrl": "https://apify.com/desastreger/sec-form-d-funding-leads",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/sec-form-d-funding-leads.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--sec-form-d-funding-leads.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 1,
+        "standardRatePer1kUsd": 2.5,
+        "currency": "USD"
+      },
+      "dataSources": "SEC EDGAR Form D XML, SEC Submissions API, USASpending.gov",
+      "tools": [
+        {
+          "name": "search_startup_funding_leads",
+          "description": "Search real-time US startup venture & private placement funding rounds from official SEC EDGAR Form D filings. Returns decision-maker names/titles, phone, HQ address, exact amount raised, EIN, and optional federal grant history."
+        },
+        {
+          "name": "get_company_funding_dossier",
+          "description": "Look up a specific US private company by name or CIK across SEC EDGAR Form D filings, SEC entity metadata (EIN, SIC, prior rounds), and USASpending.gov federal contracts/grants."
+        },
+        {
+          "name": "summarize_funding_market",
+          "description": "Aggregate recent US private placement volume, median/total capital raised, top states, and top industries from recent SEC Form D operating startup filings."
+        }
+      ]
+    },
+    {
+      "id": "us-kyb-compliance-dossier",
+      "name": "US KYB & Compliance Scraper — SEC, LEI, FDA ($1/1k)",
+      "description": "One-call US Know-Your-Business (KYB) and vendor risk due-diligence dossier aggregating GLEIF Global LEI corporate hierarchy, SEC EDGAR filings, FDA Drug & Device recalls, CFPB consumer complaints, and USASpending federal contracts.",
+      "storeUrl": "https://apify.com/desastreger/us-kyb-compliance-dossier",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-kyb-compliance-dossier.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 1,
+        "standardRatePer1kUsd": 2.5,
+        "currency": "USD"
+      },
+      "dataSources": "GLEIF LEI, SEC EDGAR, FDA openFDA, CFPB, USASpending.gov",
+      "tools": [
+        {
+          "name": "screen_company_kyb",
+          "description": "Generate a deterministic Know-Your-Business (KYB) & vendor compliance dossier for a single company across 5 official public registries: GLEIF Global LEI, SEC EDGAR, FDA openFDA Recalls, CFPB Consumer Complaints, and USASpending Federal Contracts."
+        },
+        {
+          "name": "batch_screen_companies",
+          "description": "Batch-screen up to 20 companies across GLEIF LEI, SEC EDGAR, FDA openFDA Recalls, CFPB Consumer Complaints, and USASpending Federal Contracts, returning deterministic 0-100 KYB verification scores, verification statuses, and risk flags."
+        }
+      ]
+    },
+    {
+      "id": "federal-govcon-recompete-radar",
+      "name": "GovCon Recompete Contracts & Grants Scraper ($0.80/1k)",
+      "description": "Track expiring US federal contracts entering recompete windows (USASpending.gov) and live open/forecasted federal grants (Grants.gov) with incumbent vendor names, UEIs, obligated ceiling values, NAICS/PSC codes, and expiration countdowns.",
+      "storeUrl": "https://apify.com/desastreger/federal-govcon-recompete-radar",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/federal-govcon-recompete-radar.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "USASpending.gov, Grants.gov",
+      "tools": [
+        {
+          "name": "search_expiring_recompete_contracts",
+          "description": "Search active US federal contracts (USASpending.gov) expiring within the next N days to identify incumbent recompete capture opportunities, incumbent vendor names, obligated contract values, NAICS codes, and awarding agencies."
+        },
+        {
+          "name": "search_open_federal_grants",
+          "description": "Search live open (\"posted\") and upcoming (\"forecasted\") US federal grant & R&D funding opportunities directly from official Grants.gov APIs."
+        }
+      ]
+    },
+    {
+      "id": "us-metro-building-trade-permits",
+      "name": "Building Permits Scraper — Solar & Roofing ($0.50/1k)",
+      "description": "Harmonized US municipal building, solar PV, roofing, electrical, HVAC/mechanical, plumbing, and commercial remodel permits across 5 major metros (Los Angeles, Chicago, Austin, San Francisco, Seattle) with contractor names, valuations, and lead scores.",
+      "storeUrl": "https://apify.com/desastreger/us-metro-building-trade-permits",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-metro-building-trade-permits.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--us-metro-building-trade-permits.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.5,
+        "standardRatePer1kUsd": 1.5,
+        "currency": "USD"
+      },
+      "dataSources": "LA, Chicago, Austin, SF & Seattle Socrata Open Data APIs",
+      "tools": [
+        {
+          "name": "search_metro_building_permits",
+          "description": "Search live municipal building, solar PV, roofing, electrical, HVAC/mechanical, plumbing, new construction, and commercial remodel permits across major US metros (Chicago, Austin, Seattle, Los Angeles, San Francisco) with contractor names, valuations, and B2B lead scores."
+        },
+        {
+          "name": "list_supported_permit_metros",
+          "description": "List all supported US municipal building permit Socrata portals (Chicago, Austin, Seattle, Los Angeles, San Francisco), their live dataset URLs, ordering fields, and supported trade filters."
+        }
+      ]
+    },
+    {
+      "id": "cross-border-tariff-eu-trade-mcp",
+      "name": "US Tariff (HTS), EU VAT & TED Tenders Scraper ($0.80/1k)",
+      "description": "Cross-border customs & European procurement intelligence: calculate official USITC Harmonized Tariff Schedule (HTS) duty rates + Chapter 99 footnotes, verify EU corporate VAT numbers via EC VIES, and search EU TED public tenders.",
+      "storeUrl": "https://apify.com/desastreger/cross-border-tariff-eu-trade-mcp",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/cross-border-tariff-eu-trade-mcp.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "USITC HTS API, European Commission VIES, EU TED API v3",
+      "tools": [
+        {
+          "name": "lookup_us_hts_tariff",
+          "description": "Look up official US Harmonized Tariff Schedule (HTS) duty rates from USITC, deterministically compute base ad-valorem USD duty estimates for a shipment value, inherit 8-digit parent rates on statistical subheadings, and flag Chapter 99 / Section 301 trade-remedy footnotes."
+        },
+        {
+          "name": "verify_eu_vat_numbers",
+          "description": "Verify European Union corporate VAT numbers in real time via the official European Commission VIES REST API, returning legal entity names, registered addresses, and member-state availability status."
+        },
+        {
+          "name": "search_eu_ted_tenders",
+          "description": "Search European public procurement tenders and contract notices from the official EU Tenders Electronic Daily (TED) Open API v3 by keywords, 8-digit CPV codes, and 3-letter ISO country codes."
+        }
+      ]
+    },
+    {
+      "id": "us-healthcare-practice-owners",
+      "name": "NPPES NPI Registry Scraper — Clinic Owners ($0.50/1k)",
+      "description": "Query official CMS NPPES NPI Registry v2.1 organization records to extract dental, medspa, dermatology, physical therapy, optometry, and clinic Authorized Officials (owners/presidents), credentials, direct phone numbers, and corporate-chain filtering.",
+      "storeUrl": "https://apify.com/desastreger/us-healthcare-practice-owners",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-healthcare-practice-owners.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--us-healthcare-practice-owners.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.5,
+        "standardRatePer1kUsd": 1.5,
+        "currency": "USD"
+      },
+      "dataSources": "CMS NPPES NPI Registry API v2.1",
+      "tools": [
+        {
+          "name": "search_healthcare_practice_owners",
+          "description": "Search US dental, medspa, dermatology, physical therapy, chiropractic, optometry, urgent care, pharmacy, and specialty healthcare practice organizations (CMS NPPES v2.1 NPI-2) to extract Authorized Official (owner/president) names, clinician credentials (DDS, DMD, MD, DO, PT), direct phone numbers, ownership classification, and 0-100 B2B lead scores."
+        },
+        {
+          "name": "lookup_practice_by_npi",
+          "description": "Look up a specific US healthcare practice organization by its 10-digit National Provider Identifier (NPI) from CMS NPPES v2.1 and return normalized Authorized Official, phones, taxonomy, ownership type, and lead score."
+        }
+      ]
+    },
+    {
+      "id": "b2b-domain-mail-security-posture",
+      "name": "DMARC, SPF, MX & Domain Security Scraper ($0.50/1k)",
+      "description": "Zero-key RFC infrastructure intelligence: inspect DNS MX email providers (Google Workspace, Microsoft 365, Proofpoint), SPF SaaS senders, DMARC spoofing gaps, live TLS X.509 certificates, IANA RDAP domain age, and RIPEstat BGP ASNs.",
+      "storeUrl": "https://apify.com/desastreger/b2b-domain-mail-security-posture",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/b2b-domain-mail-security-posture.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.5,
+        "standardRatePer1kUsd": 1.5,
+        "currency": "USD"
+      },
+      "dataSources": "Native RFC DNS (MX/SPF/DMARC/NS), TLS SNI, IANA RDAP, RIPEstat BGP",
+      "tools": [
+        {
+          "name": "audit_domain_posture",
+          "description": "Audit a single B2B domain (accepts raw domain, URL, or email address) via pure RFC protocols: DNS MX Email Provider (Google Workspace, Microsoft 365, Proofpoint, Mimecast, etc.), SPF policy & third-party SaaS senders (HubSpot, Salesforce, SendGrid, etc.), DMARC spoofing vulnerability, TLS X.509 certificate & SAN subdomains, IANA RDAP domain age & registrar, RIPEstat BGP/ASN hosting, and 0-100 security posture score."
+        },
+        {
+          "name": "batch_audit_domains",
+          "description": "Batch-audit up to 50 B2B domains concurrently via pure RFC protocols (DNS MX/SPF/DMARC/NS, TLS X.509 certificates, official IANA RDAP domain age & registrar, and RIPEstat BGP/ASN hosting) for GTM enrichment, MSP security prospecting, and vendor KYB triage."
+        }
+      ]
+    },
+    {
+      "id": "us-municipal-code-violation-distressed-leads",
+      "name": "Code Violations & Distressed Property Scraper ($0.80/1k)",
+      "description": "Multi-city municipal code enforcement and distressed property lead feed harmonizing 6 US Socrata open-data portals with parcel IDs, geocodes, structural/vacancy/blight classification, and investor distress scoring.",
+      "storeUrl": "https://apify.com/desastreger/us-municipal-code-violation-distressed-leads",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-municipal-code-violation-distressed-leads.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "Austin, SF, Seattle, Buffalo, Montgomery MD & Cincinnati Socrata APIs",
+      "tools": [
+        {
+          "name": "search_code_violation_leads",
+          "description": "Search active municipal code enforcement, housing habitability violations, condemned/vacant structures, blight, and distressed property leads across 6 US Socrata portals (Austin, Seattle, San Francisco, Buffalo, Montgomery County MD, Cincinnati) with parcel IDs, geocodes, distress scores, and investor priority tiers."
+        },
+        {
+          "name": "list_code_violation_metros",
+          "description": "List all 6 supported US municipal code enforcement Socrata portals (Austin, Seattle, San Francisco, Buffalo, Montgomery County MD, Cincinnati), their live dataset URLs, ordering fields, and supported distress filters."
+        }
+      ]
+    },
+    {
+      "id": "epa-echo-industrial-facility-compliance",
+      "name": "EPA ECHO Scraper — Violations & Penalties ($0.50/1k)",
+      "description": "Screen US industrial plants, refineries, and utilities via US EPA ECHO APIs for Clean Water Act (NPDES), Clean Air Act, and RCRA Hazardous Waste Significant Non-Compliance (SNC/HPV) flags, inspections, and civil penalties.",
+      "storeUrl": "https://apify.com/desastreger/epa-echo-industrial-facility-compliance",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/epa-echo-industrial-facility-compliance.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.5,
+        "standardRatePer1kUsd": 1.5,
+        "currency": "USD"
+      },
+      "dataSources": "US EPA ECHO REST APIs (Clean Water NPDES, Clean Air, RCRA)",
+      "tools": [
+        {
+          "name": "search_epa_facility_violations",
+          "description": "Screen US industrial facilities, manufacturing plants, refineries, and utilities for Clean Water Act (NPDES), Clean Air Act, and RCRA hazardous waste violations, SNC/HPV flags, inspections, and civil penalties via official US EPA ECHO REST APIs."
+        },
+        {
+          "name": "lookup_facility_compliance",
+          "description": "Look up cross-statute US EPA compliance history, permits, inspections, SNC status, and penalties for a specific facility by EPA FRS Registry ID, source permit ID (NPDES/AIR/RCRA), or facility name."
+        }
+      ]
+    },
+    {
+      "id": "openalex-pubmed-expert-finder-mcp",
+      "name": "Clinical Trials & PubMed Scraper — PI Emails ($0.50/1k)",
+      "description": "Combine NIH ClinicalTrials.gov API v2 and EMBL-EBI Europe PMC / PubMed to extract recruiting clinical trial Principal Investigators, direct unmasked contact emails & phones, pharma/academic sponsors, citations, and NIH grant IDs.",
+      "storeUrl": "https://apify.com/desastreger/openalex-pubmed-expert-finder-mcp",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/openalex-pubmed-expert-finder-mcp.png",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.5,
+        "standardRatePer1kUsd": 1.5,
+        "currency": "USD"
+      },
+      "dataSources": "NIH ClinicalTrials.gov REST API v2, EMBL-EBI Europe PMC / PubMed",
+      "tools": [
+        {
+          "name": "find_clinical_trial_investigators",
+          "description": "Find active Recruiting and upcoming clinical trial Principal Investigators, direct Central Contacts (unmasked emails and phone numbers), biotech/pharma vs academic sponsors, trial phases, and clinical sites via official NIH ClinicalTrials.gov REST API v2."
+        },
+        {
+          "name": "search_pubmed_kol_experts",
+          "description": "Search peer-reviewed biomedical Key Opinion Leaders (KOLs) and Principal Investigators from official PubMed / EMBL-EBI Europe PMC APIs, extracting institutional affiliations, corresponding emails, citation counts, NIH/research grant IDs, ORCIDs, and open-access links."
+        }
+      ]
+    }
+  ]
+}
