@@ -33,6 +33,21 @@ See [`server.json`](./server.json) for the machine-readable MCP Registry catalog
 
 ---
 
+## Install Ready-to-Use Agent Skills (`SKILL.md`)
+
+Every server in this repository also ships an open-standard [`skills/<slug>/SKILL.md`](./skills) playbook (including parameter schemas, query recipes, and executive report templates) compatible with **Claude Code**, **Cursor**, **Codex CLI**, **Gemini CLI**, **GitHub Copilot**, **OpenClaw**, and **Google Antigravity**:
+
+```bash
+# Install all 10 open-data skills via the open skills CLI (Claude Code / Cursor / Codex / Antigravity)
+npx skills add desastreger/open-data-mcp-servers
+
+# Or copy a single skill directly into Claude Code / Antigravity:
+git clone https://github.com/desastreger/open-data-mcp-servers.git
+cp -r open-data-mcp-servers/skills/sec-form-d-funding-leads ~/.claude/skills/
+```
+
+---
+
 ## IDE & AI Client Setup (`mcp_config.json`)
 
 Replace `<YOUR_APIFY_TOKEN>` with your personal [Apify API token](https://console.apify.com/settings/integrations) and pick the servers you want (example below connects **SEC Form D**, **US KYB**, and **Domain Security**):
