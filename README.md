@@ -1,6 +1,8 @@
 # Open Data B2B & Compliance MCP Servers + Apify Actors
 
-Ten production-grade, **100% deterministic, zero-third-party-API-key** remote **Streamable HTTP Model Context Protocol (MCP)** servers and Apify Store Actors backed exclusively by official US/EU public-domain registries and RFC network protocols.
+[![M8ven Score](https://m8ven.ai/badge/mcp/desastreger/open-data-mcp-servers)](https://m8ven.ai/mcp/desastreger/open-data-mcp-servers?s=readme)
+
+Ten production-grade, **100% deterministic, zero-third-party-API-key** remote **Streamable HTTP Model Context Protocol (MCP)** servers (plus a zero-dependency **22-tool local STDIO MCP router** in [`src/index.mjs`](./src/index.mjs)) and Apify Store Actors backed exclusively by official US/EU public-domain registries and RFC network protocols.
 
 > [!IMPORTANT]
 > **Early-Adopter Launch Pricing (`$0.50–$1.00 / 1,000 records`) — Limited Launch Window:**
@@ -101,6 +103,24 @@ Replace `<YOUR_APIFY_TOKEN>` with your personal [Apify API token](https://consol
       "url": "https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp",
       "headers": {
         "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
+      }
+    }
+  }
+}
+```
+
+### Unified Local STDIO Router (All 22 Read-Only Tools via One Entrypoint)
+
+For MCP clients that prefer local `stdio` transport, run the zero-dependency router in [`src/index.mjs`](./src/index.mjs):
+
+```json
+{
+  "mcpServers": {
+    "open-data-mcp-router": {
+      "command": "npx",
+      "args": ["-y", "github:desastreger/open-data-mcp-servers"],
+      "env": {
+        "APIFY_TOKEN": "<YOUR_APIFY_TOKEN>"
       }
     }
   }
