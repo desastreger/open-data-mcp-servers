@@ -1,6 +1,6 @@
 # Open Data B2B & Compliance MCP Servers + Apify Actors
 
-[![M8ven Score](https://m8ven.ai/badge/mcp/desastreger/open-data-mcp-servers)](https://m8ven.ai/mcp/desastreger/open-data-mcp-servers?s=readme)
+[![M8ven Score](https://m8ven.ai/badge/mcp/desastreger-open-data-mcp-servers-fy4dv2?v=58aa41fe4cae2c2c264b540e16a76cc8)](https://m8ven.ai/mcp/desastreger-open-data-mcp-servers-fy4dv2?s=readme)
 
 Ten production-grade, **100% deterministic, zero-third-party-API-key** remote **Streamable HTTP Model Context Protocol (MCP)** servers (plus a zero-dependency **22-tool local STDIO MCP router** in [`src/index.mjs`](./src/index.mjs)) and Apify Store Actors backed exclusively by official US/EU public-domain registries and RFC network protocols.
 
