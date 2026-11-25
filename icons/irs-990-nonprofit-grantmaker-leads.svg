@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071926"/>
+      <stop offset="55%" stop-color="#0D2F45"/>
+      <stop offset="100%" stop-color="#114B5F"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="44%" r="54%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.28"/>
+      <stop offset="65%" stop-color="#10B981" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#071926" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6EE7B7" stop-opacity="0.78"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#FBBF24" stop-opacity="0.78"/>
+    </linearGradient>
+    <linearGradient id="emeraldGoldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="55%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#FDE68A"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle geometric grid rings -->
+  <g stroke="#6EE7B7" stroke-opacity="0.12" stroke-width="2" fill="none">
+    <circle cx="256" cy="246" r="194"/>
+    <circle cx="256" cy="246" r="144" stroke-dasharray="10 10"/>
+    <line x1="256" y1="64" x2="256" y2="424"/>
+    <line x1="74" y1="246" x2="438" y2="246"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- IRS Form 990 Ledger Card -->
+  <rect x="116" y="88" width="252" height="316" rx="26" fill="#061E2E" stroke="url(#emeraldGoldGrad)" stroke-width="10"/>
+
+  <!-- Classical Foundation Pediment / Roof inside Ledger Header -->
+  <path d="M 152 152 L 242 114 L 332 152 Z" fill="url(#emeraldGoldGrad)" fill-opacity="0.92"/>
+  <rect x="150" y="158" width="184" height="10" rx="5" fill="#A7F3D0"/>
+
+  <!-- 3 Classical Foundation Pillars -->
+  <g fill="#E2E8F0" fill-opacity="0.92">
+    <rect x="168" y="176" width="22" height="62" rx="4"/>
+    <rect x="231" y="176" width="22" height="62" rx="4"/>
+    <rect x="294" y="176" width="22" height="62" rx="4"/>
+  </g>
+  <rect x="148" y="244" width="188" height="12" rx="6" fill="#6EE7B7"/>
+
+  <!-- Ledger Financial Rows -->
+  <g stroke="#94A3B8" stroke-width="10" stroke-linecap="round" stroke-opacity="0.78">
+    <line x1="156" y1="290" x2="278" y2="290"/>
+    <line x1="156" y1="324" x2="254" y2="324"/>
+    <line x1="156" y1="358" x2="232" y2="358"/>
+  </g>
+
+  <!-- Gold Grantmaking Seal ($ Badge) -->
+  <circle cx="342" cy="316" r="62" fill="#061E2E" stroke="url(#goldGrad)" stroke-width="10"/>
+  <circle cx="342" cy="316" r="46" fill="none" stroke="#FDE68A" stroke-opacity="0.35" stroke-width="2.5"/>
+  <!-- Vector Dollar / Grant Symbol -->
+  <path d="M 342 282 L 342 350" stroke="#FCD34D" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 360 298 C 360 288 324 288 324 302 C 324 316 360 314 360 328 C 360 342 324 342 324 332"
+        fill="none" stroke="#FDE68A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#061E2E" fill-opacity="0.9" stroke="#34D399" stroke-opacity="0.78" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#A7F3D0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#A7F3D0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#A7F3D0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

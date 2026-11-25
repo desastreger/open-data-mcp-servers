@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.desastreger/open-data-mcp-servers",
   "title": "Open Data B2B & Compliance MCP Servers",
-  "description": "12 zero-key US/EU public-registry & RFC security MCP servers (SEC Form D/4, FDA 510k, KYB, GovCon).",
-  "version": "1.2.1",
+  "description": "14 zero-key US/EU public-registry & security MCP servers (SEC, IRS 990, CISA KEV, FDA, KYB, GovCon).",
+  "version": "1.3.0",
   "websiteUrl": "https://desastreger.github.io/open-data-mcp-servers/",
   "repository": {
     "url": "https://github.com/desastreger/open-data-mcp-servers",
@@ -23,7 +23,7 @@
     {
       "registryType": "npm",
       "identifier": "open-data-mcp-servers",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "transport": {
         "type": "stdio"
       },
@@ -40,7 +40,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker"
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp"
     },
     {
       "type": "streamable-http",
@@ -177,6 +177,30 @@
     {
       "type": "streamable-http",
       "url": "https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <YOUR_APIFY_TOKEN>",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    },
+    {
+      "type": "streamable-http",
+      "url": "https://desastreger--irs-990-nonprofit-grantmaker-leads.apify.actor/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <YOUR_APIFY_TOKEN>",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    },
+    {
+      "type": "streamable-http",
+      "url": "https://desastreger--cisa-kev-nvd-exploit-prioritizer-mcp.apify.actor/mcp",
       "headers": [
         {
           "name": "Authorization",

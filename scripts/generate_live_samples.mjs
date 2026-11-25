@@ -163,6 +163,63 @@ async function fetchFda510k() {
   }));
 }
 
+async function fetchIrs990() {
+  const FORM_MAP = { 0: "990", 1: "990EZ", 2: "990PF" };
+  const search = await fetchJson("https://projects.propublica.org/nonprofits/api/v2/search.json?q=foundation&state%5Bid%5D=NY");
+  const candidates = (search?.organizations || []).filter((o) => o?.ein).slice(0, 3);
+  const details = await Promise.all(
+    candidates.map(async (org) => {
+      const einDigits = String(org.ein).padStart(9, "0");
+      const detail = await fetchJson(`https://projects.propublica.org/nonprofits/api/v2/organizations/${einDigits}.json`);
+      const o = detail?.organization || org;
+      const latest = (detail?.filings_with_data || [])[0] || {};
+      return {
+        formattedEin: org.strein || `${einDigits.slice(0, 2)}-${einDigits.slice(2)}`,
+        organizationName: o.name || org.name || "N/A",
+        cityState: [o.city || org.city, o.state || org.state].filter(Boolean).join(", ") || "NY",
+        formType: FORM_MAP[latest.formtype] || "990",
+        taxPeriod: latest.tax_prd ? `${String(latest.tax_prd).slice(0, 4)}-${String(latest.tax_prd).slice(4, 6)}` : "N/A",
+        totalRevenueUsd: Number(latest.totrevenue || 0),
+        totalAssetsUsd: Number(latest.totassetsend || 0),
+      };
+    })
+  );
+  return details;
+}
+
+async function fetchCisaKev() {
+  const data = await fetchJson("https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json");
+  const sorted = [...(data?.vulnerabilities || [])]
+    .sort((a, b) => String(b.dateAdded || "").localeCompare(String(a.dateAdded || "")) || String(b.cveID || "").localeCompare(String(a.cveID || "")))
+    .slice(0, 3);
+
+  let epssByCve = {};
+  if (sorted.length) {
+    try {
+      const cveParam = sorted.map((v) => v.cveID).filter(Boolean).join(",");
+      const epss = await fetchJson(`https://api.first.org/data/v1/epss?cve=${encodeURIComponent(cveParam)}`);
+      for (const row of epss?.data || []) {
+        if (row?.cve) epssByCve[row.cve.toUpperCase()] = Number(row.epss);
+      }
+    } catch {
+      epssByCve = {};
+    }
+  }
+
+  return sorted.map((v) => {
+    const score = epssByCve[String(v.cveID || "").toUpperCase()];
+    return {
+      cveId: v.cveID || "N/A",
+      vendorProject: v.vendorProject || "N/A",
+      product: v.product || "N/A",
+      dateAdded: v.dateAdded || "N/A",
+      dueDate: v.dueDate || "N/A",
+      ransomwareUse: v.knownRansomwareCampaignUse || "Unknown",
+      epssPct: Number.isFinite(score) ? `${(score * 100).toFixed(2)}%` : "—",
+    };
+  });
+}
+
 async function safeCollect(label, fn) {
   try {
     const records = await fn();
@@ -322,6 +379,38 @@ function buildMarkdown(generatedAt, catalog, sources) {
   }
   lines.push("");
 
+  // 8. IRS Form 990
+  lines.push("## 8. IRS Form 990 Nonprofits & Foundations (`irs-990-nonprofit-grantmaker-leads`)");
+  lines.push("");
+  if (sources.irs990.ok && sources.irs990.records.length) {
+    lines.push("| EIN | Organization | Location | Form | Tax Period | Revenue | Total Assets |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.irs990.records) {
+      lines.push(
+        `| \`${mdCell(r.formattedEin)}\` | ${mdCell(r.organizationName)} | ${mdCell(r.cityState)} | \`${mdCell(r.formType)}\` | \`${mdCell(r.taxPeriod)}\` | ${formatUsd(r.totalRevenueUsd)} | **${formatUsd(r.totalAssetsUsd)}** |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.irs990.error || "No records returned")}_`);
+  }
+  lines.push("");
+
+  // 9. CISA KEV + EPSS
+  lines.push("## 9. CISA KEV & FIRST.org EPSS Exploited Vulnerabilities (`cisa-kev-nvd-exploit-prioritizer-mcp`)");
+  lines.push("");
+  if (sources.cisaKev.ok && sources.cisaKev.records.length) {
+    lines.push("| CVE ID | Vendor | Product | Date Added | BOD Due Date | Ransomware | EPSS 30d |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.cisaKev.records) {
+      lines.push(
+        `| \`${mdCell(r.cveId)}\` | ${mdCell(r.vendorProject)} | ${mdCell(r.product)} | \`${mdCell(r.dateAdded)}\` | \`${mdCell(r.dueDate)}\` | \`${mdCell(r.ransomwareUse)}\` | \`${mdCell(r.epssPct)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.cisaKev.error || "No records returned")}_`);
+  }
+  lines.push("");
+
   return lines.join("\n");
 }
 
@@ -350,10 +439,10 @@ function buildHtml(generatedAt, catalog, sources) {
     operatingSystem: "Cross-platform (Streamable HTTP MCP / STDIO)",
     url: "https://desastreger.github.io/open-data-mcp-servers/",
     downloadUrl: "https://github.com/desastreger/open-data-mcp-servers",
-    softwareVersion: "1.2.0",
+    softwareVersion: "1.3.0",
     license: "https://opensource.org/licenses/MIT",
     description:
-      "12 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D & Form 4, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
+      "14 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D & Form 4, IRS Form 990, CISA KEV + EPSS + NVD, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
     author: {
       "@type": "Person",
       name: "desastreger",
@@ -420,10 +509,10 @@ function buildHtml(generatedAt, catalog, sources) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Data MCP Servers — 12 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
-  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 12 deterministic zero-API-key MCP servers for SEC Form D &amp; Form 4, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
+  <title>Open Data MCP Servers — 14 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
+  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 14 deterministic zero-API-key MCP servers for SEC Form D &amp; Form 4, IRS Form 990, CISA KEV &amp; EPSS, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
   <meta property="og:title" content="Open Data B2B &amp; Compliance MCP Servers" />
-  <meta property="og:description" content="12 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
+  <meta property="og:description" content="14 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://desastreger.github.io/open-data-mcp-servers/" />
   <link rel="canonical" href="https://desastreger.github.io/open-data-mcp-servers/" />
@@ -541,13 +630,13 @@ function buildHtml(generatedAt, catalog, sources) {
     <section class="hero">
       <div class="pill-row">
         <span class="badge green">1-Click Browser OAuth · Zero API Keys</span>
-        <span class="badge">28 Read-Only MCP Tools</span>
+        <span class="badge">34 Read-Only MCP Tools</span>
         <span class="badge">Official MCP Registry: io.github.desastreger/open-data-mcp-servers</span>
         <span class="badge">Live Snapshot: ${escapeHtml(generatedAt)}</span>
       </div>
       <h1>Open Data B2B &amp; Compliance MCP Servers</h1>
       <p class="subtitle">
-        Twelve deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR (Form D &amp; Form 4), US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
+        Fourteen deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR (Form D &amp; Form 4), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
       </p>
       <div class="hero-actions">
         <div class="install-box">
@@ -558,7 +647,7 @@ function buildHtml(generatedAt, catalog, sources) {
           </div>
         </div>
         <div class="install-box">
-          <span class="label">Install All 12 Agent Skills (skills.sh)</span>
+          <span class="label">Install All 14 Agent Skills (skills.sh)</span>
           <div class="copy-row">
             <code>${escapeHtml(skillsCmd)}</code>
             <button type="button" class="copy-btn" data-copy="${escapeHtml(skillsCmd)}">Copy CLI</button>
@@ -575,7 +664,7 @@ function buildHtml(generatedAt, catalog, sources) {
     </section>
 
     <section>
-      <h2>12 Production MCP Servers &amp; Apify Actors</h2>
+      <h2>14 Production MCP Servers &amp; Apify Actors</h2>
       <p class="section-note">Connect via 1-Click Browser OAuth (no manual API key) or direct Apify Standby Streamable HTTP (<code>Bearer $APIFY_TOKEN</code>).</p>
       <div class="grid">
         ${serverCardsHtml}
@@ -703,6 +792,42 @@ function buildHtml(generatedAt, catalog, sources) {
           </tbody>
         </table>
       </div>
+
+      <div class="table-card">
+        <h3>8. IRS Form 990 Nonprofits &amp; Foundations (<code>irs-990-nonprofit-grantmaker-leads</code>)</h3>
+        <table>
+          <thead><tr><th>EIN</th><th>Organization</th><th>Location</th><th>Form</th><th>Tax Period</th><th>Revenue</th><th>Total Assets</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.irs990.records, [
+              { raw: (r) => `<code>${escapeHtml(r.formattedEin)}</code>` },
+              { get: (r) => r.organizationName },
+              { get: (r) => r.cityState },
+              { raw: (r) => `<code>${escapeHtml(r.formType)}</code>` },
+              { get: (r) => r.taxPeriod },
+              { get: (r) => formatUsd(r.totalRevenueUsd) },
+              { raw: (r) => `<strong>${escapeHtml(formatUsd(r.totalAssetsUsd))}</strong>` },
+            ])}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>9. CISA KEV &amp; FIRST.org EPSS Exploited Vulnerabilities (<code>cisa-kev-nvd-exploit-prioritizer-mcp</code>)</h3>
+        <table>
+          <thead><tr><th>CVE ID</th><th>Vendor</th><th>Product</th><th>Date Added</th><th>BOD Due Date</th><th>Ransomware</th><th>EPSS 30d</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.cisaKev.records, [
+              { raw: (r) => `<code>${escapeHtml(r.cveId)}</code>` },
+              { get: (r) => r.vendorProject },
+              { get: (r) => r.product },
+              { get: (r) => r.dateAdded },
+              { get: (r) => r.dueDate },
+              { raw: (r) => `<code>${escapeHtml(r.ransomwareUse)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.epssPct)}</code>` },
+            ])}
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <footer>
@@ -738,7 +863,7 @@ async function main() {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   const generatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
-  const [sec, usaspending, nppes, epa, trials, form4, fda510k] = await Promise.all([
+  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev] = await Promise.all([
     safeCollect("SEC EDGAR", fetchSecFormD),
     safeCollect("USASpending", fetchUsaSpending),
     safeCollect("CMS NPPES", fetchCmsNppes),
@@ -746,9 +871,11 @@ async function main() {
     safeCollect("ClinicalTrials.gov", fetchClinicalTrials),
     safeCollect("SEC Form 4", fetchSecForm4),
     safeCollect("FDA 510(k)", fetchFda510k),
+    safeCollect("IRS 990", fetchIrs990),
+    safeCollect("CISA KEV", fetchCisaKev),
   ]);
 
-  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k };
+  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev };
 
   fs.mkdirSync(path.join(ROOT, "samples"), { recursive: true });
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
@@ -771,6 +898,8 @@ async function main() {
           trials: trials.records.length,
           form4: form4.records.length,
           fda510k: fda510k.records.length,
+          irs990: irs990.records.length,
+          cisaKev: cisaKev.records.length,
         },
         errors: Object.fromEntries(
           Object.entries(sources)

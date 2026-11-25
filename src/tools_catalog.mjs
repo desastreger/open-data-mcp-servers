@@ -1,10 +1,10 @@
 // Auto-generated deterministic read-only MCP tool schemas & frozen endpoint allowlist.
-// Zero filesystem or shell access. All 28 tools are strictly read-only public-registry queries.
+// Zero filesystem or shell access. All 34 tools are strictly read-only public-registry queries.
 
 export const SERVER_INFO = Object.freeze({
   "name": "open-data-mcp-servers",
-  "version": "1.2.1",
-  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 12 official US/EU public-registry & RFC security MCP servers (28 read-only tools)."
+  "version": "1.3.0",
+  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 14 official US/EU public-registry & RFC security MCP servers (34 read-only tools)."
 });
 
 export const TOOL_ROUTES = Object.freeze({
@@ -119,6 +119,30 @@ export const TOOL_ROUTES = Object.freeze({
   "lookup_fda_clearance_by_id": {
     "slug": "fda-medtech-510k-approval-tracker",
     "endpoint": "https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp"
+  },
+  "search_nonprofit_990_leads": {
+    "slug": "irs-990-nonprofit-grantmaker-leads",
+    "endpoint": "https://desastreger--irs-990-nonprofit-grantmaker-leads.apify.actor/mcp"
+  },
+  "get_nonprofit_990_dossier": {
+    "slug": "irs-990-nonprofit-grantmaker-leads",
+    "endpoint": "https://desastreger--irs-990-nonprofit-grantmaker-leads.apify.actor/mcp"
+  },
+  "screen_high_asset_foundations": {
+    "slug": "irs-990-nonprofit-grantmaker-leads",
+    "endpoint": "https://desastreger--irs-990-nonprofit-grantmaker-leads.apify.actor/mcp"
+  },
+  "search_exploited_vulnerabilities": {
+    "slug": "cisa-kev-nvd-exploit-prioritizer-mcp",
+    "endpoint": "https://desastreger--cisa-kev-nvd-exploit-prioritizer-mcp.apify.actor/mcp"
+  },
+  "score_cve_exploit_risk": {
+    "slug": "cisa-kev-nvd-exploit-prioritizer-mcp",
+    "endpoint": "https://desastreger--cisa-kev-nvd-exploit-prioritizer-mcp.apify.actor/mcp"
+  },
+  "summarize_vendor_kev_exposure": {
+    "slug": "cisa-kev-nvd-exploit-prioritizer-mcp",
+    "endpoint": "https://desastreger--cisa-kev-nvd-exploit-prioritizer-mcp.apify.actor/mcp"
   }
 });
 
@@ -1410,6 +1434,279 @@ export const MCP_TOOLS = Object.freeze([
     },
     "annotations": {
       "title": "Lookup FDA 510(k) or PMA Clearance by ID",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_nonprofit_990_leads",
+    "description": "Search US 501(c) nonprofits, hospitals, universities, and private grantmaking foundations via ProPublica Nonprofit Explorer API v2, enriched with latest IRS Form 990 / 990-PF / 990-EZ financials, executive compensation, grants paid, PDF filing URLs, and lead quality scores.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Organization name, city, or mission keyword (e.g., \"foundation\", \"hospital\", \"university\"). Default: \"foundation\".",
+          "default": "foundation"
+        },
+        "state": {
+          "type": "string",
+          "description": "Optional 2-letter US state abbreviation (e.g., \"NY\", \"CA\", \"TX\")."
+        },
+        "nteeCategory": {
+          "type": "integer",
+          "description": "Optional NTEE broad sector ID 1-10 (1=Arts, 2=Education, 3=Environment, 4=Health, 5=Human Services, 6=International, 7=Public/Societal Benefit & Foundations, 8=Religion, 9=Mutual, 10=Unknown)."
+        },
+        "subsectionCode": {
+          "type": "integer",
+          "description": "Optional IRS 501(c) subsection code (e.g., 3 for 501(c)(3), 4 for 501(c)(4), 6 for 501(c)(6))."
+        },
+        "minRevenueUsd": {
+          "type": "integer",
+          "description": "Minimum latest total revenue in USD. Default: 0.",
+          "default": 0
+        },
+        "minAssetsUsd": {
+          "type": "integer",
+          "description": "Minimum latest total assets in USD. Default: 0.",
+          "default": 0
+        },
+        "foundationsOnly": {
+          "type": "boolean",
+          "description": "When true, restrict to private foundations (990-PF) and grantmaking foundations (NTEE T* / grants paid). Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum leads to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search IRS Form 990 Nonprofit Leads",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "get_nonprofit_990_dossier",
+    "description": "Retrieve a complete IRS Form 990/990-PF/990-EZ financial dossier for a specific US nonprofit or foundation by 9-digit EIN (e.g., \"13-1684331\") or organization name (e.g., \"Ford Foundation\"), including up to 5 recent multi-year filings.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "einOrQuery"
+      ],
+      "properties": {
+        "einOrQuery": {
+          "type": "string",
+          "description": "9-digit IRS EIN (with or without hyphen, e.g., \"13-1684331\") or organization name (e.g., \"Ford Foundation\")."
+        },
+        "state": {
+          "type": "string",
+          "description": "Optional 2-letter US state filter when searching by name."
+        },
+        "nteeCategory": {
+          "type": "integer",
+          "description": "Optional NTEE category (1-10) when searching by name."
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get IRS Form 990 Nonprofit Dossier",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "screen_high_asset_foundations",
+    "description": "Screen active US grantmaking foundations above a minimum asset threshold (default $1,000,000), returning ranked Form 990-PF and Community Foundation prospects with combined assets, total grants paid, and state breakdown.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Foundation keyword, cause, or city (e.g., \"climate\", \"education\", \"foundation\"). Default: \"foundation\".",
+          "default": "foundation"
+        },
+        "state": {
+          "type": "string",
+          "description": "Optional 2-letter US state filter (e.g., \"CA\", \"NY\", \"MA\")."
+        },
+        "nteeCategory": {
+          "type": "integer",
+          "description": "Optional NTEE sector category ID (1-10)."
+        },
+        "minAssetsUsd": {
+          "type": "integer",
+          "description": "Minimum total end-of-year assets in USD. Default: 1000000.",
+          "default": 1000000
+        },
+        "minRevenueUsd": {
+          "type": "integer",
+          "description": "Minimum total annual revenue in USD. Default: 0.",
+          "default": 0
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum foundations to return (1-50). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Screen High-Asset Grantmaking Foundations",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_exploited_vulnerabilities",
+    "description": "Search and prioritize active CISA Known Exploited Vulnerabilities (KEV) filtered by vendor, product, keyword, ransomware linkage, KEV dateAdded window, or minimum FIRST.org EPSS probability. Returns 0-100 patchPriorityScore rankings, federal BOD due dates, EPSS scores, and optional NIST NVD v2 CVSS.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cveIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional specific CVE IDs to include and score (e.g., [\"CVE-2024-3400\"])."
+        },
+        "vendorProject": {
+          "type": "string",
+          "description": "Optional vendor/project substring filter (e.g., \"Microsoft\", \"Cisco\", \"Fortinet\")."
+        },
+        "product": {
+          "type": "string",
+          "description": "Optional product substring filter (e.g., \"Windows\", \"PAN-OS\", \"IOS XE\")."
+        },
+        "keyword": {
+          "type": "string",
+          "description": "Optional keyword or CWE across CVE ID, vendor, product, title, and description."
+        },
+        "ransomwareOnly": {
+          "type": "boolean",
+          "description": "Filter to CVEs with knownRansomwareCampaignUse = \"Known\". Default: false.",
+          "default": false
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "KEV dateAdded lookback window in days (1-3650). Falls back to most recent matches if 0 inside window when vendorProject/cveIds is set. Default: 90.",
+          "default": 90
+        },
+        "minEpssScore": {
+          "type": "number",
+          "description": "Minimum FIRST.org EPSS 30d exploit probability (0.0 to 1.0). Default: 0.",
+          "default": 0
+        },
+        "includeNvdCvss": {
+          "type": "boolean",
+          "description": "Optionally enrich top 3 matched CVEs with NIST NVD v2 CVSS severity/vector. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum prioritized advisories to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search CISA KEV Exploited Vulnerabilities",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "score_cve_exploit_risk",
+    "description": "Score 1 to 10 specific CVE identifiers (e.g., \"CVE-2024-3400\" or [\"CVE-2021-44228\", \"CVE-2026-132224\"]) by fusing CISA KEV active-exploitation status, FIRST.org EPSS probability/percentile, and NIST NVD v2 CVSS baseScore into a deterministic 0-100 patch priority dossier.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cveId": {
+          "type": "string",
+          "description": "Single CVE ID to score (e.g., \"CVE-2024-3400\")."
+        },
+        "cveIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional array of up to 10 CVE IDs to score in one call."
+        },
+        "includeNvdCvss": {
+          "type": "boolean",
+          "description": "Fetch NIST NVD v2 CVSS baseScore, vector, and analysis status (capped at 3 CVEs unauthenticated). Default: true.",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Score CVE Exploit Risk (KEV + EPSS + NVD)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "summarize_vendor_kev_exposure",
+    "description": "Summarize a software or hardware vendor/project exposure across the live CISA KEV catalog, reporting total KEV entries, ransomware-linked count, overdue BOD directives, top affected products, top CWEs, and EPSS-ranked top vulnerabilities.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "vendorProject"
+      ],
+      "properties": {
+        "vendorProject": {
+          "type": "string",
+          "description": "Vendor or project name substring (e.g., \"Cisco\", \"Microsoft\", \"Ivanti\", \"Fortinet\")."
+        },
+        "product": {
+          "type": "string",
+          "description": "Optional product substring filter within the vendor exposure summary."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Historical KEV lookback window in days (1-3650). Default: 3650 (full catalog).",
+          "default": 3650
+        },
+        "ransomwareOnly": {
+          "type": "boolean",
+          "description": "Restrict vendor summary to ransomware-linked KEV entries. Default: false.",
+          "default": false
+        },
+        "includeNvdCvss": {
+          "type": "boolean",
+          "description": "Optionally enrich top 3 vendor advisories with NIST NVD v2 CVSS. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum top-ranked vulnerabilities to include in the vendor summary (1-50). Default: 15.",
+          "default": 15
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Summarize Vendor CISA KEV Exposure",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
