@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071124"/>
+      <stop offset="55%" stop-color="#0D2142"/>
+      <stop offset="100%" stop-color="#07323F"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="54%" cy="46%" r="54%">
+      <stop offset="0%" stop-color="#22C55E" stop-opacity="0.34"/>
+      <stop offset="65%" stop-color="#0EA5E9" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#071124" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4ADE80" stop-opacity="0.78"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.72"/>
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#CBD5E1"/>
+    </linearGradient>
+    <linearGradient id="buyGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#16A34A"/>
+      <stop offset="55%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#86EFAC"/>
+    </linearGradient>
+    <linearGradient id="accentCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#22C55E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Subtle radar rings & grid -->
+  <g stroke="#4ADE80" stroke-opacity="0.12" stroke-width="2" fill="none">
+    <circle cx="256" cy="248" r="196"/>
+    <circle cx="256" cy="248" r="142" stroke-dasharray="10 10"/>
+    <line x1="64" y1="136" x2="448" y2="136"/>
+    <line x1="64" y1="248" x2="448" y2="248"/>
+    <line x1="64" y1="360" x2="448" y2="360"/>
+    <line x1="142" y1="64" x2="142" y2="424"/>
+    <line x1="256" y1="64" x2="256" y2="424"/>
+    <line x1="370" y1="64" x2="370" y2="424"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- SEC Form 4 Filing Card -->
+  <path d="M 108 92 L 248 92 L 306 150 L 306 374 C 306 388 295 399 281 399 L 108 399 C 94 399 83 388 83 374 L 83 117 C 83 103 94 92 108 92 Z"
+        fill="url(#docGrad)" stroke="#38BDF8" stroke-opacity="0.55" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M 248 92 L 248 136 C 248 144 254 150 262 150 L 306 150 Z" fill="#94A3B8"/>
+
+  <!-- Candlestick / signal bars inside filing -->
+  <rect x="118" y="142" width="96" height="20" rx="10" fill="#0D2142"/>
+  <rect x="118" y="182" width="146" height="14" rx="7" fill="#64748B" fill-opacity="0.58"/>
+  <rect x="118" y="212" width="120" height="14" rx="7" fill="#64748B" fill-opacity="0.45"/>
+
+  <!-- Form "4" Badge Stamp -->
+  <rect x="118" y="266" width="84" height="84" rx="18" fill="#16A34A" fill-opacity="0.16" stroke="#16A34A" stroke-width="9"/>
+  <path d="M 168 286 L 140 322 L 176 322 M 168 286 L 168 336"
+        fill="none" stroke="#15803D" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Insider Cluster Network Hub (Right / Foreground) -->
+  <circle cx="348" cy="252" r="102" fill="#08162B" fill-opacity="0.94" stroke="url(#buyGrad)" stroke-width="12"/>
+
+  <!-- Cluster connection edges -->
+  <g stroke="#38BDF8" stroke-width="7" stroke-linecap="round" stroke-opacity="0.85">
+    <line x1="306" y1="224" x2="348" y2="292"/>
+    <line x1="390" y1="224" x2="348" y2="292"/>
+    <line x1="306" y1="224" x2="390" y2="224"/>
+  </g>
+
+  <!-- 3 Insider Cluster Nodes -->
+  <circle cx="306" cy="224" r="21" fill="url(#buyGrad)" stroke="#08162B" stroke-width="5"/>
+  <circle cx="390" cy="224" r="21" fill="url(#buyGrad)" stroke="#08162B" stroke-width="5"/>
+  <circle cx="348" cy="292" r="24" fill="url(#accentCyan)" stroke="#08162B" stroke-width="5"/>
+
+  <!-- Upward Buy Arrow Badge (Top-right) -->
+  <circle cx="394" cy="126" r="44" fill="url(#buyGrad)" stroke="#08162B" stroke-width="10"/>
+  <path d="M 394 146 L 394 106 M 376 122 L 394 104 L 412 122"
+        fill="none" stroke="#052E16" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#051120" fill-opacity="0.86" stroke="#4ADE80" stroke-opacity="0.72" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#BBF7D0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#BBF7D0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#BBF7D0" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
