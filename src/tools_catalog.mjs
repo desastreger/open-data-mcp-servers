@@ -1,10 +1,10 @@
 // Auto-generated deterministic read-only MCP tool schemas & frozen endpoint allowlist.
-// Zero filesystem or shell access. All 22 tools are strictly read-only public-registry queries.
+// Zero filesystem or shell access. All 28 tools are strictly read-only public-registry queries.
 
 export const SERVER_INFO = Object.freeze({
-  name: "open-data-mcp-servers",
-  version: "1.1.0",
-  description: "Unified STDIO-to-Streamable-HTTP MCP router for 10 official US/EU public-registry & RFC security MCP servers (22 read-only tools).",
+  "name": "open-data-mcp-servers",
+  "version": "1.2.0",
+  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 12 official US/EU public-registry & RFC security MCP servers (28 read-only tools)."
 });
 
 export const TOOL_ROUTES = Object.freeze({
@@ -95,6 +95,30 @@ export const TOOL_ROUTES = Object.freeze({
   "list_code_violation_metros": {
     "slug": "us-municipal-code-violation-distressed-leads",
     "endpoint": "https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp"
+  },
+  "search_form4_insider_trades": {
+    "slug": "sec-form4-insider-cluster-signals",
+    "endpoint": "https://desastreger--sec-form4-insider-cluster-signals.apify.actor/mcp"
+  },
+  "get_company_insider_dossier": {
+    "slug": "sec-form4-insider-cluster-signals",
+    "endpoint": "https://desastreger--sec-form4-insider-cluster-signals.apify.actor/mcp"
+  },
+  "detect_insider_cluster_buys": {
+    "slug": "sec-form4-insider-cluster-signals",
+    "endpoint": "https://desastreger--sec-form4-insider-cluster-signals.apify.actor/mcp"
+  },
+  "search_fda_device_clearances": {
+    "slug": "fda-medtech-510k-approval-tracker",
+    "endpoint": "https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp"
+  },
+  "get_medtech_applicant_dossier": {
+    "slug": "fda-medtech-510k-approval-tracker",
+    "endpoint": "https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp"
+  },
+  "lookup_fda_clearance_by_id": {
+    "slug": "fda-medtech-510k-approval-tracker",
+    "endpoint": "https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp"
   }
 });
 
@@ -1099,6 +1123,293 @@ export const MCP_TOOLS = Object.freeze([
     },
     "annotations": {
       "title": "List Code Violation Metros",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_form4_insider_trades",
+    "description": "Search real-time US corporate insider buys and sales from official SEC EDGAR Form 4 XML filings. Filter by stock tickers, CIKs, date window, open-market purchases only (code P), Rule 10b5-1 plan exclusion, or minimum USD transaction value. Returns insider role, 10b5-1 flag, transaction rows, clusterBuyCount, and 0-100 signalScore.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "tickers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional US stock tickers (e.g., [\"NVDA\", \"AAPL\"]). Omit for market-wide Form 4 scan."
+        },
+        "ciks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional SEC CIK numbers (e.g., [\"0001045810\"])."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-365). Default: 7.",
+          "default": 7
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Optional explicit YYYY-MM-DD start date."
+        },
+        "endDate": {
+          "type": "string",
+          "description": "Optional explicit YYYY-MM-DD end date."
+        },
+        "openMarketPurchasesOnly": {
+          "type": "boolean",
+          "description": "Only return filings with open-market purchases (transactionCode = P). Default: false.",
+          "default": false
+        },
+        "exclude10b51Plans": {
+          "type": "boolean",
+          "description": "Exclude pre-scheduled Rule 10b5-1 plan trades (aff10b5One = true). Default: false.",
+          "default": false
+        },
+        "minTransactionValueUsd": {
+          "type": "number",
+          "description": "Minimum transaction dollar value in USD. Default: 0.",
+          "default": 0
+        },
+        "searchQuery": {
+          "type": "string",
+          "description": "Optional company, ticker, or insider name keyword."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum signals to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search SEC Form 4 Insider Trades",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "get_company_insider_dossier",
+    "description": "Pull a complete insider trading dossier for a specific US public company by stock ticker (e.g., \"NVDA\") or 10-digit SEC CIK, summarizing net insider buying vs selling, Rule 10b5-1 plan ratio, cluster buy count, and recent Form 4 / 4/A filings.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "tickerOrCik"
+      ],
+      "properties": {
+        "tickerOrCik": {
+          "type": "string",
+          "description": "Stock ticker symbol (e.g., \"NVDA\") or 10-digit SEC CIK (e.g., \"0001045810\")."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-365). Default: 90.",
+          "default": 90
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum recent Form 4 filings to inspect (1-50). Default: 15.",
+          "default": 15
+        },
+        "includeAmendments": {
+          "type": "boolean",
+          "description": "Include Form 4/A amended filings. Default: true.",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get Company Insider Trading Dossier",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "detect_insider_cluster_buys",
+    "description": "Scan recent SEC Form 4 filings for multi-insider open-market cluster buys (2+ distinct insiders purchasing shares of the same company with code P), prioritizing discretionary C-suite buys outside Rule 10b5-1 plans.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "tickers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of tickers to check for cluster buys. Omit for market-wide scan."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-90). Default: 14.",
+          "default": 14
+        },
+        "minClusterSize": {
+          "type": "integer",
+          "description": "Minimum distinct insiders buying the same ticker (default: 2).",
+          "default": 2
+        },
+        "exclude10b51Plans": {
+          "type": "boolean",
+          "description": "Exclude Rule 10b5-1 scheduled purchases. Default: true.",
+          "default": true
+        },
+        "minTransactionValueUsd": {
+          "type": "number",
+          "description": "Minimum USD purchase per filing. Default: 10000.",
+          "default": 10000
+        },
+        "scanLimit": {
+          "type": "integer",
+          "description": "Number of open-market purchase filings to scan and group (5-100). Default: 40.",
+          "default": 40
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Detect Insider Cluster Buys",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_fda_device_clearances",
+    "description": "Search newly cleared FDA 510(k) and Premarket Approval (PMA) medical devices via official openFDA APIs, returning normalized device names, direct applicant contact names, mailing addresses, product codes, device classes, FDA summary URLs, and optional openFDA device recall history.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "daysBack": {
+          "type": "integer",
+          "description": "Number of past days of FDA decision_date records to scan (1-3650). Default: 90.",
+          "default": 90
+        },
+        "submissionType": {
+          "type": "string",
+          "enum": [
+            "all",
+            "510k",
+            "pma"
+          ],
+          "description": "Filter by FDA pathway: \"all\" (510k + PMA), \"510k\", or \"pma\". Default: \"all\".",
+          "default": "all"
+        },
+        "applicantQuery": {
+          "type": "string",
+          "description": "Optional MedTech company/applicant name filter (e.g., \"Boston Scientific\", \"Medtronic\")."
+        },
+        "deviceKeyword": {
+          "type": "string",
+          "description": "Optional keyword across device_name, trade_name, or generic_name (e.g., \"catheter\", \"MRI\")."
+        },
+        "medicalSpecialty": {
+          "type": "string",
+          "description": "Optional FDA advisory committee / medical specialty (e.g., \"Cardiovascular\", \"Orthopedic\", \"Radiology\")."
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Optional 2-letter ISO country code filter (e.g., \"US\", \"DE\")."
+        },
+        "includeRecallHistory": {
+          "type": "boolean",
+          "description": "Enrich each clearance with applicant recall count and latest Class I/II/III recall status. Default: true.",
+          "default": true
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum clearance leads to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search FDA 510(k) & PMA Device Clearances",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "get_medtech_applicant_dossier",
+    "description": "Build a 360-degree FDA regulatory dossier for a specific MedTech manufacturer/applicant, combining recent 510(k) clearances (with direct regulatory contacts), PMA approvals/supplements, and full openFDA device recall/enforcement history.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "applicantName"
+      ],
+      "properties": {
+        "applicantName": {
+          "type": "string",
+          "description": "MedTech manufacturer or applicant name (e.g., \"Boston Scientific\", \"Stryker\", \"Medtronic\")."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Historical decision_date lookback in days (1-3650). Default: 365.",
+          "default": 365
+        },
+        "submissionType": {
+          "type": "string",
+          "enum": [
+            "all",
+            "510k",
+            "pma"
+          ],
+          "description": "Filter clearances by \"all\", \"510k\", or \"pma\". Default: \"all\".",
+          "default": "all"
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum clearance records to return in the dossier (1-50). Default: 15.",
+          "default": 15
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get MedTech Applicant Regulatory Dossier",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "lookup_fda_clearance_by_id",
+    "description": "Look up a specific FDA 510(k) K-number (e.g., \"K261026\") or PMA ID (e.g., \"P900056\") with direct applicant contact info and optional openFDA device recall history.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "clearanceId"
+      ],
+      "properties": {
+        "clearanceId": {
+          "type": "string",
+          "description": "FDA 510(k) K-number (e.g., \"K261026\") or PMA number (e.g., \"P900056\")."
+        },
+        "includeRecallHistory": {
+          "type": "boolean",
+          "description": "Include applicant openFDA device recall history. Default: true.",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Lookup FDA 510(k) or PMA Clearance by ID",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,

@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.desastreger/open-data-mcp-servers",
   "title": "Open Data B2B & Compliance MCP Servers",
-  "description": "10 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
-  "version": "1.0.0",
+  "description": "12 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
+  "version": "1.2.0",
   "repository": {
     "url": "https://github.com/desastreger/open-data-mcp-servers",
     "source": "github"
@@ -406,7 +406,93 @@
         }
       ],
       "oauthUrl": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+    },
+    {
+      "id": "sec-form4-insider-cluster-signals",
+      "name": "SEC Form 4 Insider Trading & Cluster Buy Signals Scraper",
+      "description": "Real-time US corporate insider purchases, sales, Rule 10b5-1 flags, and multi-insider cluster buy signals from official SEC EDGAR Form 4 XML filings and Submissions/EFTS APIs.",
+      "storeUrl": "https://apify.com/desastreger/sec-form4-insider-cluster-signals",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/sec-form4-insider-cluster-signals.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/sec-form4-insider-cluster-signals",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--sec-form4-insider-cluster-signals.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "SEC EDGAR Form 4 XML, SEC Submissions API, SEC EFTS API",
+      "tools": [
+        {
+          "name": "search_form4_insider_trades",
+          "description": "Search real-time US corporate insider buys and sales from official SEC EDGAR Form 4 XML filings. Filter by stock tickers, CIKs, date window, open-market purchases only (code P), Rule 10b5-1 plan exclusion, or minimum USD transaction value. Returns insider role, 10b5-1 flag, transaction rows, clusterBuyCount, and 0-100 signalScore."
+        },
+        {
+          "name": "get_company_insider_dossier",
+          "description": "Pull a complete insider trading dossier for a specific US public company by stock ticker (e.g., \"NVDA\") or 10-digit SEC CIK, summarizing net insider buying vs selling, Rule 10b5-1 plan ratio, cluster buy count, and recent Form 4 / 4/A filings."
+        },
+        {
+          "name": "detect_insider_cluster_buys",
+          "description": "Scan recent SEC Form 4 filings for multi-insider open-market cluster buys (2+ distinct insiders purchasing shares of the same company with code P), prioritizing discretionary C-suite buys outside Rule 10b5-1 plans."
+        }
+      ]
+    },
+    {
+      "id": "fda-medtech-510k-approval-tracker",
+      "name": "FDA 510(k) & PMA Medical Device Clearances Scraper",
+      "description": "Track newly cleared US FDA 510(k) and Premarket Approval (PMA) medical devices via official openFDA Device APIs with direct applicant contacts, product codes, device classes, and recall history.",
+      "storeUrl": "https://apify.com/desastreger/fda-medtech-510k-approval-tracker",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/fda-medtech-510k-approval-tracker.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/fda-medtech-510k-approval-tracker",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "US FDA openFDA Device APIs (510k, PMA, Enforcement Recalls)",
+      "tools": [
+        {
+          "name": "search_fda_device_clearances",
+          "description": "Search newly cleared FDA 510(k) and Premarket Approval (PMA) medical devices via official openFDA APIs, returning normalized device names, direct applicant contact names, mailing addresses, product codes, device classes, FDA summary URLs, and optional openFDA device recall history."
+        },
+        {
+          "name": "get_medtech_applicant_dossier",
+          "description": "Build a 360-degree FDA regulatory dossier for a specific MedTech manufacturer/applicant, combining recent 510(k) clearances (with direct regulatory contacts), PMA approvals/supplements, and full openFDA device recall/enforcement history."
+        },
+        {
+          "name": "lookup_fda_clearance_by_id",
+          "description": "Look up a specific FDA 510(k) K-number (e.g., \"K261026\") or PMA ID (e.g., \"P900056\") with direct applicant contact info and optional openFDA device recall history."
+        }
+      ]
     }
   ],
-  "oauthGatewayUrl": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp"
+  "oauthGatewayUrl": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker"
 }

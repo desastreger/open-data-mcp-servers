@@ -132,6 +132,37 @@ async function fetchClinicalTrials() {
   });
 }
 
+async function fetchSecForm4() {
+  const data = await fetchJson("https://efts.sec.gov/LATEST/search-index?forms=4");
+  const hits = (data?.hits?.hits || []).slice(0, 3);
+  return hits.map((h) => {
+    const src = h._source || {};
+    const names = Array.isArray(src.display_names) ? src.display_names : [];
+    const owner = (names[0] || "N/A").replace(/\s*\(CIK\s+\d+\)\s*/i, "").trim();
+    const issuer = (names[1] || "N/A").replace(/\s*\(CIK\s+\d+\)\s*/i, "").trim();
+    const accession = String(h._id || "").split(":")[0];
+    return {
+      issuer,
+      reportingOwner: owner,
+      form: src.form || "4",
+      filingDate: src.file_date || "N/A",
+      accessionNumber: accession || "N/A",
+    };
+  });
+}
+
+async function fetchFda510k() {
+  const data = await fetchJson("https://api.fda.gov/device/510k.json?sort=decision_date:desc&limit=3");
+  return (data?.results || []).slice(0, 3).map((r) => ({
+    kNumber: r.k_number || "N/A",
+    deviceName: r.device_name || "N/A",
+    applicant: r.applicant || "N/A",
+    specialty: r.advisory_committee_description || r.advisory_committee || "N/A",
+    productCode: r.product_code || "—",
+    decisionDate: r.decision_date || "N/A",
+  }));
+}
+
 async function safeCollect(label, fn) {
   try {
     const records = await fn();
@@ -259,6 +290,38 @@ function buildMarkdown(generatedAt, catalog, sources) {
   }
   lines.push("");
 
+  // 6. SEC EDGAR Form 4
+  lines.push("## 6. SEC EDGAR Form 4 Insider Transactions (`sec-form4-insider-cluster-signals`)");
+  lines.push("");
+  if (sources.form4.ok && sources.form4.records.length) {
+    lines.push("| Issuer | Reporting Insider | Form | Filing Date | Accession Number |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.form4.records) {
+      lines.push(
+        `| ${mdCell(r.issuer)} | ${mdCell(r.reportingOwner)} | \`${mdCell(r.form)}\` | \`${mdCell(r.filingDate)}\` | \`${mdCell(r.accessionNumber)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.form4.error || "No records returned")}_`);
+  }
+  lines.push("");
+
+  // 7. FDA 510(k)
+  lines.push("## 7. US FDA 510(k) Medical Device Clearances (`fda-medtech-510k-approval-tracker`)");
+  lines.push("");
+  if (sources.fda510k.ok && sources.fda510k.records.length) {
+    lines.push("| 510(k) ID | Device Name | Applicant | Specialty | Product Code | Decision Date |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.fda510k.records) {
+      lines.push(
+        `| \`${mdCell(r.kNumber)}\` | ${mdCell(r.deviceName)} | ${mdCell(r.applicant)} | ${mdCell(r.specialty)} | \`${mdCell(r.productCode)}\` | \`${mdCell(r.decisionDate)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.fda510k.error || "No records returned")}_`);
+  }
+  lines.push("");
+
   return lines.join("\n");
 }
 
@@ -287,10 +350,10 @@ function buildHtml(generatedAt, catalog, sources) {
     operatingSystem: "Cross-platform (Streamable HTTP MCP / STDIO)",
     url: "https://desastreger.github.io/open-data-mcp-servers/",
     downloadUrl: "https://github.com/desastreger/open-data-mcp-servers",
-    softwareVersion: "1.1.0",
+    softwareVersion: "1.2.0",
     license: "https://opensource.org/licenses/MIT",
     description:
-      "10 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
+      "12 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D & Form 4, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
     author: {
       "@type": "Person",
       name: "desastreger",
@@ -357,10 +420,10 @@ function buildHtml(generatedAt, catalog, sources) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Data MCP Servers — 10 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
-  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 10 deterministic zero-API-key MCP servers for SEC Form D, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
+  <title>Open Data MCP Servers — 12 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
+  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 12 deterministic zero-API-key MCP servers for SEC Form D &amp; Form 4, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
   <meta property="og:title" content="Open Data B2B &amp; Compliance MCP Servers" />
-  <meta property="og:description" content="10 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
+  <meta property="og:description" content="12 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://desastreger.github.io/open-data-mcp-servers/" />
   <link rel="canonical" href="https://desastreger.github.io/open-data-mcp-servers/" />
@@ -478,13 +541,13 @@ function buildHtml(generatedAt, catalog, sources) {
     <section class="hero">
       <div class="pill-row">
         <span class="badge green">1-Click Browser OAuth · Zero API Keys</span>
-        <span class="badge">22 Read-Only MCP Tools</span>
+        <span class="badge">28 Read-Only MCP Tools</span>
         <span class="badge">Official MCP Registry: io.github.desastreger/open-data-mcp-servers</span>
         <span class="badge">Live Snapshot: ${escapeHtml(generatedAt)}</span>
       </div>
       <h1>Open Data B2B &amp; Compliance MCP Servers</h1>
       <p class="subtitle">
-        Ten deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR, GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
+        Twelve deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR (Form D &amp; Form 4), US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
       </p>
       <div class="hero-actions">
         <div class="install-box">
@@ -495,7 +558,7 @@ function buildHtml(generatedAt, catalog, sources) {
           </div>
         </div>
         <div class="install-box">
-          <span class="label">Install All 10 Agent Skills (skills.sh)</span>
+          <span class="label">Install All 12 Agent Skills (skills.sh)</span>
           <div class="copy-row">
             <code>${escapeHtml(skillsCmd)}</code>
             <button type="button" class="copy-btn" data-copy="${escapeHtml(skillsCmd)}">Copy CLI</button>
@@ -512,7 +575,7 @@ function buildHtml(generatedAt, catalog, sources) {
     </section>
 
     <section>
-      <h2>10 Production MCP Servers &amp; Apify Actors</h2>
+      <h2>12 Production MCP Servers &amp; Apify Actors</h2>
       <p class="section-note">Connect via 1-Click Browser OAuth (no manual API key) or direct Apify Standby Streamable HTTP (<code>Bearer $APIFY_TOKEN</code>).</p>
       <div class="grid">
         ${serverCardsHtml}
@@ -607,6 +670,39 @@ function buildHtml(generatedAt, catalog, sources) {
           </tbody>
         </table>
       </div>
+
+      <div class="table-card">
+        <h3>6. SEC EDGAR Form 4 Insider Transactions (<code>sec-form4-insider-cluster-signals</code>)</h3>
+        <table>
+          <thead><tr><th>Issuer</th><th>Reporting Insider</th><th>Form</th><th>Filing Date</th><th>Accession</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.form4.records, [
+              { get: (r) => r.issuer },
+              { get: (r) => r.reportingOwner },
+              { raw: (r) => `<code>${escapeHtml(r.form)}</code>` },
+              { get: (r) => r.filingDate },
+              { raw: (r) => `<code>${escapeHtml(r.accessionNumber)}</code>` },
+            ])}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>7. US FDA 510(k) Medical Device Clearances (<code>fda-medtech-510k-approval-tracker</code>)</h3>
+        <table>
+          <thead><tr><th>510(k) ID</th><th>Device Name</th><th>Applicant</th><th>Specialty</th><th>Product Code</th><th>Decision Date</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.fda510k.records, [
+              { raw: (r) => `<code>${escapeHtml(r.kNumber)}</code>` },
+              { get: (r) => r.deviceName },
+              { get: (r) => r.applicant },
+              { get: (r) => r.specialty },
+              { raw: (r) => `<code>${escapeHtml(r.productCode)}</code>` },
+              { get: (r) => r.decisionDate },
+            ])}
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <footer>
@@ -642,15 +738,17 @@ async function main() {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   const generatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
-  const [sec, usaspending, nppes, epa, trials] = await Promise.all([
+  const [sec, usaspending, nppes, epa, trials, form4, fda510k] = await Promise.all([
     safeCollect("SEC EDGAR", fetchSecFormD),
     safeCollect("USASpending", fetchUsaSpending),
     safeCollect("CMS NPPES", fetchCmsNppes),
     safeCollect("EPA ECHO", fetchEpaEcho),
     safeCollect("ClinicalTrials.gov", fetchClinicalTrials),
+    safeCollect("SEC Form 4", fetchSecForm4),
+    safeCollect("FDA 510(k)", fetchFda510k),
   ]);
 
-  const sources = { sec, usaspending, nppes, epa, trials };
+  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k };
 
   fs.mkdirSync(path.join(ROOT, "samples"), { recursive: true });
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
@@ -671,6 +769,8 @@ async function main() {
           nppes: nppes.records.length,
           epa: epa.records.length,
           trials: trials.records.length,
+          form4: form4.records.length,
+          fda510k: fda510k.records.length,
         },
         errors: Object.fromEntries(
           Object.entries(sources)

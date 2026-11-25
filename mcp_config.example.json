@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "open-data-mcp-suite-oauth": {
-      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp"
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker"
     },
     "sec-form-d-funding-leads": {
       "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
@@ -32,6 +32,12 @@
     },
     "openalex-pubmed-expert-finder-mcp": {
       "url": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+    },
+    "sec-form4-insider-cluster-signals": {
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form4-insider-cluster-signals"
+    },
+    "fda-medtech-510k-approval-tracker": {
+      "url": "https://mcp.apify.com/?tools=desastreger/fda-medtech-510k-approval-tracker"
     }
   }
 }

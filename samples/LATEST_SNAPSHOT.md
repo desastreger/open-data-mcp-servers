@@ -1,8 +1,8 @@
 # Live US/EU Open-Data Registry Snapshot
 
-> **Auto-generated:** `2026-11-25T10:44:02Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
+> **Auto-generated:** `2026-11-25T10:50:04Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
 > **Interactive Web Showcase:** [https://desastreger.github.io/open-data-mcp-servers/](https://desastreger.github.io/open-data-mcp-servers/)
-> **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp`
+> **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker`
 
 Each table below contains **3 real live sample records** pulled directly from official public registries during the latest automated showcase refresh.
 
@@ -45,3 +45,19 @@ Each table below contains **3 real live sample records** pulled directly from of
 | `NCT06141187` | Percutaneous Vertebroplasty Vs. Sham for Osteoporotic Vertebral Compression Fractures F... | Spine Centre of Southern Denmark | `NA` | Mikkel Ø Andersen, MD | `mikkel.andersen2@rsyd.dk` |
 | `NCT06569121` | Efficacy of a Telehealth Delivered Group Lifestyle Balance for People Post Stroke (tGLB... | Baylor Research Institute | `NA` | Site Contact | `See NCT record` |
 | `NCT02585414` | Assessment of TFT by OCT in Healthy Subjects and Subjects With DES | Medical University of Vienna | `N/A` | Gerhard Garhofer, MD | `gerhard.garhoefer@meduniwien.ac.at` |
+
+## 6. SEC EDGAR Form 4 Insider Transactions (`sec-form4-insider-cluster-signals`)
+
+| Issuer | Reporting Insider | Form | Filing Date | Accession Number |
+| :--- | :--- | :--- | :--- | :--- |
+| WILSON BANK HOLDING CO | PATTON JAMES ANTHONY | `4` | `2026-11-24` | `0002161049-26-000002` |
+| YELP INC | Kuduvalli Ramesh Akhil | `4` | `2026-11-24` | `0002148694-26-000006` |
+| Criteo S.A. | McGogney Connor | `4` | `2026-11-24` | `0002148390-26-000015` |
+
+## 7. US FDA 510(k) Medical Device Clearances (`fda-medtech-510k-approval-tracker`)
+
+| 510(k) ID | Device Name | Applicant | Specialty | Product Code | Decision Date |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `K261026` | Sine Monitoring Essential Tremor Smartphone (SMETSP) | Nordic Kinetics AB | Unknown | `—` | `2026-11-15` |
+| `K262992` | MiniMed Fit pump | Medtronic MiniMed | Clinical Chemistry | `QFG` | `2026-11-13` |
+| `K261411` | Disposable safety lancet (Impress, Impress Pro, Elite, Elite Pro, Lite4, Impress Max) | SteriLance Medical (Suzhou), Inc. | General, Plastic Surgery | `FMK` | `2026-11-13` |
