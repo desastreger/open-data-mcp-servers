@@ -50,18 +50,54 @@ Combine **NIH National Library of Medicine ClinicalTrials.gov REST API v2** and 
 
 ## Connect the Remote MCP Server
 
-This skill connects to the live Apify Standby Streamable HTTP MCP server (`$0.50 / 1,000 leads` launch pay-per-event rate; `$1.50 / 1,000` standard rate; zero external NCBI/Europe PMC API keys required).
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **Remote Streamable HTTP MCP Endpoint:** `https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp`
-- **Authentication Header:** `Authorization: Bearer $APIFY_TOKEN`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
 
-### Claude Code CLI
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp`
+- **Apify Store Page:** `https://apify.com/desastreger/openalex-pubmed-expert-finder-mcp`
+
+#### Claude Code CLI (OAuth)
 ```bash
-claude mcp add --transport http openalex-pubmed-expert-finder-mcp https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp \
+claude mcp add --transport http openalex-pubmed-expert-finder-mcp "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "openalex-pubmed-expert-finder-mcp": {
+      "url": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "openalex-pubmed-expert-finder-mcp": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
+```bash
+claude mcp add --transport http openalex-pubmed-expert-finder-mcp \
+  https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

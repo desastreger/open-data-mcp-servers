@@ -1,64 +1,37 @@
 {
   "mcpServers": {
+    "open-data-mcp-suite-oauth": {
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp"
+    },
     "sec-form-d-funding-leads": {
-      "url": "https://desastreger--sec-form-d-funding-leads.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
     },
     "us-kyb-compliance-dossier": {
-      "url": "https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
     },
     "federal-govcon-recompete-radar": {
-      "url": "https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar"
     },
     "us-metro-building-trade-permits": {
-      "url": "https://desastreger--us-metro-building-trade-permits.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
     },
     "cross-border-tariff-eu-trade-mcp": {
-      "url": "https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp"
     },
     "us-healthcare-practice-owners": {
-      "url": "https://desastreger--us-healthcare-practice-owners.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
     },
     "b2b-domain-mail-security-posture": {
-      "url": "https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
     },
     "us-municipal-code-violation-distressed-leads": {
-      "url": "https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads"
     },
     "epa-echo-industrial-facility-compliance": {
-      "url": "https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance"
     },
     "openalex-pubmed-expert-finder-mcp": {
-      "url": "https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp",
-      "headers": {
-        "Authorization": "Bearer <YOUR_APIFY_TOKEN>"
-      }
+      "url": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
     }
   }
 }

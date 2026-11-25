@@ -4,7 +4,8 @@
 
 **Category:** Cybersecurity & GTM Tech Stack  
 **Apify Store:** [https://apify.com/desastreger/b2b-domain-mail-security-posture](https://apify.com/desastreger/b2b-domain-mail-security-posture)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp`  
 **Official Data Sources:** Native RFC DNS (MX/SPF/DMARC/NS), TLS SNI, IANA RDAP, RIPEstat BGP
 
 > [!IMPORTANT]
@@ -68,7 +69,41 @@ Batch-audit up to 50 B2B domains concurrently via pure RFC protocols (DNS MX/SPF
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http b2b-domain-mail-security-posture "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "b2b-domain-mail-security-posture": {
+      "url": "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "b2b-domain-mail-security-posture": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

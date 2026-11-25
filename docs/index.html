@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Data MCP Servers — 10 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
+  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 10 deterministic zero-API-key MCP servers for SEC Form D, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
+  <meta property="og:title" content="Open Data B2B &amp; Compliance MCP Servers" />
+  <meta property="og:description" content="10 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://desastreger.github.io/open-data-mcp-servers/" />
+  <link rel="canonical" href="https://desastreger.github.io/open-data-mcp-servers/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Open Data B2B & Compliance MCP Servers","applicationCategory":"DeveloperApplication","operatingSystem":"Cross-platform (Streamable HTTP MCP / STDIO)","url":"https://desastreger.github.io/open-data-mcp-servers/","downloadUrl":"https://github.com/desastreger/open-data-mcp-servers","softwareVersion":"1.1.0","license":"https://opensource.org/licenses/MIT","description":"10 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.","author":{"@type":"Person","name":"desastreger","url":"https://apify.com/desastreger"},"offers":{"@type":"AggregateOffer","priceCurrency":"USD","lowPrice":"0.50","highPrice":"1.00","offerCount":"10"}}</script>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --panel: #111827;
+      --panel-2: #162033;
+      --border: #25324a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #10b981;
+      --code-bg: #070c17;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: radial-gradient(circle at top right, #13223e 0%, var(--bg) 52%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 72px; }
+    .hero {
+      background: linear-gradient(145deg, rgba(22,32,51,0.95), rgba(11,17,32,0.95));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      margin-bottom: 36px;
+    }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; padding: 4px 10px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: rgba(56, 189, 248, 0.08); color: #bae6fd;
+    }
+    .badge.green { background: rgba(16, 185, 129, 0.1); color: #a7f3d0; }
+    h1 { margin: 0 0 12px; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.18; }
+    .subtitle { color: var(--muted); max-width: 820px; margin: 0 0 24px; font-size: 1.05rem; }
+    .hero-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .install-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-2); font-weight: 700; margin-bottom: 6px; }
+    .copy-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .copy-row code {
+      display: block; overflow-x: auto; white-space: nowrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px; color: #f8fafc; padding: 4px 0;
+    }
+    .copy-btn {
+      flex-shrink: 0; background: #1e293b; color: #f8fafc;
+      border: 1px solid #334155; border-radius: 8px;
+      padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .copy-btn:hover { background: #334155; border-color: var(--accent); }
+    .cta-links { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-block; padding: 9px 15px; border-radius: 9px;
+      font-weight: 600; font-size: 14px; border: 1px solid var(--border);
+      background: var(--panel-2); color: var(--text);
+    }
+    .btn.primary { background: #0284c7; border-color: #38bdf8; color: #ffffff; }
+    h2 { font-size: 1.45rem; margin: 40px 0 14px; }
+    .section-note { color: var(--muted); margin-top: -6px; margin-bottom: 18px; font-size: 0.95rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 18px; }
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .card-head { display: flex; align-items: center; gap: 12px; }
+    .card-head h3 { margin: 0 0 4px; font-size: 1.03rem; }
+    .price-badge {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      padding: 2px 8px; border-radius: 6px;
+      background: rgba(16, 185, 129, 0.14); color: #6ee7b7;
+    }
+    .card-desc { margin: 0; font-size: 0.91rem; color: #cbd5e1; }
+    .meta-line { font-size: 0.83rem; color: var(--muted); }
+    .tools-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tool-pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px; padding: 3px 7px; border-radius: 6px;
+      background: #0f172a; border: 1px solid #26354d; color: #7dd3fc;
+    }
+    .endpoint-box {
+      background: var(--code-bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+    }
+    .card-links { display: flex; gap: 16px; font-size: 13px; font-weight: 600; }
+    .standby-details { font-size: 12px; color: var(--muted); }
+    .standby-details summary { cursor: pointer; }
+    .table-card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px; margin-bottom: 18px; overflow-x: auto;
+    }
+    .table-card h3 { margin: 0 0 10px; font-size: 1.05rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #1e293b; vertical-align: top; }
+    th { color: #93c5fd; font-weight: 600; white-space: nowrap; }
+    .muted { color: var(--muted); }
+    footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <div class="pill-row">
+        <span class="badge green">1-Click Browser OAuth · Zero API Keys</span>
+        <span class="badge">22 Read-Only MCP Tools</span>
+        <span class="badge">Official MCP Registry: io.github.desastreger/open-data-mcp-servers</span>
+        <span class="badge">Live Snapshot: 2026-11-25T10:42:10Z</span>
+      </div>
+      <h1>Open Data B2B &amp; Compliance MCP Servers</h1>
+      <p class="subtitle">
+        Ten deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR, GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
+      </p>
+      <div class="hero-actions">
+        <div class="install-box">
+          <span class="label">1-Click All-in-One OAuth MCP URL (Claude / Cursor / VS Code / Antigravity)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp">Copy URL</button>
+          </div>
+        </div>
+        <div class="install-box">
+          <span class="label">Install All 10 Agent Skills (skills.sh)</span>
+          <div class="copy-row">
+            <code>npx skills add desastreger/open-data-mcp-servers --all</code>
+            <button type="button" class="copy-btn" data-copy="npx skills add desastreger/open-data-mcp-servers --all">Copy CLI</button>
+          </div>
+        </div>
+      </div>
+      <div class="cta-links">
+        <a class="btn primary" href="https://apify.com/desastreger" target="_blank" rel="noopener">Browse Apify Store ↗</a>
+        <a class="btn" href="https://github.com/desastreger/open-data-mcp-servers" target="_blank" rel="noopener">GitHub Repository ↗</a>
+        <a class="btn" href="https://agensi.io" target="_blank" rel="noopener">Agensi Marketplace ↗</a>
+        <a class="btn" href="https://github.com/desastreger/open-data-mcp-servers/tree/main/templates/n8n" target="_blank" rel="noopener">n8n Workflows ↗</a>
+        <a class="btn" href="https://github.com/desastreger/open-data-mcp-servers/blob/main/templates/clay/README.md" target="_blank" rel="noopener">Clay HTTP Recipes ↗</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>10 Production MCP Servers &amp; Apify Actors</h2>
+      <p class="section-note">Connect via 1-Click Browser OAuth (no manual API key) or direct Apify Standby Streamable HTTP (<code>Bearer $APIFY_TOKEN</code>).</p>
+      <div class="grid">
+        
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/sec-form-d-funding-leads.svg" alt="sec-form-d-funding-leads icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>SEC Form D Scraper — Startup Funding &amp; EIN ($1/1k)</h3>
+            <span class="price-badge">$1.00 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Real-time US startup venture &amp; Reg D private placement rounds directly from SEC EDGAR Form D XML filings. Filters out pooled hedge/PE funds automatically and extracts CEO/founder names, phones, HQ addresses, EINs, and federal grant history.</p>
+        <div class="meta-line"><strong>Sources:</strong> SEC EDGAR Form D XML, SEC Submissions API, USASpending.gov</div>
+        <div class="tools-wrap"><span class="tool-pill">search_startup_funding_leads</span><span class="tool-pill">get_company_funding_dossier</span><span class="tool-pill">summarize_funding_market</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/sec-form-d-funding-leads" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/sec-form-d-funding-leads/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/sec-form-d-funding-leads/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--sec-form-d-funding-leads.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--sec-form-d-funding-leads.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-kyb-compliance-dossier.svg" alt="us-kyb-compliance-dossier icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>US KYB &amp; Compliance Scraper — SEC, LEI, FDA ($1/1k)</h3>
+            <span class="price-badge">$1.00 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">One-call US Know-Your-Business (KYB) and vendor risk due-diligence dossier aggregating GLEIF Global LEI corporate hierarchy, SEC EDGAR filings, FDA Drug &amp; Device recalls, CFPB consumer complaints, and USASpending federal contracts.</p>
+        <div class="meta-line"><strong>Sources:</strong> GLEIF LEI, SEC EDGAR, FDA openFDA, CFPB, USASpending.gov</div>
+        <div class="tools-wrap"><span class="tool-pill">screen_company_kyb</span><span class="tool-pill">batch_screen_companies</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/us-kyb-compliance-dossier" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/us-kyb-compliance-dossier/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/us-kyb-compliance-dossier/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/federal-govcon-recompete-radar.svg" alt="federal-govcon-recompete-radar icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>GovCon Recompete Contracts &amp; Grants Scraper ($0.80/1k)</h3>
+            <span class="price-badge">$0.80 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Track expiring US federal contracts entering recompete windows (USASpending.gov) and live open/forecasted federal grants (Grants.gov) with incumbent vendor names, UEIs, obligated ceiling values, NAICS/PSC codes, and expiration countdowns.</p>
+        <div class="meta-line"><strong>Sources:</strong> USASpending.gov, Grants.gov</div>
+        <div class="tools-wrap"><span class="tool-pill">search_expiring_recompete_contracts</span><span class="tool-pill">search_open_federal_grants</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/federal-govcon-recompete-radar" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/federal-govcon-recompete-radar/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/federal-govcon-recompete-radar/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-metro-building-trade-permits.svg" alt="us-metro-building-trade-permits icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>Building Permits Scraper — Solar &amp; Roofing ($0.50/1k)</h3>
+            <span class="price-badge">$0.50 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Harmonized US municipal building, solar PV, roofing, electrical, HVAC/mechanical, plumbing, and commercial remodel permits across 5 major metros (Los Angeles, Chicago, Austin, San Francisco, Seattle) with contractor names, valuations, and lead scores.</p>
+        <div class="meta-line"><strong>Sources:</strong> LA, Chicago, Austin, SF &amp; Seattle Socrata Open Data APIs</div>
+        <div class="tools-wrap"><span class="tool-pill">search_metro_building_permits</span><span class="tool-pill">list_supported_permit_metros</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/us-metro-building-trade-permits" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/us-metro-building-trade-permits/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/us-metro-building-trade-permits/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--us-metro-building-trade-permits.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--us-metro-building-trade-permits.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/cross-border-tariff-eu-trade-mcp.svg" alt="cross-border-tariff-eu-trade-mcp icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>US Tariff (HTS), EU VAT &amp; TED Tenders Scraper ($0.80/1k)</h3>
+            <span class="price-badge">$0.80 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Cross-border customs &amp; European procurement intelligence: calculate official USITC Harmonized Tariff Schedule (HTS) duty rates + Chapter 99 footnotes, verify EU corporate VAT numbers via EC VIES, and search EU TED public tenders.</p>
+        <div class="meta-line"><strong>Sources:</strong> USITC HTS API, European Commission VIES, EU TED API v3</div>
+        <div class="tools-wrap"><span class="tool-pill">lookup_us_hts_tariff</span><span class="tool-pill">verify_eu_vat_numbers</span><span class="tool-pill">search_eu_ted_tenders</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/cross-border-tariff-eu-trade-mcp" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/cross-border-tariff-eu-trade-mcp/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/cross-border-tariff-eu-trade-mcp/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-healthcare-practice-owners.svg" alt="us-healthcare-practice-owners icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>NPPES NPI Registry Scraper — Clinic Owners ($0.50/1k)</h3>
+            <span class="price-badge">$0.50 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Query official CMS NPPES NPI Registry v2.1 organization records to extract dental, medspa, dermatology, physical therapy, optometry, and clinic Authorized Officials (owners/presidents), credentials, direct phone numbers, and corporate-chain filtering.</p>
+        <div class="meta-line"><strong>Sources:</strong> CMS NPPES NPI Registry API v2.1</div>
+        <div class="tools-wrap"><span class="tool-pill">search_healthcare_practice_owners</span><span class="tool-pill">lookup_practice_by_npi</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/us-healthcare-practice-owners" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/us-healthcare-practice-owners/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/us-healthcare-practice-owners/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--us-healthcare-practice-owners.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--us-healthcare-practice-owners.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/b2b-domain-mail-security-posture.svg" alt="b2b-domain-mail-security-posture icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>DMARC, SPF, MX &amp; Domain Security Scraper ($0.50/1k)</h3>
+            <span class="price-badge">$0.50 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Zero-key RFC infrastructure intelligence: inspect DNS MX email providers (Google Workspace, Microsoft 365, Proofpoint), SPF SaaS senders, DMARC spoofing gaps, live TLS X.509 certificates, IANA RDAP domain age, and RIPEstat BGP ASNs.</p>
+        <div class="meta-line"><strong>Sources:</strong> Native RFC DNS (MX/SPF/DMARC/NS), TLS SNI, IANA RDAP, RIPEstat BGP</div>
+        <div class="tools-wrap"><span class="tool-pill">audit_domain_posture</span><span class="tool-pill">batch_audit_domains</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/b2b-domain-mail-security-posture" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/b2b-domain-mail-security-posture/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/b2b-domain-mail-security-posture/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/us-municipal-code-violation-distressed-leads.svg" alt="us-municipal-code-violation-distressed-leads icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>Code Violations &amp; Distressed Property Scraper ($0.80/1k)</h3>
+            <span class="price-badge">$0.80 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Multi-city municipal code enforcement and distressed property lead feed harmonizing 6 US Socrata open-data portals with parcel IDs, geocodes, structural/vacancy/blight classification, and investor distress scoring.</p>
+        <div class="meta-line"><strong>Sources:</strong> Austin, SF, Seattle, Buffalo, Montgomery MD &amp; Cincinnati Socrata APIs</div>
+        <div class="tools-wrap"><span class="tool-pill">search_code_violation_leads</span><span class="tool-pill">list_code_violation_metros</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/us-municipal-code-violation-distressed-leads" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/us-municipal-code-violation-distressed-leads/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/us-municipal-code-violation-distressed-leads/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/epa-echo-industrial-facility-compliance.svg" alt="epa-echo-industrial-facility-compliance icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>EPA ECHO Scraper — Violations &amp; Penalties ($0.50/1k)</h3>
+            <span class="price-badge">$0.50 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Screen US industrial plants, refineries, and utilities via US EPA ECHO APIs for Clean Water Act (NPDES), Clean Air Act, and RCRA Hazardous Waste Significant Non-Compliance (SNC/HPV) flags, inspections, and civil penalties.</p>
+        <div class="meta-line"><strong>Sources:</strong> US EPA ECHO REST APIs (Clean Water NPDES, Clean Air, RCRA)</div>
+        <div class="tools-wrap"><span class="tool-pill">search_epa_facility_violations</span><span class="tool-pill">lookup_facility_compliance</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/epa-echo-industrial-facility-compliance" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/epa-echo-industrial-facility-compliance/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/epa-echo-industrial-facility-compliance/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <img src="https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/openalex-pubmed-expert-finder-mcp.svg" alt="openalex-pubmed-expert-finder-mcp icon" width="44" height="44" loading="lazy" />
+          <div>
+            <h3>Clinical Trials &amp; PubMed Scraper — PI Emails ($0.50/1k)</h3>
+            <span class="price-badge">$0.50 / 1k launch</span>
+          </div>
+        </div>
+        <p class="card-desc">Combine NIH ClinicalTrials.gov API v2 and EMBL-EBI Europe PMC / PubMed to extract recruiting clinical trial Principal Investigators, direct unmasked contact emails &amp; phones, pharma/academic sponsors, citations, and NIH grant IDs.</p>
+        <div class="meta-line"><strong>Sources:</strong> NIH ClinicalTrials.gov REST API v2, EMBL-EBI Europe PMC / PubMed</div>
+        <div class="tools-wrap"><span class="tool-pill">find_clinical_trial_investigators</span><span class="tool-pill">search_pubmed_kol_experts</span></div>
+        <div class="endpoint-box">
+          <span class="label">1-Click OAuth MCP (Zero Key)</span>
+          <div class="copy-row">
+            <code>https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp">Copy</button>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="https://apify.com/desastreger/openalex-pubmed-expert-finder-mcp" target="_blank" rel="noopener">Apify Store ↗</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/servers/openalex-pubmed-expert-finder-mcp/README.md" target="_blank" rel="noopener">Docs</a>
+          <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/skills/openalex-pubmed-expert-finder-mcp/SKILL.md" target="_blank" rel="noopener">SKILL.md</a>
+        </div>
+        <details class="standby-details">
+          <summary>Direct Standby URL (Bearer $APIFY_TOKEN)</summary>
+          <div class="copy-row" style="margin-top:8px;">
+            <code>https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp</code>
+            <button type="button" class="copy-btn" data-copy="https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp">Copy</button>
+          </div>
+        </details>
+      </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Daily Live Open-Data Preview (Pulled 2026-11-25T10:42:10Z)</h2>
+      <p class="section-note">Automatically refreshed every day at <code>07:15 UTC</code> with 0 LLM tokens from live public-domain APIs. Full markdown archive: <a href="https://github.com/desastreger/open-data-mcp-servers/blob/main/samples/LATEST_SNAPSHOT.md" target="_blank" rel="noopener">samples/LATEST_SNAPSHOT.md</a>.</p>
+
+      <div class="table-card">
+        <h3>1. SEC EDGAR Form D Filings (<code>sec-form-d-funding-leads</code>)</h3>
+        <table>
+          <thead><tr><th>Company Name</th><th>CIK</th><th>Form</th><th>Filing Date</th><th>Location</th><th>Accession</th></tr></thead>
+          <tbody>
+            <tr><td>Vandelay Wicker 1616 LLC</td><td><code>0002166991</code></td><td><code>D</code></td><td>2026-11-24</td><td>Bannockburn, IL</td><td><code>0002166991-26-000001</code></td></tr>
+<tr><td>CLC NextGen LP</td><td><code>0002166932</code></td><td><code>D</code></td><td>2026-11-24</td><td>New York, NY</td><td><code>0002166932-26-000001</code></td></tr>
+<tr><td>Bebemos Inc.</td><td><code>0002166927</code></td><td><code>D</code></td><td>2026-11-24</td><td>Encinitas, CA</td><td><code>0002166927-26-000001</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>2. USASpending.gov Prime Federal Contracts (<code>federal-govcon-recompete-radar</code>)</h3>
+        <table>
+          <thead><tr><th>Award ID</th><th>Recipient</th><th>Obligated USD</th><th>Awarding Agency</th><th>End Date</th><th>NAICS</th></tr></thead>
+          <tbody>
+            <tr><td><code>HT940216C0001</code></td><td>HUMANA GOVERNMENT BUSINESS INC</td><td><strong>$51,269,205,263</strong></td><td>Department of Defense</td><td>2025-12-31</td><td><code>—</code></td></tr>
+<tr><td><code>DEAC0494AL85000</code></td><td>LOCKHEED MARTIN CORP</td><td><strong>$48,063,737,196</strong></td><td>Department of Energy</td><td>2017-04-30</td><td><code>—</code></td></tr>
+<tr><td><code>DENA0003525</code></td><td>NATIONAL TECHNOLOGY &amp; ENGINEERING SOLUTIONS OF SANDIA, LLC</td><td><strong>$44,093,914,875</strong></td><td>Department of Energy</td><td>2027-04-30</td><td><code>—</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>3. CMS NPPES NPI-2 Healthcare Practice Owners (<code>us-healthcare-practice-owners</code>)</h3>
+        <table>
+          <thead><tr><th>NPI</th><th>Organization</th><th>Authorized Official</th><th>Title</th><th>Location</th><th>Phone</th></tr></thead>
+          <tbody>
+            <tr><td><code>1760813802</code></td><td>101 DENTAL GROUP</td><td>AMIR CHOROOMI</td><td>dentist</td><td>CANOGA PARK, CA</td><td><code>818-999-9900</code></td></tr>
+<tr><td><code>1730535774</code></td><td>1012 GROUP, INC</td><td>PATTI BOLANDER</td><td>Director of Operations</td><td>SAN MATEO, CA</td><td><code>650-458-3727</code></td></tr>
+<tr><td><code>1447156245</code></td><td>109 DENTAL GROUP, PROFESSIONAL CORPORATION</td><td>THOMAS PHAM</td><td>Owner Dentist</td><td>CAMARILLO, CA</td><td><code>805-484-3599</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>4. US EPA ECHO Industrial Compliance (<code>epa-echo-industrial-facility-compliance</code>)</h3>
+        <table>
+          <thead><tr><th>Registry ID</th><th>Facility Name</th><th>Location</th><th>SNC Flag</th><th>Quarters NC</th><th>SIC</th></tr></thead>
+          <tbody>
+            <tr><td><code>110071320510</code></td><td>SOUTH CENTRAL WATER COMPANY</td><td>JUSTIN, TX</td><td><code>N</code></td><td>1</td><td><code>4952</code></td></tr>
+<tr><td><code>110072155318</code></td><td>$1 PLUS LATINO</td><td>HOUSTON, TX</td><td><code>N</code></td><td>0</td><td><code>—</code></td></tr>
+<tr><td><code>110001874669</code></td><td>$1.25 CLEANERS</td><td>HOUSTON, TX</td><td><code>N</code></td><td>0</td><td><code>7216</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>5. NIH ClinicalTrials.gov Recruiting Trials (<code>openalex-pubmed-expert-finder-mcp</code>)</h3>
+        <table>
+          <thead><tr><th>NCT ID</th><th>Study Title</th><th>Lead Sponsor</th><th>Phase</th><th>Central Contact</th><th>Email</th></tr></thead>
+          <tbody>
+            <tr><td><code>NCT06141187</code></td><td>Percutaneous Vertebroplasty Vs. Sham for Osteoporotic Vertebral Compression Fractures F...</td><td>Spine Centre of Southern Denmark</td><td>NA</td><td>Mikkel Ø Andersen, MD</td><td><code>mikkel.andersen2@rsyd.dk</code></td></tr>
+<tr><td><code>NCT06569121</code></td><td>Efficacy of a Telehealth Delivered Group Lifestyle Balance for People Post Stroke (tGLB...</td><td>Baylor Research Institute</td><td>NA</td><td>Site Contact</td><td><code>See NCT record</code></td></tr>
+<tr><td><code>NCT02585414</code></td><td>Assessment of TFT by OCT in Healthy Subjects and Subjects With DES</td><td>Medical University of Vienna</td><td>N/A</td><td>Gerhard Garhofer, MD</td><td><code>gerhard.garhoefer@meduniwien.ac.at</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <span>MIT License · Built by <a href="https://github.com/desastreger" target="_blank" rel="noopener">desastreger</a></span>
+      <span><a href="https://apify.com/desastreger" target="_blank" rel="noopener">Apify Store</a> · <a href="https://agensi.io" target="_blank" rel="noopener">Agensi</a> · <a href="https://skills.sh" target="_blank" rel="noopener">skills.sh</a></span>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const value = btn.getAttribute('data-copy');
+        if (!value) return;
+        const orig = btn.textContent;
+        try {
+          await navigator.clipboard.writeText(value);
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = orig; }, 1600);
+        } catch {
+          btn.textContent = 'Copy manually';
+          setTimeout(() => { btn.textContent = orig; }, 1600);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

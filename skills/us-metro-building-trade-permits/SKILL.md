@@ -49,21 +49,54 @@ Activate this skill whenever a user needs live municipal construction activity, 
 
 ## Connect the Remote MCP Server
 
-Connect any Streamable HTTP MCP client using `$APIFY_TOKEN`:
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **MCP Endpoint:** `https://desastreger--us-metro-building-trade-permits.apify.actor/mcp`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
+
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits`
 - **Apify Store Page:** `https://apify.com/desastreger/us-metro-building-trade-permits`
-- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
-- **Pay-Per-Event Rate:** `$0.50 / 1,000` permits launch (`$1.50 / 1,000` standard); zero monthly subscription
 
-### Claude Code CLI
+#### Claude Code CLI (OAuth)
+```bash
+claude mcp add --transport http us-metro-building-trade-permits "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "us-metro-building-trade-permits": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "us-metro-building-trade-permits": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--us-metro-building-trade-permits.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
 ```bash
 claude mcp add --transport http us-metro-building-trade-permits \
   https://desastreger--us-metro-building-trade-permits.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

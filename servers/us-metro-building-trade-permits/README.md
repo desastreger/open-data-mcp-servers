@@ -4,7 +4,8 @@
 
 **Category:** Construction, Solar & Trade Leads  
 **Apify Store:** [https://apify.com/desastreger/us-metro-building-trade-permits](https://apify.com/desastreger/us-metro-building-trade-permits)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--us-metro-building-trade-permits.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--us-metro-building-trade-permits.apify.actor/mcp`  
 **Official Data Sources:** LA, Chicago, Austin, SF & Seattle Socrata Open Data APIs
 
 > [!IMPORTANT]
@@ -64,7 +65,41 @@ _Takes no required arguments._
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http us-metro-building-trade-permits "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "us-metro-building-trade-permits": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "us-metro-building-trade-permits": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-metro-building-trade-permits"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

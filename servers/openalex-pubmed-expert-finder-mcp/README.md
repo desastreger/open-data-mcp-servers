@@ -4,7 +4,8 @@
 
 **Category:** Biotech, Life Sciences & R&D  
 **Apify Store:** [https://apify.com/desastreger/openalex-pubmed-expert-finder-mcp](https://apify.com/desastreger/openalex-pubmed-expert-finder-mcp)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--openalex-pubmed-expert-finder-mcp.apify.actor/mcp`  
 **Official Data Sources:** NIH ClinicalTrials.gov REST API v2, EMBL-EBI Europe PMC / PubMed
 
 > [!IMPORTANT]
@@ -65,7 +66,41 @@ Search peer-reviewed biomedical Key Opinion Leaders (KOLs) and Principal Investi
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http openalex-pubmed-expert-finder-mcp "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "openalex-pubmed-expert-finder-mcp": {
+      "url": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "openalex-pubmed-expert-finder-mcp": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/openalex-pubmed-expert-finder-mcp"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

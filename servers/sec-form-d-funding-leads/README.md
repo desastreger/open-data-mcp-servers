@@ -4,7 +4,8 @@
 
 **Category:** Venture Funding & Executive Contacts  
 **Apify Store:** [https://apify.com/desastreger/sec-form-d-funding-leads](https://apify.com/desastreger/sec-form-d-funding-leads)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--sec-form-d-funding-leads.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--sec-form-d-funding-leads.apify.actor/mcp`  
 **Official Data Sources:** SEC EDGAR Form D XML, SEC Submissions API, USASpending.gov
 
 > [!IMPORTANT]
@@ -82,7 +83,41 @@ Aggregate recent US private placement volume, median/total capital raised, top s
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http sec-form-d-funding-leads "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "sec-form-d-funding-leads": {
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "sec-form-d-funding-leads": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

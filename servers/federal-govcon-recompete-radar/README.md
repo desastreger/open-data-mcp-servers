@@ -4,7 +4,8 @@
 
 **Category:** Government Contracting & Grants  
 **Apify Store:** [https://apify.com/desastreger/federal-govcon-recompete-radar](https://apify.com/desastreger/federal-govcon-recompete-radar)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--federal-govcon-recompete-radar.apify.actor/mcp`  
 **Official Data Sources:** USASpending.gov, Grants.gov
 
 > [!IMPORTANT]
@@ -70,7 +71,41 @@ Search live open ("posted") and upcoming ("forecasted") US federal grant & R&D f
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http federal-govcon-recompete-radar "https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "federal-govcon-recompete-radar": {
+      "url": "https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "federal-govcon-recompete-radar": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/federal-govcon-recompete-radar"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

@@ -50,18 +50,54 @@ Inspect single or bulk B2B domains, website URLs, and email addresses across fou
 
 ## Connect the Remote MCP Server
 
-This skill connects to the live Apify Standby Streamable HTTP MCP server (`$0.50 / 1,000 domains` launch pay-per-event rate; `$1.50 / 1,000` standard rate; zero third-party WHOIS/DNS API keys required).
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **Remote Streamable HTTP MCP Endpoint:** `https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp`
-- **Authentication Header:** `Authorization: Bearer $APIFY_TOKEN`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
 
-### Claude Code CLI
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture`
+- **Apify Store Page:** `https://apify.com/desastreger/b2b-domain-mail-security-posture`
+
+#### Claude Code CLI (OAuth)
 ```bash
-claude mcp add --transport http b2b-domain-mail-security-posture https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp \
+claude mcp add --transport http b2b-domain-mail-security-posture "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "b2b-domain-mail-security-posture": {
+      "url": "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "b2b-domain-mail-security-posture": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/b2b-domain-mail-security-posture"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
+```bash
+claude mcp add --transport http b2b-domain-mail-security-posture \
+  https://desastreger--b2b-domain-mail-security-posture.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

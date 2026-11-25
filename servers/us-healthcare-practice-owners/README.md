@@ -4,7 +4,8 @@
 
 **Category:** Healthcare & Medical Leads  
 **Apify Store:** [https://apify.com/desastreger/us-healthcare-practice-owners](https://apify.com/desastreger/us-healthcare-practice-owners)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--us-healthcare-practice-owners.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--us-healthcare-practice-owners.apify.actor/mcp`  
 **Official Data Sources:** CMS NPPES NPI Registry API v2.1
 
 > [!IMPORTANT]
@@ -68,7 +69,41 @@ Look up a specific US healthcare practice organization by its 10-digit National 
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http us-healthcare-practice-owners "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "us-healthcare-practice-owners": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "us-healthcare-practice-owners": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

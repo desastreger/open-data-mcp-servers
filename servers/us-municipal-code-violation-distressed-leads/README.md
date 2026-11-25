@@ -4,7 +4,8 @@
 
 **Category:** Real Estate & Distressed Property  
 **Apify Store:** [https://apify.com/desastreger/us-municipal-code-violation-distressed-leads](https://apify.com/desastreger/us-municipal-code-violation-distressed-leads)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--us-municipal-code-violation-distressed-leads.apify.actor/mcp`  
 **Official Data Sources:** Austin, SF, Seattle, Buffalo, Montgomery MD & Cincinnati Socrata APIs
 
 > [!IMPORTANT]
@@ -63,7 +64,41 @@ _Takes no required arguments._
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http us-municipal-code-violation-distressed-leads "https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "us-municipal-code-violation-distressed-leads": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "us-municipal-code-violation-distressed-leads": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-municipal-code-violation-distressed-leads"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

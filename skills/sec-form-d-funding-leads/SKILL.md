@@ -49,21 +49,54 @@ Activate this skill when the user needs authoritative, real-time intelligence on
 
 ## Connect the Remote MCP Server
 
-Preferred transport is the zero-install Apify Standby Streamable HTTP MCP endpoint authenticated with `$APIFY_TOKEN`:
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **MCP Endpoint:** `https://desastreger--sec-form-d-funding-leads.apify.actor/mcp`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
+
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads`
 - **Apify Store Page:** `https://apify.com/desastreger/sec-form-d-funding-leads`
-- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
-- **Pay-Per-Event Rate:** `$1.00 / 1,000` leads launch (`$2.50 / 1,000` standard); zero monthly subscription
 
-### Claude Code CLI
+#### Claude Code CLI (OAuth)
+```bash
+claude mcp add --transport http sec-form-d-funding-leads "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "sec-form-d-funding-leads": {
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "sec-form-d-funding-leads": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--sec-form-d-funding-leads.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
 ```bash
 claude mcp add --transport http sec-form-d-funding-leads \
   https://desastreger--sec-form-d-funding-leads.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

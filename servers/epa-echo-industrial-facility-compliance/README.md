@@ -4,7 +4,8 @@
 
 **Category:** Environmental Compliance & ESG  
 **Apify Store:** [https://apify.com/desastreger/epa-echo-industrial-facility-compliance](https://apify.com/desastreger/epa-echo-industrial-facility-compliance)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--epa-echo-industrial-facility-compliance.apify.actor/mcp`  
 **Official Data Sources:** US EPA ECHO REST APIs (Clean Water NPDES, Clean Air, RCRA)
 
 > [!IMPORTANT]
@@ -75,7 +76,41 @@ Look up cross-statute US EPA compliance history, permits, inspections, SNC statu
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http epa-echo-industrial-facility-compliance "https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "epa-echo-industrial-facility-compliance": {
+      "url": "https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "epa-echo-industrial-facility-compliance": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/epa-echo-industrial-facility-compliance"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

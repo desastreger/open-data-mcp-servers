@@ -51,18 +51,54 @@ Query official US Department of Health & Human Services (HHS) / CMS National Pla
 
 ## Connect the Remote MCP Server
 
-This skill connects to the live Apify Standby Streamable HTTP MCP server backed by official CMS NPPES APIs (`$0.50 / 1,000 leads` launch pay-per-event rate; `$1.50 / 1,000` standard rate; no external CMS API key required).
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **Remote Streamable HTTP MCP Endpoint:** `https://desastreger--us-healthcare-practice-owners.apify.actor/mcp`
-- **Authentication Header:** `Authorization: Bearer $APIFY_TOKEN`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
 
-### Claude Code CLI
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners`
+- **Apify Store Page:** `https://apify.com/desastreger/us-healthcare-practice-owners`
+
+#### Claude Code CLI (OAuth)
 ```bash
-claude mcp add --transport http us-healthcare-practice-owners https://desastreger--us-healthcare-practice-owners.apify.actor/mcp \
+claude mcp add --transport http us-healthcare-practice-owners "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "us-healthcare-practice-owners": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "us-healthcare-practice-owners": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-healthcare-practice-owners"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--us-healthcare-practice-owners.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
+```bash
+claude mcp add --transport http us-healthcare-practice-owners \
+  https://desastreger--us-healthcare-practice-owners.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

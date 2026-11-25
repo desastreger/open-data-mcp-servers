@@ -4,7 +4,8 @@
 
 **Category:** KYB & Vendor Due Diligence  
 **Apify Store:** [https://apify.com/desastreger/us-kyb-compliance-dossier](https://apify.com/desastreger/us-kyb-compliance-dossier)  
-**Remote MCP Endpoint (Streamable HTTP):** `https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp`  
+**1-Click OAuth MCP (Zero API Key):** `https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier`  
+**Direct Standby MCP (Bearer Token):** `https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp`  
 **Official Data Sources:** GLEIF LEI, SEC EDGAR, FDA openFDA, CFPB, USASpending.gov
 
 > [!IMPORTANT]
@@ -72,7 +73,41 @@ Batch-screen up to 20 companies across GLEIF LEI, SEC EDGAR, FDA openFDA Recalls
 
 ## Quickstart
 
-### Add to `mcp_config.json`
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup)
+
+Connect directly via Apify's managed OAuth MCP gateway — your AI client opens a browser login once and requires **no manual `APIFY_TOKEN`** in config files:
+
+```bash
+# Claude Code CLI (1-Click OAuth)
+claude mcp add --transport http us-kyb-compliance-dossier "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
+```
+
+**Claude Desktop / Cursor / Windsurf / Google Antigravity (`mcp_config.json`):**
+```json
+{
+  "mcpServers": {
+    "us-kyb-compliance-dossier": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
+    }
+  }
+}
+```
+
+**VS Code Copilot (`.vscode/mcp.json`):**
+```json
+{
+  "servers": {
+    "us-kyb-compliance-dossier": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless automation, CI/CD, or direct token-authenticated clients:
 
 ```json
 {

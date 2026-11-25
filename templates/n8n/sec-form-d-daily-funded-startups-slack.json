@@ -1,0 +1,175 @@
+{
+  "name": "SEC Form D Daily Funded Startups to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Daily 09:00 Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/desastreger~sec-form-d-funding-leads/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$env.APIFY_TOKEN}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"daysBack\": 2,\n  \"maxResults\": 25,\n  \"operatingCompaniesOnly\": true,\n  \"minAmountSold\": 250000,\n  \"includeSecEntityMetadata\": true,\n  \"enrichWithFederalAwards\": true\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000002",
+      "name": "Fetch SEC Form D Funded Startups",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-amount-sold",
+              "leftValue": "={{ Number($json.totalAmountSold || 0) }}",
+              "rightValue": 250000,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000003",
+      "name": "Filter >= $250k Closed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEBHOOK_URL}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"*New SEC Form D Funded Startup:* {{$json.companyName}}\\n*Raised:* ${{Number($json.totalAmountSold || 0).toLocaleString()}} / ${{Number($json.totalOfferingAmount || 0).toLocaleString()}}\\n*Contact:* {{$json.primaryContactName || 'N/A'}} ({{$json.primaryContactTitle || 'Officer'}}) | {{$json.phone || 'N/A'}}\\n*Industry / State:* {{$json.industryGroup || 'N/A'}} | {{$json.address?.state || 'US'}}\\n*EIN:* {{$json.secEntityMetadata?.ein || 'N/A'}} | *Lead Score:* {{$json.leadScore || 0}}/100\\n*Filing:* {{$json.edgarFilingUrl}}\"\n}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000004",
+      "name": "Post Startup Lead to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        240
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 09:00 Schedule": {
+      "main": [
+        [
+          {
+            "node": "Fetch SEC Form D Funded Startups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch SEC Form D Funded Startups": {
+      "main": [
+        [
+          {
+            "node": "Filter >= $250k Closed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter >= $250k Closed": {
+      "main": [
+        [
+          {
+            "node": "Post Startup Lead to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "sec-edgar"
+    },
+    {
+      "name": "apify"
+    },
+    {
+      "name": "lead-gen"
+    }
+  ]
+}

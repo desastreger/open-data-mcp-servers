@@ -48,21 +48,54 @@ Activate this skill whenever supply-chain, finance, tax, e-commerce, or European
 
 ## Connect the Remote MCP Server
 
-Connect any Streamable HTTP MCP client using `$APIFY_TOKEN`:
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **MCP Endpoint:** `https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
+
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp`
 - **Apify Store Page:** `https://apify.com/desastreger/cross-border-tariff-eu-trade-mcp`
-- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
-- **Pay-Per-Event Rate:** `$0.80 / 1,000` records launch (`$2.00 / 1,000` standard); zero monthly subscription
 
-### Claude Code CLI
+#### Claude Code CLI (OAuth)
+```bash
+claude mcp add --transport http cross-border-tariff-eu-trade-mcp "https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "cross-border-tariff-eu-trade-mcp": {
+      "url": "https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "cross-border-tariff-eu-trade-mcp": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/cross-border-tariff-eu-trade-mcp"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
 ```bash
 claude mcp add --transport http cross-border-tariff-eu-trade-mcp \
   https://desastreger--cross-border-tariff-eu-trade-mcp.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

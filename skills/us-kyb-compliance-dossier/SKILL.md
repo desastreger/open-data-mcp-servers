@@ -49,21 +49,54 @@ Activate this skill whenever a user needs authoritative corporate identity verif
 
 ## Connect the Remote MCP Server
 
-Connect any Streamable HTTP MCP client directly using `$APIFY_TOKEN`:
+### Option 1: 1-Click Browser OAuth (Zero API Key Setup — Recommended)
 
-- **MCP Endpoint:** `https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp`
+Connect directly via Apify's managed OAuth gateway (`https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier`) — Claude Code, Cursor, Claude Desktop, Windsurf, VS Code, and Google Antigravity sign in via browser OAuth with **zero manual `APIFY_TOKEN`** needed:
+
+- **1-Click OAuth MCP URL:** `https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier`
 - **Apify Store Page:** `https://apify.com/desastreger/us-kyb-compliance-dossier`
-- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
-- **Pay-Per-Event Rate:** `$1.00 / 1,000` dossiers launch (`$2.50 / 1,000` standard); zero monthly subscription
 
-### Claude Code CLI
+#### Claude Code CLI (OAuth)
+```bash
+claude mcp add --transport http us-kyb-compliance-dossier "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
+```
+
+#### Cursor / Claude Desktop / Windsurf / Google Antigravity (OAuth `mcp.json`)
+```json
+{
+  "mcpServers": {
+    "us-kyb-compliance-dossier": {
+      "url": "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
+    }
+  }
+}
+```
+
+#### VS Code Copilot (`.vscode/mcp.json`)
+```json
+{
+  "servers": {
+    "us-kyb-compliance-dossier": {
+      "type": "http",
+      "url": "https://mcp.apify.com/?tools=desastreger/us-kyb-compliance-dossier"
+    }
+  }
+}
+```
+
+### Option 2: Direct Standby Streamable HTTP (`Bearer $APIFY_TOKEN`)
+
+For headless scripts, CI pipelines, or direct Standby authentication:
+
+- **Standby MCP Endpoint:** `https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp`
+- **Auth Header:** `Authorization: Bearer $APIFY_TOKEN`
+
 ```bash
 claude mcp add --transport http us-kyb-compliance-dossier \
   https://desastreger--us-kyb-compliance-dossier.apify.actor/mcp \
   --header "Authorization: Bearer $APIFY_TOKEN"
 ```
 
-### Cursor / Claude Desktop (`mcp.json` / `claude_desktop_config.json`)
 ```json
 {
   "mcpServers": {

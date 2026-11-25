@@ -1,0 +1,163 @@
+{
+  "name": "GovCon Expiring Recompete Contracts to CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "b2c3d4e5-0002-4000-8000-000000000001",
+      "name": "Weekly Monday 08:00 Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/desastreger~federal-govcon-recompete-radar/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$env.APIFY_TOKEN}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"mode\": \"recompete_contracts\",\n  \"daysToExpiration\": 180,\n  \"minAwardAmountUsd\": 250000,\n  \"naicsCodes\": [\"541511\", \"541512\", \"541519\", \"541611\"],\n  \"maxResults\": 50\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "b2c3d4e5-0002-4000-8000-000000000002",
+      "name": "Fetch Expiring Federal Contracts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(({ json }) => ({\n  json: {\n    dealName: `${json.awardId || 'GOVCON'} - ${json.recipientName || 'Incumbent'} Recompete`,\n    awardId: json.awardId,\n    incumbentVendor: json.recipientName,\n    incumbentUei: json.recipientUei || null,\n    agency: json.awardingAgency,\n    obligatedAmountUsd: Number(json.awardAmount || 0),\n    expirationDate: json.endDate,\n    daysRemaining: json.daysRemaining,\n    naicsCode: json.naicsCode,\n    pscCode: json.pscCode || null,\n    usaspendingUrl: json.usaspendingUrl || null\n  }\n}));"
+      },
+      "id": "b2c3d4e5-0002-4000-8000-000000000003",
+      "name": "Normalize CRM Opportunity Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.CRM_WEBHOOK_URL}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.CRM_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0002-4000-8000-000000000004",
+      "name": "Upsert Recompete Deal in CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Weekly Monday 08:00 Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Expiring Federal Contracts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Expiring Federal Contracts": {
+      "main": [
+        [
+          {
+            "node": "Normalize CRM Opportunity Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize CRM Opportunity Payload": {
+      "main": [
+        [
+          {
+            "node": "Upsert Recompete Deal in CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "govcon"
+    },
+    {
+      "name": "usaspending"
+    },
+    {
+      "name": "crm"
+    }
+  ]
+}
