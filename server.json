@@ -3,7 +3,7 @@
   "name": "io.github.desastreger/open-data-mcp-servers",
   "title": "Open Data B2B & Compliance MCP Servers",
   "description": "12 zero-key US/EU public-registry & RFC security MCP servers (SEC Form D/4, FDA 510k, KYB, GovCon).",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "websiteUrl": "https://desastreger.github.io/open-data-mcp-servers/",
   "repository": {
     "url": "https://github.com/desastreger/open-data-mcp-servers",
@@ -16,6 +16,24 @@
       "mimeType": "image/png",
       "sizes": [
         "512x512"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "open-data-mcp-servers",
+      "version": "1.2.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "APIFY_TOKEN",
+          "description": "Apify API token used when calling live remote public-registry tools.",
+          "isRequired": false,
+          "isSecret": true
+        }
       ]
     }
   ],

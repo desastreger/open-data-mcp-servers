@@ -3,7 +3,7 @@
 
 export const SERVER_INFO = Object.freeze({
   "name": "open-data-mcp-servers",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Unified STDIO-to-Streamable-HTTP MCP router for 12 official US/EU public-registry & RFC security MCP servers (28 read-only tools)."
 });
 

@@ -1,18 +1,19 @@
 {
   "name": "open-data-mcp-servers",
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "mcpName": "io.github.desastreger/open-data-mcp-servers",
   "description": "28 read-only US/EU public-registry & RFC security MCP tools (STDIO router + 12 remote Streamable HTTP MCP servers + 12 SKILL.md agent playbooks).",
+  "homepage": "https://desastreger.github.io/open-data-mcp-servers/",
   "license": "MIT",
   "type": "module",
   "main": "./src/index.mjs",
   "bin": {
-    "open-data-mcp-servers": "./src/index.mjs"
+    "open-data-mcp-servers": "src/index.mjs"
   },
   "files": [
     "src/",
     "skills/",
     "servers/",
-    "icons/",
     "server.json",
     "mcp_config.example.json",
     "README.md",
@@ -27,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/desastreger/open-data-mcp-servers.git"
+    "url": "git+https://github.com/desastreger/open-data-mcp-servers.git"
   },
   "keywords": [
     "mcp",
@@ -35,12 +36,18 @@
     "model-context-protocol",
     "open-data",
     "sec-edgar",
+    "form-d",
+    "form-4",
+    "insider-trading",
+    "fda-510k",
     "kyb",
     "govcon",
     "epa-echo",
     "clinical-trials",
     "nppes",
     "building-permits",
+    "dmarc",
+    "apify",
     "skill-md"
   ],
   "dependencies": {}
