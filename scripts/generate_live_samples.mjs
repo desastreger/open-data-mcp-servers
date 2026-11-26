@@ -220,6 +220,95 @@ async function fetchCisaKev() {
   });
 }
 
+async function fetchSec13f() {
+  const data = await fetchJson("https://efts.sec.gov/LATEST/search-index?forms=13F-HR");
+  const hits = (data?.hits?.hits || []).slice(0, 3);
+  return hits.map((h) => {
+    const src = h._source || {};
+    const rawName = Array.isArray(src.display_names) ? src.display_names[0] || "" : "";
+    const cikMatch = rawName.match(/\(CIK\s+(\d+)\)/i);
+    const cik = cikMatch ? cikMatch[1] : Array.isArray(src.ciks) ? src.ciks[0] : "";
+    const managerName = rawName.replace(/\s*\(CIK\s+\d+\)\s*/i, "").trim() || "N/A";
+    const accession = String(h._id || "").split(":")[0];
+    return {
+      managerName,
+      cik: cik || "N/A",
+      form: src.form || "13F-HR",
+      periodEnding: src.period_ending || "N/A",
+      filingDate: src.file_date || "N/A",
+      location: Array.isArray(src.biz_locations) ? src.biz_locations[0] || "US" : "US",
+      accessionNumber: accession || "N/A",
+    };
+  });
+}
+
+function parseCsvLine(line) {
+  const fields = [];
+  let cur = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"' && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = false;
+      } else {
+        cur += ch;
+      }
+    } else if (ch === '"') {
+      inQuotes = true;
+    } else if (ch === ",") {
+      fields.push(cur.trim());
+      cur = "";
+    } else {
+      cur += ch;
+    }
+  }
+  fields.push(cur.trim());
+  return fields;
+}
+
+async function fetchOfacSanctions() {
+  const res = await fetch("https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.CSV", {
+    headers: { "User-Agent": USER_AGENT },
+    signal: AbortSignal.timeout(TIMEOUT_MS),
+  });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} from OFAC SDN.CSV`);
+  }
+  const text = await res.text();
+  const lines = text.split(/\r?\n/);
+  const rows = [];
+  for (let i = lines.length - 1; i >= 0 && rows.length < 3; i--) {
+    const line = lines[i].trim();
+    if (!line || line === "\u001a") continue;
+    const cols = parseCsvLine(line);
+    const entNum = cols[0];
+    const primaryName = cols[1];
+    if (!entNum || !/^\d+$/.test(entNum) || !primaryName) continue;
+    const rawType = cols[2] && cols[2] !== "-0-" ? cols[2] : "entity";
+    const programs = (cols[3] && cols[3] !== "-0-" ? cols[3] : "")
+      .split(/\]\s*\[|;/)
+      .map((s) => s.replace(/[\[\]]/g, "").trim())
+      .filter(Boolean)
+      .join(", ");
+    const remarks = cols[11] && cols[11] !== "-0-" ? cols[11] : "";
+    const walletMatches = remarks.match(/Digital Currency Address\s*-\s*[A-Z0-9]+/gi) || [];
+    const remarksPreview = remarks.length > 85 ? `${remarks.slice(0, 82)}...` : remarks || "—";
+    rows.push({
+      entNum,
+      primaryName,
+      entityType: rawType,
+      programs: programs || "OFAC-SDN",
+      walletCount: walletMatches.length,
+      remarksPreview,
+    });
+  }
+  return rows;
+}
+
 async function safeCollect(label, fn) {
   try {
     const records = await fn();
@@ -411,6 +500,38 @@ function buildMarkdown(generatedAt, catalog, sources) {
   }
   lines.push("");
 
+  // 10. SEC EDGAR Form 13F-HR
+  lines.push("## 10. SEC EDGAR Form 13F-HR Institutional Filings (`sec-13f-institutional-whale-holdings`)");
+  lines.push("");
+  if (sources.sec13f.ok && sources.sec13f.records.length) {
+    lines.push("| Institutional Manager | CIK | Form | Period Ending | Filing Date | Location | Accession Number |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.sec13f.records) {
+      lines.push(
+        `| ${mdCell(r.managerName)} | \`${mdCell(r.cik)}\` | \`${mdCell(r.form)}\` | \`${mdCell(r.periodEnding)}\` | \`${mdCell(r.filingDate)}\` | ${mdCell(r.location)} | \`${mdCell(r.accessionNumber)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.sec13f.error || "No records returned")}_`);
+  }
+  lines.push("");
+
+  // 11. US Treasury OFAC SDN
+  lines.push("## 11. US Treasury OFAC SDN Sanctions List (`ofac-sanctions-aml-pep-screener-mcp`)");
+  lines.push("");
+  if (sources.ofac.ok && sources.ofac.records.length) {
+    lines.push("| Ent # | Primary Name | Type | OFAC Programs | Crypto Wallets | Remarks / Identifiers |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.ofac.records) {
+      lines.push(
+        `| \`${mdCell(r.entNum)}\` | ${mdCell(r.primaryName)} | \`${mdCell(r.entityType)}\` | \`${mdCell(r.programs)}\` | ${r.walletCount} | ${mdCell(r.remarksPreview)} |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.ofac.error || "No records returned")}_`);
+  }
+  lines.push("");
+
   return lines.join("\n");
 }
 
@@ -439,10 +560,10 @@ function buildHtml(generatedAt, catalog, sources) {
     operatingSystem: "Cross-platform (Streamable HTTP MCP / STDIO)",
     url: "https://desastreger.github.io/open-data-mcp-servers/",
     downloadUrl: "https://github.com/desastreger/open-data-mcp-servers",
-    softwareVersion: "1.3.0",
+    softwareVersion: "1.4.0",
     license: "https://opensource.org/licenses/MIT",
     description:
-      "14 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D & Form 4, IRS Form 990, CISA KEV + EPSS + NVD, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
+      "16 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D, Form 4 & Form 13F-HR, US Treasury OFAC SDN/AML, IRS Form 990, CISA KEV + EPSS + NVD, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
     author: {
       "@type": "Person",
       name: "desastreger",
@@ -509,10 +630,10 @@ function buildHtml(generatedAt, catalog, sources) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Data MCP Servers — 14 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
-  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 14 deterministic zero-API-key MCP servers for SEC Form D &amp; Form 4, IRS Form 990, CISA KEV &amp; EPSS, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
+  <title>Open Data MCP Servers — 16 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
+  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 16 deterministic zero-API-key MCP servers for SEC Form D/4/13F, OFAC SDN/AML, IRS Form 990, CISA KEV &amp; EPSS, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
   <meta property="og:title" content="Open Data B2B &amp; Compliance MCP Servers" />
-  <meta property="og:description" content="14 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
+  <meta property="og:description" content="16 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://desastreger.github.io/open-data-mcp-servers/" />
   <link rel="canonical" href="https://desastreger.github.io/open-data-mcp-servers/" />
@@ -630,13 +751,13 @@ function buildHtml(generatedAt, catalog, sources) {
     <section class="hero">
       <div class="pill-row">
         <span class="badge green">1-Click Browser OAuth · Zero API Keys</span>
-        <span class="badge">34 Read-Only MCP Tools</span>
+        <span class="badge">40 Read-Only MCP Tools</span>
         <span class="badge">Official MCP Registry: io.github.desastreger/open-data-mcp-servers</span>
         <span class="badge">Live Snapshot: ${escapeHtml(generatedAt)}</span>
       </div>
       <h1>Open Data B2B &amp; Compliance MCP Servers</h1>
       <p class="subtitle">
-        Fourteen deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR (Form D &amp; Form 4), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
+        Sixteen deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR (Form D, Form 4 &amp; Form 13F-HR), US Treasury OFAC SLS (SDN, ALT, ADD, Consolidated Non-SDN), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
       </p>
       <div class="hero-actions">
         <div class="install-box">
@@ -647,7 +768,7 @@ function buildHtml(generatedAt, catalog, sources) {
           </div>
         </div>
         <div class="install-box">
-          <span class="label">Install All 14 Agent Skills (skills.sh)</span>
+          <span class="label">Install All 16 Agent Skills (skills.sh)</span>
           <div class="copy-row">
             <code>${escapeHtml(skillsCmd)}</code>
             <button type="button" class="copy-btn" data-copy="${escapeHtml(skillsCmd)}">Copy CLI</button>
@@ -664,7 +785,7 @@ function buildHtml(generatedAt, catalog, sources) {
     </section>
 
     <section>
-      <h2>14 Production MCP Servers &amp; Apify Actors</h2>
+      <h2>16 Production MCP Servers &amp; Apify Actors</h2>
       <p class="section-note">Connect via 1-Click Browser OAuth (no manual API key) or direct Apify Standby Streamable HTTP (<code>Bearer $APIFY_TOKEN</code>).</p>
       <div class="grid">
         ${serverCardsHtml}
@@ -828,6 +949,41 @@ function buildHtml(generatedAt, catalog, sources) {
           </tbody>
         </table>
       </div>
+
+      <div class="table-card">
+        <h3>10. SEC EDGAR Form 13F-HR Institutional Filings (<code>sec-13f-institutional-whale-holdings</code>)</h3>
+        <table>
+          <thead><tr><th>Institutional Manager</th><th>CIK</th><th>Form</th><th>Period Ending</th><th>Filing Date</th><th>Location</th><th>Accession</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.sec13f.records, [
+              { get: (r) => r.managerName },
+              { raw: (r) => `<code>${escapeHtml(r.cik)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.form)}</code>` },
+              { get: (r) => r.periodEnding },
+              { get: (r) => r.filingDate },
+              { get: (r) => r.location },
+              { raw: (r) => `<code>${escapeHtml(r.accessionNumber)}</code>` },
+            ])}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>11. US Treasury OFAC SDN Sanctions List (<code>ofac-sanctions-aml-pep-screener-mcp</code>)</h3>
+        <table>
+          <thead><tr><th>Ent #</th><th>Primary Name</th><th>Type</th><th>OFAC Programs</th><th>Crypto Wallets</th><th>Remarks / Identifiers</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.ofac.records, [
+              { raw: (r) => `<code>${escapeHtml(r.entNum)}</code>` },
+              { get: (r) => r.primaryName },
+              { raw: (r) => `<code>${escapeHtml(r.entityType)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.programs)}</code>` },
+              { get: (r) => String(r.walletCount) },
+              { get: (r) => r.remarksPreview },
+            ])}
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <footer>
@@ -863,7 +1019,7 @@ async function main() {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   const generatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
-  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev] = await Promise.all([
+  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac] = await Promise.all([
     safeCollect("SEC EDGAR", fetchSecFormD),
     safeCollect("USASpending", fetchUsaSpending),
     safeCollect("CMS NPPES", fetchCmsNppes),
@@ -873,9 +1029,11 @@ async function main() {
     safeCollect("FDA 510(k)", fetchFda510k),
     safeCollect("IRS 990", fetchIrs990),
     safeCollect("CISA KEV", fetchCisaKev),
+    safeCollect("SEC Form 13F", fetchSec13f),
+    safeCollect("OFAC SDN", fetchOfacSanctions),
   ]);
 
-  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev };
+  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac };
 
   fs.mkdirSync(path.join(ROOT, "samples"), { recursive: true });
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
@@ -900,6 +1058,8 @@ async function main() {
           fda510k: fda510k.records.length,
           irs990: irs990.records.length,
           cisaKev: cisaKev.records.length,
+          sec13f: sec13f.records.length,
+          ofac: ofac.records.length,
         },
         errors: Object.fromEntries(
           Object.entries(sources)

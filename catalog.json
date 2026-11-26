@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.desastreger/open-data-mcp-servers",
   "title": "Open Data B2B & Compliance MCP Servers",
-  "description": "14 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
-  "version": "1.3.0",
+  "description": "16 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
+  "version": "1.4.0",
   "repository": {
     "url": "https://github.com/desastreger/open-data-mcp-servers",
     "source": "github"
@@ -578,7 +578,93 @@
           "description": "Summarize a software or hardware vendor/project exposure across the live CISA KEV catalog, reporting total KEV entries, ransomware-linked count, overdue BOD directives, top affected products, top CWEs, and EPSS-ranked top vulnerabilities."
         }
       ]
+    },
+    {
+      "id": "sec-13f-institutional-whale-holdings",
+      "name": "SEC Form 13F Hedge Fund & Whale Holdings Scraper",
+      "description": "Extract real-time US institutional investor, family office, and hedge fund equity & Put/Call option holdings from official SEC EDGAR Form 13F-HR XML filings with exact USD values, CUSIP/FIGI identifiers, portfolio weights, and compliance signer contacts.",
+      "storeUrl": "https://apify.com/desastreger/sec-13f-institutional-whale-holdings",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/sec-13f-institutional-whale-holdings.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/sec-13f-institutional-whale-holdings",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--sec-13f-institutional-whale-holdings.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "SEC EDGAR Form 13F-HR XML (primary_doc.xml + informationTable), SEC Submissions API, SEC EFTS API",
+      "tools": [
+        {
+          "name": "search_13f_whale_holdings",
+          "description": "Search real-time US institutional investor & hedge fund holdings from official SEC EDGAR Form 13F-HR XML filings (primary_doc.xml + informationTable). Filter by manager CIKs, issuer/ticker/CUSIP/fund keyword, Put/Call options only, minimum USD position value, and top N holdings per manager."
+        },
+        {
+          "name": "get_fund_13f_portfolio",
+          "description": "Pull the latest SEC Form 13F-HR portfolio summary and largest holdings for a specific institutional manager or hedge fund by CIK (e.g., \"0001067983\") or manager name (e.g., \"Berkshire Hathaway\"). Returns total reported AUM, tableEntryTotal, signer contact, and top positions with portfolio weights."
+        },
+        {
+          "name": "find_institutional_holders_by_issuer",
+          "description": "Find institutional whale managers holding a specific stock issuer, ticker, or 9-character CUSIP across recent SEC Form 13F-HR filings (e.g., \"NVIDIA\", \"NVDA\", or \"67066G104\"), ranked by USD position value descending."
+        }
+      ]
+    },
+    {
+      "id": "ofac-sanctions-aml-pep-screener-mcp",
+      "name": "OFAC Sanctions, AML & Crypto Wallet Screening API",
+      "description": "Screen individuals, companies, vessels, aircraft, aliases, and crypto wallet addresses against live US Treasury OFAC SDN, ALT, ADD, and Consolidated Non-SDN lists with deterministic 0-100 match scoring and <15 ms cached Standby MCP lookup.",
+      "storeUrl": "https://apify.com/desastreger/ofac-sanctions-aml-pep-screener-mcp",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/ofac-sanctions-aml-pep-screener-mcp.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/ofac-sanctions-aml-pep-screener-mcp",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--ofac-sanctions-aml-pep-screener-mcp.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "US Treasury OFAC Sanctions List Service (SDN.CSV, ALT.CSV, ADD.CSV, CONS_PRIM.CSV)",
+      "tools": [
+        {
+          "name": "screen_entities_ofac_aml",
+          "description": "Screen 1 to 100 individual, company, vessel, or aircraft names against the live US Treasury OFAC SDN and Consolidated Non-SDN lists plus ALT.CSV aliases. Returns deterministic 0-100 matchScore, matchDecision, programs, addresses, crypto wallets, and parsed IDs."
+        },
+        {
+          "name": "screen_crypto_wallet_sanctions",
+          "description": "Screen 1 to 100 cryptocurrency wallet addresses (BTC/XBT, ETH, USDT, USDC, TRX, XMR, LTC, SOL) against OFAC-sanctioned digital currency addresses parsed from SDN Remarks, or list sanctioned OFAC wallet holders filtered by blockchain currency or OFAC program."
+        },
+        {
+          "name": "search_ofac_sanctions_by_program",
+          "description": "Browse and filter live US Treasury OFAC SDN and Consolidated Non-SDN entries by sanctions program (SDGT, CYBER2, RUSSIA-EO14024, DPRK, IRAN, CMIC, CUBA), country, entity type (individual, entity, vessel, aircraft), or keyword."
+        }
+      ]
     }
   ],
-  "oauthGatewayUrl": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp"
+  "oauthGatewayUrl": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp"
 }

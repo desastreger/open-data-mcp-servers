@@ -1,8 +1,8 @@
 # Live US/EU Open-Data Registry Snapshot
 
-> **Auto-generated:** `2026-11-25T14:16:58Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
+> **Auto-generated:** `2026-11-26T14:17:28Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
 > **Interactive Web Showcase:** [https://desastreger.github.io/open-data-mcp-servers/](https://desastreger.github.io/open-data-mcp-servers/)
-> **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp`
+> **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp`
 
 Each table below contains **3 real live sample records** pulled directly from official public registries during the latest automated showcase refresh.
 
@@ -10,9 +10,9 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | Company Name | CIK | Form | Filing Date | Location | Accession Number |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| Thornberry Group Americas, LLC-S Series #2 | `0002166973` | `D` | `2026-11-25` | Indianapolis, IN | `0002166973-26-000001` |
-| CLC Exposure to Private Securities SPV, LLC - Series Titan | `0002166968` | `D` | `2026-11-25` | New York, NY | `0002166968-26-000001` |
-| Inspira Member LLC | `0002166929` | `D` | `2026-11-25` | Woburn, MA | `0002166929-26-000001` |
+| Keystone Grid LLC | `0002167226` | `D` | `2026-11-25` | Sheridan, WY | `0002167226-26-000001` |
+| GrittGene Therapeutics Inc. | `0002167176` | `D` | `2026-11-25` | Pasadena, CA | `0002167176-26-000001` |
+| Counterfact Labs, Inc. | `0002167117` | `D` | `2026-11-25` | San Francisco, CA | `0002167117-26-000001` |
 
 ## 2. USASpending.gov Federal Prime Contracts (`federal-govcon-recompete-radar`)
 
@@ -50,9 +50,9 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | Issuer | Reporting Insider | Form | Filing Date | Accession Number |
 | :--- | :--- | :--- | :--- | :--- |
-| SCHMID Group N.V. | Schuetz Arthur Josef Hermann | `4` | `2026-11-25` | `0002125667-26-000005` |
-| Dell Technologies Inc. | Kennedy David Alan | `4` | `2026-11-25` | `0002086800-26-000012` |
-| Kodiak AI, Inc. | Burnette Donald L. | `4` | `2026-11-25` | `0002080471-26-000003` |
+| CytoDyn Inc. | Wilcoxen Lauren Michelle | `4` | `2026-11-25` | `0002166516-26-000004` |
+| Galaxy Digital Inc. | Muneka Dritan | `4` | `2026-11-25` | `0002154593-26-000005` |
+| Carlyle Group Inc. | Heinzelman Kate Elizabeth | `4` | `2026-11-25` | `0002143781-26-000009` |
 
 ## 7. US FDA 510(k) Medical Device Clearances (`fda-medtech-510k-approval-tracker`)
 
@@ -74,6 +74,22 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | CVE ID | Vendor | Product | Date Added | BOD Due Date | Ransomware | EPSS 30d |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `CVE-2026-132224` | Optimizely | Web Experimentation | `2026-11-24` | `2026-11-27` | `Unknown` | `0.41%` |
-| `CVE-2026-132165` | Drupal | Core | `2026-11-24` | `2026-11-27` | `Unknown` | `—` |
-| `CVE-2026-131914` | Idunno | AntiCsrf | `2026-11-24` | `2026-11-27` | `Unknown` | `0.61%` |
+| `CVE-2026-133469` | Vates | Xen Orchestra | `2026-11-25` | `2026-11-28` | `Unknown` | `1.10%` |
+| `CVE-2026-133324` | Mitel | MiCollab | `2026-11-25` | `2026-11-28` | `Unknown` | `0.41%` |
+| `CVE-2026-133323` | Mitel | MiCollab | `2026-11-25` | `2026-11-28` | `Unknown` | `2.55%` |
+
+## 10. SEC EDGAR Form 13F-HR Institutional Filings (`sec-13f-institutional-whale-holdings`)
+
+| Institutional Manager | CIK | Form | Period Ending | Filing Date | Location | Accession Number |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Regatta Research & Money Management | `0002137529` | `13F-HR` | `2026-03-31` | `2026-11-25` | Metairie, LA | `0002137529-26-000004` |
+| Regatta Research & Money Management | `0002137529` | `13F-HR` | `2025-12-31` | `2026-11-25` | Metairie, LA | `0002137529-26-000003` |
+| Allied Private Wealth LLC | `0002132253` | `13F-HR` | `2026-09-30` | `2026-11-25` | Boca Raton, FL | `0002132253-26-000002` |
+
+## 11. US Treasury OFAC SDN Sanctions List (`ofac-sanctions-aml-pep-screener-mcp`)
+
+| Ent # | Primary Name | Type | OFAC Programs | Crypto Wallets | Remarks / Identifiers |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `59253` | SERVATI, Mohammadhossein | `individual` | `SDGT, IFSR` | 0 | DOB 06 Nov 1984; POB Tehran, Iran; nationality Iran; Additional Sanctions Informat... |
+| `59252` | TAJ, Majid | `individual` | `IRAN-EO13902` | 0 | DOB 22 Mar 1969; nationality Iran; Additional Sanctions Information - Subject to S... |
+| `59251` | BAVAND, Mohammad Javad | `individual` | `IRAN-EO13902` | 0 | DOB 08 May 1984; nationality Iran; Additional Sanctions Information - Subject to S... |

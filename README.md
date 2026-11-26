@@ -4,20 +4,20 @@
 [![Live Showcase](https://img.shields.io/badge/Live_Showcase-GitHub_Pages-0ea5e9)](https://desastreger.github.io/open-data-mcp-servers/)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.desastreger-10b981)](https://registry.modelcontextprotocol.io/)
 
-Fourteen production-grade, **100% deterministic, zero-third-party-API-key** remote **Streamable HTTP Model Context Protocol (MCP)** servers (plus a zero-dependency **34-tool local STDIO MCP router** in [`src/index.mjs`](./src/index.mjs)) and Apify Store Actors backed exclusively by official US/EU public-domain registries and RFC network protocols.
+Sixteen production-grade, **100% deterministic, zero-third-party-API-key** remote **Streamable HTTP Model Context Protocol (MCP)** servers (plus a zero-dependency **40-tool local STDIO MCP router** in [`src/index.mjs`](./src/index.mjs)) and Apify Store Actors backed exclusively by official US/EU public-domain registries and RFC network protocols.
 
 - **Interactive Showcase & Daily Live Data:** [https://desastreger.github.io/open-data-mcp-servers/](https://desastreger.github.io/open-data-mcp-servers/)
 - **Daily Live Registry Snapshot:** [`samples/LATEST_SNAPSHOT.md`](./samples/LATEST_SNAPSHOT.md) *(refreshed daily at `07:15 UTC` via GitHub Actions)*
-- **1-Click All-in-One OAuth MCP URL (Zero API Key Needed):** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp`
+- **1-Click All-in-One OAuth MCP URL (Zero API Key Needed):** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp`
 
 > [!IMPORTANT]
 > **Early-Adopter Launch Pricing (`$0.50–$1.00 / 1,000 records`) — Limited Launch Window:**
-> All 14 MCP servers & Apify Actors are currently live at **early-adopter launch rates (`$0.50–$1.00` per 1,000 records)** so early adopters can integrate and benchmark at near-compute cost. Once initial launch benchmarks are met, pricing will step up to our permanent **standard rates (`$1.50–$2.50` per 1,000 records)** — which still remain **75%–95% cheaper** than comparable Apify Store scrapers (`$10–$80/1k`).
+> All 16 MCP servers & Apify Actors are currently live at **early-adopter launch rates (`$0.50–$1.00` per 1,000 records)** so early adopters can integrate and benchmark at near-compute cost. Once initial launch benchmarks are met, pricing will step up to our permanent **standard rates (`$1.50–$2.50` per 1,000 records)** — which still remain **75%–95% cheaper** than comparable Apify Store scrapers (`$10–$80/1k`).
 
 ## Why These MCP Servers?
 
-- **1-Click Browser OAuth (Zero Manual Tokens):** Connect any single server or all 14 servers at once via `https://mcp.apify.com/?tools=desastreger/<slug>` — Claude Desktop, Claude Code, Cursor, Windsurf, VS Code, and Google Antigravity sign in seamlessly through browser OAuth.
-- **Zero External API Keys or Proxies Required:** Every endpoint queries authoritative government APIs (SEC EDGAR Form D & Form 4, IRS Form 990 via ProPublica, CISA KEV + FIRST.org EPSS + NIST NVD v2, FDA openFDA 510(k)/PMA/Recalls, GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, Europe PMC, USITC HTS, EC VIES, EU TED, Municipal Socrata portals) or native RFC protocols (DNS, TLS SNI, IANA RDAP, RIPEstat BGP).
+- **1-Click Browser OAuth (Zero Manual Tokens):** Connect any single server or all 16 servers at once via `https://mcp.apify.com/?tools=desastreger/<slug>` — Claude Desktop, Claude Code, Cursor, Windsurf, VS Code, and Google Antigravity sign in seamlessly through browser OAuth.
+- **Zero External API Keys or Proxies Required:** Every endpoint queries authoritative government APIs (SEC EDGAR Form D, Form 4 & Form 13F-HR, US Treasury OFAC SDN/Consolidated SLS, IRS Form 990 via ProPublica, CISA KEV + FIRST.org EPSS + NIST NVD v2, FDA openFDA 510(k)/PMA/Recalls, GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, Europe PMC, USITC HTS, EC VIES, EU TED, Municipal Socrata portals) or native RFC protocols (DNS, TLS SNI, IANA RDAP, RIPEstat BGP).
 - **Native Streamable HTTP MCP + REST Batch API:** Connect AI agents directly over MCP OR trigger batch JSON/CSV/Parquet runs via Apify REST API v2, **n8n**, or **Clay**.
 - **Pay-Per-Event Metering:** Only pay for normalized, deduplicated records returned.
 
@@ -41,8 +41,10 @@ Fourteen production-grade, **100% deterministic, zero-third-party-API-key** remo
 | <img src="./icons/fda-medtech-510k-approval-tracker.svg" width="32" height="32" alt="fda-medtech-510k-approval-tracker" /> | **[FDA 510(k) & PMA MedTech Clearances](./servers/fda-medtech-510k-approval-tracker/README.md)**<br/><sub>[Apify Store](https://apify.com/desastreger/fda-medtech-510k-approval-tracker) · [SKILL.md](./skills/fda-medtech-510k-approval-tracker/SKILL.md)</sub> | **OAuth:** `https://mcp.apify.com/?tools=desastreger/fda-medtech-510k-approval-tracker`<br/>**Standby:** `https://desastreger--fda-medtech-510k-approval-tracker.apify.actor/mcp` | US FDA openFDA Device APIs (510(k), PMA, Enforcement Recalls) | **$0.80 / 1k** *(reg. $2.00 / 1k)* |
 | <img src="./icons/irs-990-nonprofit-grantmaker-leads.svg" width="32" height="32" alt="irs-990-nonprofit-grantmaker-leads" /> | **[IRS Form 990 Nonprofit & Foundation Grantmakers](./servers/irs-990-nonprofit-grantmaker-leads/README.md)**<br/><sub>[Apify Store](https://apify.com/desastreger/irs-990-nonprofit-grantmaker-leads) · [SKILL.md](./skills/irs-990-nonprofit-grantmaker-leads/SKILL.md)</sub> | **OAuth:** `https://mcp.apify.com/?tools=desastreger/irs-990-nonprofit-grantmaker-leads`<br/>**Standby:** `https://desastreger--irs-990-nonprofit-grantmaker-leads.apify.actor/mcp` | ProPublica Nonprofit Explorer API v2, IRS EO BMF, Form 990/990-PF/990-EZ | **$0.50 / 1k** *(reg. $1.50 / 1k)* |
 | <img src="./icons/cisa-kev-nvd-exploit-prioritizer-mcp.svg" width="32" height="32" alt="cisa-kev-nvd-exploit-prioritizer-mcp" /> | **[CISA KEV, EPSS & NVD Exploit Prioritizer](./servers/cisa-kev-nvd-exploit-prioritizer-mcp/README.md)**<br/><sub>[Apify Store](https://apify.com/desastreger/cisa-kev-nvd-exploit-prioritizer-mcp) · [SKILL.md](./skills/cisa-kev-nvd-exploit-prioritizer-mcp/SKILL.md)</sub> | **OAuth:** `https://mcp.apify.com/?tools=desastreger/cisa-kev-nvd-exploit-prioritizer-mcp`<br/>**Standby:** `https://desastreger--cisa-kev-nvd-exploit-prioritizer-mcp.apify.actor/mcp` | CISA KEV Catalog, FIRST.org EPSS v1, NIST NVD CVE API v2 | **$0.50 / 1k** *(reg. $1.50 / 1k)* |
+| <img src="./icons/sec-13f-institutional-whale-holdings.svg" width="32" height="32" alt="sec-13f-institutional-whale-holdings" /> | **[SEC Form 13F Hedge Fund & Whale Holdings](./servers/sec-13f-institutional-whale-holdings/README.md)**<br/><sub>[Apify Store](https://apify.com/desastreger/sec-13f-institutional-whale-holdings) · [SKILL.md](./skills/sec-13f-institutional-whale-holdings/SKILL.md)</sub> | **OAuth:** `https://mcp.apify.com/?tools=desastreger/sec-13f-institutional-whale-holdings`<br/>**Standby:** `https://desastreger--sec-13f-institutional-whale-holdings.apify.actor/mcp` | SEC EDGAR Form 13F-HR XML, SEC Submissions & EFTS APIs | **$0.80 / 1k** *(reg. $2.00 / 1k)* |
+| <img src="./icons/ofac-sanctions-aml-pep-screener-mcp.svg" width="32" height="32" alt="ofac-sanctions-aml-pep-screener-mcp" /> | **[OFAC Sanctions, AML & Crypto Wallet Screener](./servers/ofac-sanctions-aml-pep-screener-mcp/README.md)**<br/><sub>[Apify Store](https://apify.com/desastreger/ofac-sanctions-aml-pep-screener-mcp) · [SKILL.md](./skills/ofac-sanctions-aml-pep-screener-mcp/SKILL.md)</sub> | **OAuth:** `https://mcp.apify.com/?tools=desastreger/ofac-sanctions-aml-pep-screener-mcp`<br/>**Standby:** `https://desastreger--ofac-sanctions-aml-pep-screener-mcp.apify.actor/mcp` | US Treasury OFAC SLS (`SDN.CSV`, `ALT.CSV`, `ADD.CSV`, `CONS_PRIM.CSV`) | **$0.80 / 1k** *(reg. $2.00 / 1k)* |
 
-See [`server.json`](./server.json) for the Official MCP Registry manifest, [`catalog.json`](./catalog.json) for the full 14-server metadata catalog, and [`mcp_config.example.json`](./mcp_config.example.json) for ready-to-paste client configs.
+See [`server.json`](./server.json) for the Official MCP Registry manifest, [`catalog.json`](./catalog.json) for the full 16-server metadata catalog, and [`mcp_config.example.json`](./mcp_config.example.json) for ready-to-paste client configs.
 
 ---
 
@@ -51,7 +53,7 @@ See [`server.json`](./server.json) for the Official MCP Registry manifest, [`cat
 Every server in this repository ships an open-standard [`skills/<slug>/SKILL.md`](./skills) playbook (including parameter schemas, query recipes, and executive report templates) indexed on [`skills.sh`](https://skills.sh) and compatible with **Claude Code**, **Cursor**, **Codex CLI**, **Gemini CLI**, **GitHub Copilot**, **OpenClaw**, and **Google Antigravity**:
 
 ```bash
-# Install all 14 open-data skills via the open skills CLI (Claude Code / Cursor / Codex / Antigravity)
+# Install all 16 open-data skills via the open skills CLI (Claude Code / Cursor / Codex / Antigravity)
 npx skills add desastreger/open-data-mcp-servers --all
 
 # Or copy a single skill directly into Claude Code / Antigravity:
@@ -67,11 +69,11 @@ cp -r open-data-mcp-servers/skills/sec-form-d-funding-leads ~/.claude/skills/
 
 Use Apify's managed OAuth MCP gateway (`https://mcp.apify.com/?tools=desastreger/<slug>`). Your MCP client automatically opens a browser login once — **no `APIFY_TOKEN` header required**.
 
-#### Claude Code CLI (All 14 Servers in One Command)
+#### Claude Code CLI (All 16 Servers in One Command)
 
 ```bash
 claude mcp add --transport http open-data-mcp-suite \
-  "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp"
+  "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp"
 ```
 
 #### Claude Desktop / Cursor / Windsurf / Google Antigravity
@@ -85,7 +87,7 @@ claude mcp add --transport http open-data-mcp-suite \
 {
   "mcpServers": {
     "open-data-mcp-suite": {
-      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp"
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp"
     }
   }
 }
@@ -98,7 +100,7 @@ claude mcp add --transport http open-data-mcp-suite \
   "servers": {
     "open-data-mcp-suite": {
       "type": "http",
-      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp"
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp"
     }
   }
 }
@@ -133,7 +135,7 @@ For headless agents, CI pipelines, or direct token-authenticated requests, repla
 }
 ```
 
-### Option 3: Unified Local STDIO Router (All 34 Read-Only Tools via One Entrypoint)
+### Option 3: Unified Local STDIO Router (All 40 Read-Only Tools via One Entrypoint)
 
 For MCP clients that prefer local `stdio` transport, run the zero-dependency router in [`src/index.mjs`](./src/index.mjs):
 
@@ -160,6 +162,7 @@ For MCP clients that prefer local `stdio` transport, run the zero-dependency rou
   - [`govcon-expiring-contracts-crm.json`](./templates/n8n/govcon-expiring-contracts-crm.json) — Weekly USASpending expiring federal contract recompete sync to CRM webhook.
   - [`kyb-compliance-vendor-webhook.json`](./templates/n8n/kyb-compliance-vendor-webhook.json) — Real-time vendor onboarding KYB webhook screening across GLEIF LEI, SEC, FDA, CFPB, and USASpending.
   - [`cisa-kev-critical-cve-slack.json`](./templates/n8n/cisa-kev-critical-cve-slack.json) — Daily CISA KEV newly added & ransomware-linked CVE alerts with EPSS & CVSS to Slack.
+  - [`ofac-aml-counterparty-screening-webhook.json`](./templates/n8n/ofac-aml-counterparty-screening-webhook.json) — Real-time FinTech/KYB onboarding webhook screening counterparties & crypto wallets against US Treasury OFAC SDN & Consolidated lists.
 - **Clay HTTP API Enrichment (`templates/clay/README.md`):**
   - Copy-paste HTTP API column setups for Form D funding/EINs, KYB risk dossiers, DNS/DMARC mail stack audits, healthcare clinic owners, and EPA compliance checks in [`templates/clay/README.md`](./templates/clay/README.md).
 

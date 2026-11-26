@@ -4,8 +4,8 @@ import test from "node:test";
 import { handleJsonRpcMessage } from "../src/index.mjs";
 import { MCP_TOOLS, TOOL_ROUTES } from "../src/tools_catalog.mjs";
 
-test("1. catalog exposes all 34 read-only tools with strict annotations and frozen routes", () => {
-  assert.equal(MCP_TOOLS.length, 34);
+test("1. catalog exposes all 40 read-only tools with strict annotations and frozen routes", () => {
+  assert.equal(MCP_TOOLS.length, 40);
   for (const tool of MCP_TOOLS) {
     assert.equal(tool.annotations.readOnlyHint, true);
     assert.equal(tool.annotations.destructiveHint, false);
@@ -39,7 +39,7 @@ test("2. STDIO process handles initialize, tools/list, and unauthenticated tools
   await new Promise((resolve) => child.on("close", resolve));
   assert.equal(lines.length, 3);
   assert.equal(lines[0].result.serverInfo.name, "open-data-mcp-servers");
-  assert.equal(lines[1].result.tools.length, 34);
+  assert.equal(lines[1].result.tools.length, 40);
   assert.equal(lines[2].result.isError, true);
   assert.match(lines[2].result.content[0].text, /Missing APIFY_TOKEN/);
 });

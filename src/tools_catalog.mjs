@@ -1,10 +1,10 @@
 // Auto-generated deterministic read-only MCP tool schemas & frozen endpoint allowlist.
-// Zero filesystem or shell access. All 34 tools are strictly read-only public-registry queries.
+// Zero filesystem or shell access. All 40 tools are strictly read-only public-registry queries.
 
 export const SERVER_INFO = Object.freeze({
   "name": "open-data-mcp-servers",
-  "version": "1.3.0",
-  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 14 official US/EU public-registry & RFC security MCP servers (34 read-only tools)."
+  "version": "1.4.0",
+  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 16 official US/EU public-registry & RFC security MCP servers (40 read-only tools)."
 });
 
 export const TOOL_ROUTES = Object.freeze({
@@ -143,6 +143,30 @@ export const TOOL_ROUTES = Object.freeze({
   "summarize_vendor_kev_exposure": {
     "slug": "cisa-kev-nvd-exploit-prioritizer-mcp",
     "endpoint": "https://desastreger--cisa-kev-nvd-exploit-prioritizer-mcp.apify.actor/mcp"
+  },
+  "search_13f_whale_holdings": {
+    "slug": "sec-13f-institutional-whale-holdings",
+    "endpoint": "https://desastreger--sec-13f-institutional-whale-holdings.apify.actor/mcp"
+  },
+  "get_fund_13f_portfolio": {
+    "slug": "sec-13f-institutional-whale-holdings",
+    "endpoint": "https://desastreger--sec-13f-institutional-whale-holdings.apify.actor/mcp"
+  },
+  "find_institutional_holders_by_issuer": {
+    "slug": "sec-13f-institutional-whale-holdings",
+    "endpoint": "https://desastreger--sec-13f-institutional-whale-holdings.apify.actor/mcp"
+  },
+  "screen_entities_ofac_aml": {
+    "slug": "ofac-sanctions-aml-pep-screener-mcp",
+    "endpoint": "https://desastreger--ofac-sanctions-aml-pep-screener-mcp.apify.actor/mcp"
+  },
+  "screen_crypto_wallet_sanctions": {
+    "slug": "ofac-sanctions-aml-pep-screener-mcp",
+    "endpoint": "https://desastreger--ofac-sanctions-aml-pep-screener-mcp.apify.actor/mcp"
+  },
+  "search_ofac_sanctions_by_program": {
+    "slug": "ofac-sanctions-aml-pep-screener-mcp",
+    "endpoint": "https://desastreger--ofac-sanctions-aml-pep-screener-mcp.apify.actor/mcp"
   }
 });
 
@@ -1707,6 +1731,309 @@ export const MCP_TOOLS = Object.freeze([
     },
     "annotations": {
       "title": "Summarize Vendor CISA KEV Exposure",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_13f_whale_holdings",
+    "description": "Search real-time US institutional investor & hedge fund holdings from official SEC EDGAR Form 13F-HR XML filings (`primary_doc.xml` + `informationTable`). Filter by manager CIKs, issuer/ticker/CUSIP/fund keyword, Put/Call options only, minimum USD position value, and top N holdings per manager.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "managerCiks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional SEC manager CIKs (e.g., [\"0001067983\"] for Berkshire Hathaway)."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional issuer name, ticker (e.g., \"NVDA\"), CUSIP, or fund name keyword."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-365). Automatically expands to 90 days if empty. Default: 30.",
+          "default": 30
+        },
+        "minPositionValueUsd": {
+          "type": "number",
+          "description": "Minimum USD position value. Default: 0.",
+          "default": 0
+        },
+        "optionsOnly": {
+          "type": "boolean",
+          "description": "When true, returns only Put/Call options positions. Default: false.",
+          "default": false
+        },
+        "topHoldingsPerManager": {
+          "type": "integer",
+          "description": "Top N largest positions per filing sorted by USD value desc (1-100). Default: 5.",
+          "default": 5
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum total holding rows to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search SEC Form 13F Whale Holdings",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "get_fund_13f_portfolio",
+    "description": "Pull the latest SEC Form 13F-HR portfolio summary and largest holdings for a specific institutional manager or hedge fund by CIK (e.g., \"0001067983\") or manager name (e.g., \"Berkshire Hathaway\"). Returns total reported AUM, tableEntryTotal, signer contact, and top positions with portfolio weights.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "managerCikOrName"
+      ],
+      "properties": {
+        "managerCikOrName": {
+          "type": "string",
+          "description": "Institutional manager 10-digit SEC CIK (e.g., \"0001067983\") or fund name (e.g., \"Berkshire Hathaway\")."
+        },
+        "topHoldings": {
+          "type": "integer",
+          "description": "Number of largest positions to return (1-50). Default: 15.",
+          "default": 15
+        },
+        "optionsOnly": {
+          "type": "boolean",
+          "description": "Return only Put/Call options holdings. Default: false.",
+          "default": false
+        },
+        "minPositionValueUsd": {
+          "type": "number",
+          "description": "Minimum USD position size. Default: 0.",
+          "default": 0
+        },
+        "includeAmendments": {
+          "type": "boolean",
+          "description": "Include Form 13F-HR/A amendments. Default: true.",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get Institutional Fund 13F Portfolio",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "find_institutional_holders_by_issuer",
+    "description": "Find institutional whale managers holding a specific stock issuer, ticker, or 9-character CUSIP across recent SEC Form 13F-HR filings (e.g., \"NVIDIA\", \"NVDA\", or \"67066G104\"), ranked by USD position value descending.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "issuerOrCusip"
+      ],
+      "properties": {
+        "issuerOrCusip": {
+          "type": "string",
+          "description": "Issuer name (e.g., \"NVIDIA\"), stock ticker (e.g., \"NVDA\"), or 9-character CUSIP (e.g., \"67066G104\")."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-365). Default: 30 (auto-expands to 90 if needed).",
+          "default": 30
+        },
+        "optionsOnly": {
+          "type": "boolean",
+          "description": "Only include Put/Call options positions on this issuer. Default: false.",
+          "default": false
+        },
+        "minPositionValueUsd": {
+          "type": "number",
+          "description": "Minimum USD position value. Default: 0.",
+          "default": 0
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum institutional holders to return (1-50). Default: 15.",
+          "default": 15
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Find Institutional Holders by Issuer or CUSIP",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "screen_entities_ofac_aml",
+    "description": "Screen 1 to 100 individual, company, vessel, or aircraft names against the live US Treasury OFAC SDN and Consolidated Non-SDN lists plus ALT.CSV aliases. Returns deterministic 0-100 matchScore, matchDecision (EXACT_SANCTIONS_HIT, STRONG_ALIAS_MATCH, POTENTIAL_FUZZY_MATCH, CLEAR_NO_HIT), programs, addresses, crypto wallets, and parsed IDs (Passport, Tax ID, LEI, IMO).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Single entity, person, vessel, or aircraft name to screen (e.g., \"AEROCARIBBEAN AIRLINES\")."
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Batch array of up to 100 entity, person, vessel, or aircraft names to screen."
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "all",
+            "individual",
+            "entity",
+            "vessel",
+            "aircraft"
+          ],
+          "description": "Optional OFAC entity type filter. Default: \"all\".",
+          "default": "all"
+        },
+        "minMatchScore": {
+          "type": "integer",
+          "description": "Minimum deterministic 0-100 similarity score required for a hit (50-100). Default: 70.",
+          "default": 70
+        },
+        "includeClearResults": {
+          "type": "boolean",
+          "description": "Emit explicit CLEAR_NO_HIT records when a screened name has no match above minMatchScore. Default: true.",
+          "default": true
+        },
+        "maxMatchesPerQuery": {
+          "type": "integer",
+          "description": "Maximum candidate matches returned per screened name (1-10). Default: 3.",
+          "default": 3
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum total dossiers to return across the batch (1-100). Default: 25.",
+          "default": 25
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Screen Entities Against OFAC Sanctions & AML Lists",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "screen_crypto_wallet_sanctions",
+    "description": "Screen 1 to 100 cryptocurrency wallet addresses (BTC/XBT, ETH, USDT, USDC, TRX, XMR, LTC, SOL) against OFAC-sanctioned digital currency addresses parsed from SDN Remarks, or list sanctioned OFAC wallet holders filtered by blockchain currency or OFAC program.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "Single cryptocurrency wallet address to screen against OFAC SDN Digital Currency Addresses."
+        },
+        "cryptoAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Batch array of up to 100 cryptocurrency wallet addresses to screen."
+        },
+        "currency": {
+          "type": "string",
+          "description": "Optional blockchain currency filter (e.g., \"XBT\", \"BTC\", \"ETH\", \"USDT\", \"TRX\", \"XMR\") to filter hits or list sanctioned wallets on that chain."
+        },
+        "programFilter": {
+          "type": "string",
+          "description": "Optional OFAC sanctions program filter (e.g., \"CYBER2\", \"SDGT\", \"DPRK4\", \"RUSSIA-EO14024\")."
+        },
+        "includeClearResults": {
+          "type": "boolean",
+          "description": "Emit CLEAR_NO_HIT records for unflagged wallet addresses. Default: true.",
+          "default": true
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum dossiers to return (1-100). Default: 25.",
+          "default": 25
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Screen Crypto Wallets Against OFAC Sanctions",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_ofac_sanctions_by_program",
+    "description": "Browse and filter live US Treasury OFAC SDN and Consolidated Non-SDN entries by sanctions program (SDGT, CYBER2, RUSSIA-EO14024, DPRK, IRAN, CMIC, CUBA), country, entity type (individual, entity, vessel, aircraft), or keyword.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "programFilter": {
+          "type": "string",
+          "description": "OFAC program code filter (e.g., \"SDGT\", \"CYBER2\", \"RUSSIA-EO14024\", \"DPRK\", \"IRAN\", \"CMIC\", \"CUBA\")."
+        },
+        "countryFilter": {
+          "type": "string",
+          "description": "Case-insensitive country filter across OFAC ADD.CSV addresses (e.g., \"Iran\", \"Russia\", \"Cuba\")."
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "all",
+            "individual",
+            "entity",
+            "vessel",
+            "aircraft"
+          ],
+          "description": "Entity type filter. Default: \"all\".",
+          "default": "all"
+        },
+        "listSource": {
+          "type": "string",
+          "enum": [
+            "ALL",
+            "OFAC_SDN",
+            "OFAC_CONSOLIDATED_NON_SDN"
+          ],
+          "description": "Restrict to SDN or Consolidated Non-SDN list. Default: \"ALL\".",
+          "default": "ALL"
+        },
+        "keyword": {
+          "type": "string",
+          "description": "Optional keyword across primary name, aliases, remarks, programs, or countries."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum sanctioned dossiers to return (1-100). Default: 25.",
+          "default": 25
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search OFAC Sanctions by Program or Country",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
