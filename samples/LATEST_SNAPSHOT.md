@@ -1,6 +1,6 @@
 # Live US/EU Open-Data Registry Snapshot
 
-> **Auto-generated:** `2026-11-26T14:17:28Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
+> **Auto-generated:** `2026-11-26T17:44:12Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
 > **Interactive Web Showcase:** [https://desastreger.github.io/open-data-mcp-servers/](https://desastreger.github.io/open-data-mcp-servers/)
 > **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp`
 
@@ -74,9 +74,9 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | CVE ID | Vendor | Product | Date Added | BOD Due Date | Ransomware | EPSS 30d |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| `CVE-2026-133469` | Vates | Xen Orchestra | `2026-11-25` | `2026-11-28` | `Unknown` | `1.10%` |
-| `CVE-2026-133324` | Mitel | MiCollab | `2026-11-25` | `2026-11-28` | `Unknown` | `0.41%` |
-| `CVE-2026-133323` | Mitel | MiCollab | `2026-11-25` | `2026-11-28` | `Unknown` | `2.55%` |
+| `CVE-2026-133469` | Vates | Xen Orchestra | `2026-11-25` | `2026-11-28` | `Unknown` | `31.77%` |
+| `CVE-2026-133324` | Mitel | MiCollab | `2026-11-25` | `2026-11-28` | `Unknown` | `0.83%` |
+| `CVE-2026-133323` | Mitel | MiCollab | `2026-11-25` | `2026-11-28` | `Unknown` | `5.63%` |
 
 ## 10. SEC EDGAR Form 13F-HR Institutional Filings (`sec-13f-institutional-whale-holdings`)
 
