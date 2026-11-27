@@ -1,6 +1,6 @@
 # Live US/EU Open-Data Registry Snapshot
 
-> **Auto-generated:** `2026-11-27T14:13:26Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
+> **Auto-generated:** `2026-11-27T17:27:52Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
 > **Interactive Web Showcase:** [https://desastreger.github.io/open-data-mcp-servers/](https://desastreger.github.io/open-data-mcp-servers/)
 > **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp,desastreger/federal-register-regulatory-rule-radar`
 
@@ -50,9 +50,9 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | Issuer | Reporting Insider | Form | Filing Date | Accession Number |
 | :--- | :--- | :--- | :--- | :--- |
-| OBOOK HOLDINGS INC. | WANG CHUN KAI | `4` | `2026-11-27` | `0002109337-26-000021` |
-| New Oriental Education & Technology Group Inc. | Hsieh Louis | `4` | `2026-11-27` | `0001686218-26-000006` |
-| FRANKLIN FINANCIAL SERVICES CORP /PA/ | Duffey Gregory A | `4` | `2026-11-27` | `0001638509-26-000010` |
+| PURE CYCLE CORP | Fink Christopher | `4` | `2026-11-27` | `0002155883-26-000006` |
+| Aura Minerals Inc. | Sousa Mauad Bruno | `4` | `2026-11-27` | `0002117905-26-000053` |
+| Vesta Real Estate Corporation, S.A.B. de C.V. | Cuevas Argueta Fernando Alberto | `4` | `2026-11-27` | `0002117102-26-000005` |
 
 ## 7. US FDA 510(k) Medical Device Clearances (`fda-medtech-510k-approval-tracker`)
 
