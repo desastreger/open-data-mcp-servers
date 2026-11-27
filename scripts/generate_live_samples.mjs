@@ -309,6 +309,35 @@ async function fetchOfacSanctions() {
   return rows;
 }
 
+async function fetchFederalRegister() {
+  const url =
+    "https://www.federalregister.gov/api/v1/documents.json?per_page=3&order=newest" +
+    "&conditions%5Btype%5D%5B%5D=RULE&conditions%5Btype%5D%5B%5D=PRORULE&conditions%5Btype%5D%5B%5D=PRESDOCU" +
+    "&fields%5B%5D=document_number&fields%5B%5D=title&fields%5B%5D=type&fields%5B%5D=publication_date" +
+    "&fields%5B%5D=agencies&fields%5B%5D=cfr_references&fields%5B%5D=comments_close_on&fields%5B%5D=effective_on&fields%5B%5D=significant";
+  const data = await fetchJson(url);
+  return (data?.results || []).slice(0, 3).map((r) => {
+    const agencies = (r.agencies || []).map((a) => a.name).filter(Boolean);
+    const cfrRefs = (r.cfr_references || [])
+      .map((c) => (c?.title && c?.part ? `${c.title} CFR ${c.part}` : null))
+      .filter(Boolean);
+    const title = String(r.title || "N/A");
+    return {
+      documentNumber: r.document_number || "N/A",
+      title: title.length > 85 ? `${title.slice(0, 82)}...` : title,
+      type: r.type || "N/A",
+      agency: agencies[0] || "Federal Agency",
+      publicationDate: r.publication_date || "N/A",
+      deadlineOrEffective: r.comments_close_on
+        ? `Comments: ${r.comments_close_on}`
+        : r.effective_on
+          ? `Effective: ${r.effective_on}`
+          : "—",
+      cfr: cfrRefs.slice(0, 2).join(", ") || "—",
+    };
+  });
+}
+
 async function safeCollect(label, fn) {
   try {
     const records = await fn();
@@ -532,6 +561,22 @@ function buildMarkdown(generatedAt, catalog, sources) {
   }
   lines.push("");
 
+  // 12. US Federal Register
+  lines.push("## 12. US Federal Register Rules & Executive Orders (`federal-register-regulatory-rule-radar`)");
+  lines.push("");
+  if (sources.fedreg.ok && sources.fedreg.records.length) {
+    lines.push("| Doc # | Title | Type | Primary Agency | Published | Deadline / Effective | CFR |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.fedreg.records) {
+      lines.push(
+        `| \`${mdCell(r.documentNumber)}\` | ${mdCell(r.title)} | \`${mdCell(r.type)}\` | ${mdCell(r.agency)} | \`${mdCell(r.publicationDate)}\` | \`${mdCell(r.deadlineOrEffective)}\` | \`${mdCell(r.cfr)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.fedreg.error || "No records returned")}_`);
+  }
+  lines.push("");
+
   return lines.join("\n");
 }
 
@@ -560,10 +605,10 @@ function buildHtml(generatedAt, catalog, sources) {
     operatingSystem: "Cross-platform (Streamable HTTP MCP / STDIO)",
     url: "https://desastreger.github.io/open-data-mcp-servers/",
     downloadUrl: "https://github.com/desastreger/open-data-mcp-servers",
-    softwareVersion: "1.4.0",
+    softwareVersion: "1.5.0",
     license: "https://opensource.org/licenses/MIT",
     description:
-      "16 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for SEC Form D, Form 4 & Form 13F-HR, US Treasury OFAC SDN/AML, IRS Form 990, CISA KEV + EPSS + NVD, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
+      "17 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for US Federal Register rules & Executive Orders, SEC Form D, Form 4 & Form 13F-HR, US Treasury OFAC SDN/AML, IRS Form 990, CISA KEV + EPSS + NVD, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
     author: {
       "@type": "Person",
       name: "desastreger",
@@ -630,10 +675,10 @@ function buildHtml(generatedAt, catalog, sources) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Data MCP Servers — 16 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
-  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 16 deterministic zero-API-key MCP servers for SEC Form D/4/13F, OFAC SDN/AML, IRS Form 990, CISA KEV &amp; EPSS, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
+  <title>Open Data MCP Servers — 17 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
+  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 17 deterministic zero-API-key MCP servers for US Federal Register rules, SEC Form D/4/13F, OFAC SDN/AML, IRS Form 990, CISA KEV &amp; EPSS, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
   <meta property="og:title" content="Open Data B2B &amp; Compliance MCP Servers" />
-  <meta property="og:description" content="16 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
+  <meta property="og:description" content="17 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://desastreger.github.io/open-data-mcp-servers/" />
   <link rel="canonical" href="https://desastreger.github.io/open-data-mcp-servers/" />
@@ -751,13 +796,13 @@ function buildHtml(generatedAt, catalog, sources) {
     <section class="hero">
       <div class="pill-row">
         <span class="badge green">1-Click Browser OAuth · Zero API Keys</span>
-        <span class="badge">40 Read-Only MCP Tools</span>
+        <span class="badge">43 Read-Only MCP Tools</span>
         <span class="badge">Official MCP Registry: io.github.desastreger/open-data-mcp-servers</span>
         <span class="badge">Live Snapshot: ${escapeHtml(generatedAt)}</span>
       </div>
       <h1>Open Data B2B &amp; Compliance MCP Servers</h1>
       <p class="subtitle">
-        Sixteen deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by SEC EDGAR (Form D, Form 4 &amp; Form 13F-HR), US Treasury OFAC SLS (SDN, ALT, ADD, Consolidated Non-SDN), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
+        Seventeen deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by US Federal Register API v1, SEC EDGAR (Form D, Form 4 &amp; Form 13F-HR), US Treasury OFAC SLS (SDN, ALT, ADD, Consolidated Non-SDN), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
       </p>
       <div class="hero-actions">
         <div class="install-box">
@@ -768,7 +813,7 @@ function buildHtml(generatedAt, catalog, sources) {
           </div>
         </div>
         <div class="install-box">
-          <span class="label">Install All 16 Agent Skills (skills.sh)</span>
+          <span class="label">Install All 17 Agent Skills (skills.sh)</span>
           <div class="copy-row">
             <code>${escapeHtml(skillsCmd)}</code>
             <button type="button" class="copy-btn" data-copy="${escapeHtml(skillsCmd)}">Copy CLI</button>
@@ -785,7 +830,7 @@ function buildHtml(generatedAt, catalog, sources) {
     </section>
 
     <section>
-      <h2>16 Production MCP Servers &amp; Apify Actors</h2>
+      <h2>17 Production MCP Servers &amp; Apify Actors</h2>
       <p class="section-note">Connect via 1-Click Browser OAuth (no manual API key) or direct Apify Standby Streamable HTTP (<code>Bearer $APIFY_TOKEN</code>).</p>
       <div class="grid">
         ${serverCardsHtml}
@@ -984,6 +1029,24 @@ function buildHtml(generatedAt, catalog, sources) {
           </tbody>
         </table>
       </div>
+
+      <div class="table-card">
+        <h3>12. US Federal Register Rules &amp; Executive Orders (<code>federal-register-regulatory-rule-radar</code>)</h3>
+        <table>
+          <thead><tr><th>Doc #</th><th>Title</th><th>Type</th><th>Primary Agency</th><th>Published</th><th>Deadline / Effective</th><th>CFR</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.fedreg.records, [
+              { raw: (r) => `<code>${escapeHtml(r.documentNumber)}</code>` },
+              { get: (r) => r.title },
+              { raw: (r) => `<code>${escapeHtml(r.type)}</code>` },
+              { get: (r) => r.agency },
+              { get: (r) => r.publicationDate },
+              { raw: (r) => `<code>${escapeHtml(r.deadlineOrEffective)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.cfr)}</code>` },
+            ])}
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <footer>
@@ -1019,7 +1082,7 @@ async function main() {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   const generatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
-  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac] = await Promise.all([
+  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac, fedreg] = await Promise.all([
     safeCollect("SEC EDGAR", fetchSecFormD),
     safeCollect("USASpending", fetchUsaSpending),
     safeCollect("CMS NPPES", fetchCmsNppes),
@@ -1031,9 +1094,10 @@ async function main() {
     safeCollect("CISA KEV", fetchCisaKev),
     safeCollect("SEC Form 13F", fetchSec13f),
     safeCollect("OFAC SDN", fetchOfacSanctions),
+    safeCollect("Federal Register", fetchFederalRegister),
   ]);
 
-  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac };
+  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac, fedreg };
 
   fs.mkdirSync(path.join(ROOT, "samples"), { recursive: true });
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
@@ -1060,6 +1124,7 @@ async function main() {
           cisaKev: cisaKev.records.length,
           sec13f: sec13f.records.length,
           ofac: ofac.records.length,
+          fedreg: fedreg.records.length,
         },
         errors: Object.fromEntries(
           Object.entries(sources)

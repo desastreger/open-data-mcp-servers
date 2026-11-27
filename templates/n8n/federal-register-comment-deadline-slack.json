@@ -1,0 +1,187 @@
+{
+  "name": "Federal Register Open Comment Deadlines & Significant Rules to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "e5f6a7b8-0006-4000-8000-000000000001",
+      "name": "Daily 09:00 Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/desastreger~federal-register-regulatory-rule-radar/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$env.APIFY_TOKEN}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"documentTypes\": [\"PRORULE\", \"NOTICE\"],\n  \"daysBack\": 30,\n  \"openCommentWindowOnly\": true,\n  \"significantOnly\": false,\n  \"maxResults\": 25\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "e5f6a7b8-0006-4000-8000-000000000002",
+      "name": "Fetch Federal Register Open Comment Rules",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-closing-soon",
+              "leftValue": "={{ $json.daysUntilCommentsClose !== null && $json.daysUntilCommentsClose !== undefined ? Number($json.daysUntilCommentsClose) : 999 }}",
+              "rightValue": 14,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            },
+            {
+              "id": "cond-high-impact",
+              "leftValue": "={{ Number($json.regulatoryImpactScore || 0) }}",
+              "rightValue": 60,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "id": "e5f6a7b8-0006-4000-8000-000000000003",
+      "name": "Filter Closing <= 14d or Impact >= 60",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        740,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEBHOOK_URL}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"*[{{$json.urgencyTier || 'OPEN_COMMENT_DEADLINE'}}] {{$json.documentNumber}} — {{$json.title}}*\\n*Agency:* {{$json.primaryAgency || 'Federal Agency'}} | *Type:* {{$json.documentType || 'Proposed Rule'}} | *OMB Significant:* {{$json.significant ? 'Yes' : 'No'}}\\n*Comments Close:* {{$json.commentsCloseOn || 'N/A'}} ({{$json.daysUntilCommentsClose ?? 'N/A'}} days left) | *Impact Score:* {{$json.regulatoryImpactScore || 0}}/100\\n*CFR:* {{Array.isArray($json.cfrReferences) && $json.cfrReferences.length ? $json.cfrReferences.join(', ') : 'N/A'}} | *Dockets:* {{Array.isArray($json.docketIds) && $json.docketIds.length ? $json.docketIds.join(', ') : 'N/A'}}\\n*Federal Register:* {{$json.htmlUrl}}\\n*Regulations.gov Comments:* {{$json.regulationsGovCommentsUrl || 'N/A'}}\"\n}",
+        "options": {}
+      },
+      "id": "e5f6a7b8-0006-4000-8000-000000000004",
+      "name": "Post Federal Register Deadline Alert to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        240
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 09:00 Schedule": {
+      "main": [
+        [
+          {
+            "node": "Fetch Federal Register Open Comment Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Federal Register Open Comment Rules": {
+      "main": [
+        [
+          {
+            "node": "Filter Closing <= 14d or Impact >= 60",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Closing <= 14d or Impact >= 60": {
+      "main": [
+        [
+          {
+            "node": "Post Federal Register Deadline Alert to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "federal-register"
+    },
+    {
+      "name": "regulatory-compliance"
+    },
+    {
+      "name": "apify"
+    },
+    {
+      "name": "government-affairs"
+    }
+  ]
+}

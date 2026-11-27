@@ -1,10 +1,10 @@
 // Auto-generated deterministic read-only MCP tool schemas & frozen endpoint allowlist.
-// Zero filesystem or shell access. All 40 tools are strictly read-only public-registry queries.
+// Zero filesystem or shell access. All 43 tools are strictly read-only public-registry queries.
 
 export const SERVER_INFO = Object.freeze({
   "name": "open-data-mcp-servers",
-  "version": "1.4.0",
-  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 16 official US/EU public-registry & RFC security MCP servers (40 read-only tools)."
+  "version": "1.5.0",
+  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 17 official US/EU public-registry & RFC security MCP servers (43 read-only tools)."
 });
 
 export const TOOL_ROUTES = Object.freeze({
@@ -167,6 +167,18 @@ export const TOOL_ROUTES = Object.freeze({
   "search_ofac_sanctions_by_program": {
     "slug": "ofac-sanctions-aml-pep-screener-mcp",
     "endpoint": "https://desastreger--ofac-sanctions-aml-pep-screener-mcp.apify.actor/mcp"
+  },
+  "search_federal_register_rules": {
+    "slug": "federal-register-regulatory-rule-radar",
+    "endpoint": "https://desastreger--federal-register-regulatory-rule-radar.apify.actor/mcp"
+  },
+  "track_open_comment_deadlines": {
+    "slug": "federal-register-regulatory-rule-radar",
+    "endpoint": "https://desastreger--federal-register-regulatory-rule-radar.apify.actor/mcp"
+  },
+  "get_federal_register_document": {
+    "slug": "federal-register-regulatory-rule-radar",
+    "endpoint": "https://desastreger--federal-register-regulatory-rule-radar.apify.actor/mcp"
   }
 });
 
@@ -2034,6 +2046,160 @@ export const MCP_TOOLS = Object.freeze([
     },
     "annotations": {
       "title": "Search OFAC Sanctions by Program or Country",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_federal_register_rules",
+    "description": "Search newly published US Federal Register Final Rules, Proposed Rules, Notices, and Presidential Executive Orders via official federalregister.gov API v1. Returns normalized CFR citations, agencies, dockets, RINs, effective/comment countdowns, urgency tier, and 0-100 regulatory impact scores.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional full-text search term (e.g., \"artificial intelligence\", \"PFAS\", \"Medicare\")."
+        },
+        "documentTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "RULE",
+              "PRORULE",
+              "NOTICE",
+              "PRESDOCU"
+            ]
+          },
+          "description": "Federal Register document types to include. Default: [\"RULE\", \"PRORULE\", \"PRESDOCU\"].",
+          "default": [
+            "RULE",
+            "PRORULE",
+            "PRESDOCU"
+          ]
+        },
+        "agencySlugs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional Federal Register agency slugs (e.g., [\"securities-and-exchange-commission\", \"environmental-protection-agency\"])."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-3650); falls back to 60 days if 0 hits. Default: 14.",
+          "default": 14
+        },
+        "openCommentWindowOnly": {
+          "type": "boolean",
+          "description": "Return only documents with an open public comment window. Default: false.",
+          "default": false
+        },
+        "significantOnly": {
+          "type": "boolean",
+          "description": "Filter to OMB economically/regulatorily significant rules. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum documents to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search US Federal Register Rules & Executive Orders",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "track_open_comment_deadlines",
+    "description": "Track US Federal Register Proposed Rules and Notices with active, open public comment windows (comments_close_on >= today), sorted by soonest closing deadline and regulatory impact score so legal and government-affairs teams never miss a comment cutoff.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional topic or industry keyword filter."
+        },
+        "agencySlugs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional Federal Register agency slugs to monitor."
+        },
+        "documentTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "RULE",
+              "PRORULE",
+              "NOTICE",
+              "PRESDOCU"
+            ]
+          },
+          "description": "Document types to scan for open comments. Default: [\"PRORULE\", \"NOTICE\"].",
+          "default": [
+            "PRORULE",
+            "NOTICE"
+          ]
+        },
+        "significantOnly": {
+          "type": "boolean",
+          "description": "Filter to OMB significant rulemakings only. Default: false.",
+          "default": false
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Publication lookback window in days (1-3650). Default: 60.",
+          "default": 60
+        },
+        "maxClosingInDays": {
+          "type": "integer",
+          "description": "Optional filter for deadlines closing within N days (e.g., 30 for deadlines closing in <= 30 days)."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum open-comment rules to return (1-50). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Track Open Federal Register Comment Deadlines",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "get_federal_register_document",
+    "description": "Look up a specific US Federal Register document by official document number (e.g., \"2026-24141\") with full normalized CFR citations, agencies, dockets, RINs, comment counts, effective/comment countdowns, and regulatory impact score.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "documentNumber"
+      ],
+      "properties": {
+        "documentNumber": {
+          "type": "string",
+          "description": "Official Federal Register document number (e.g., \"2026-24141\")."
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get Federal Register Document by Number",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,

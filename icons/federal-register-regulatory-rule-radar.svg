@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071326"/>
+      <stop offset="55%" stop-color="#0E2547"/>
+      <stop offset="100%" stop-color="#173866"/>
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="44%" r="54%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#38BDF8" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#071326" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0.78"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="55%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app icon base -->
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#bgGrad)"/>
+  <rect x="0" y="0" width="512" height="512" rx="108" fill="url(#glowGrad)"/>
+
+  <!-- Radar rings -->
+  <g stroke="#38BDF8" stroke-opacity="0.18" stroke-width="2.5" fill="none">
+    <circle cx="256" cy="242" r="196"/>
+    <circle cx="256" cy="242" r="144" stroke-dasharray="10 10"/>
+    <line x1="256" y1="62" x2="256" y2="422"/>
+    <line x1="76" y1="242" x2="436" y2="242"/>
+  </g>
+
+  <!-- Inner bevel border -->
+  <rect x="10" y="10" width="492" height="492" rx="98" fill="none" stroke="url(#borderGrad)" stroke-width="4"/>
+
+  <!-- Federal Rule Document Sheet -->
+  <path d="M 142 98 L 316 98 L 366 148 L 366 392 C 366 404 356 414 344 414 L 142 414 C 130 414 120 404 120 392 L 120 120 C 120 108 130 98 142 98 Z"
+        fill="#0B1B36" stroke="url(#cyanGrad)" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M 316 98 L 316 148 L 366 148" fill="#173866" stroke="url(#cyanGrad)" stroke-width="8" stroke-linejoin="round"/>
+
+  <!-- Federal Dome / Columns Header Emblem -->
+  <path d="M 164 176 L 243 136 L 322 176 Z" fill="url(#goldGrad)"/>
+  <rect x="162" y="178" width="162" height="10" rx="3" fill="#FDE68A"/>
+  <g fill="#E2E8F0">
+    <rect x="176" y="194" width="16" height="46" rx="3"/>
+    <rect x="212" y="194" width="16" height="46" rx="3"/>
+    <rect x="248" y="194" width="16" height="46" rx="3"/>
+    <rect x="284" y="194" width="16" height="46" rx="3"/>
+  </g>
+  <rect x="160" y="242" width="166" height="10" rx="3" fill="#93C5FD"/>
+
+  <!-- CFR / Rule Lines -->
+  <g stroke="#CBD5E1" stroke-width="10" stroke-linecap="round">
+    <line x1="164" y1="286" x2="296" y2="286"/>
+    <line x1="164" y1="318" x2="262" y2="318"/>
+    <line x1="164" y1="350" x2="238" y2="350"/>
+  </g>
+
+  <!-- Radar Alert / Comment Deadline Seal -->
+  <circle cx="332" cy="332" r="56" fill="#071326" stroke="url(#goldGrad)" stroke-width="10"/>
+  <circle cx="332" cy="332" r="34" fill="none" stroke="#FBBF24" stroke-opacity="0.45" stroke-width="3" stroke-dasharray="6 6"/>
+  <path d="M 332 304 L 332 332 L 352 344" fill="none" stroke="#FEF3C7" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="332" cy="332" r="6" fill="#F59E0B"/>
+
+  <!-- Bottom-right MCP pill badge (pure vector paths) -->
+  <g>
+    <rect x="342" y="420" width="130" height="52" rx="26" fill="#071326" fill-opacity="0.90" stroke="#F59E0B" stroke-opacity="0.78" stroke-width="3"/>
+    <path d="M 369 456 L 369 436 L 380 448 L 391 436 L 391 456" fill="none" stroke="#FDE68A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 418 438 C 413 434 404 435 403 446 C 404 457 413 458 418 454" fill="none" stroke="#FDE68A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 431 456 L 431 436 L 442 436 C 449 436 449 447 442 447 L 431 447" fill="none" stroke="#FDE68A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

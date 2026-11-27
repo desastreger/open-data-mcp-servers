@@ -1,8 +1,8 @@
 # Live US/EU Open-Data Registry Snapshot
 
-> **Auto-generated:** `2026-11-26T17:44:12Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
+> **Auto-generated:** `2026-11-27T14:13:26Z` (0 LLM tokens · pure Node.js `fetch` against live government APIs)
 > **Interactive Web Showcase:** [https://desastreger.github.io/open-data-mcp-servers/](https://desastreger.github.io/open-data-mcp-servers/)
-> **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp`
+> **1-Click All-in-One OAuth MCP:** `https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp,desastreger/federal-register-regulatory-rule-radar`
 
 Each table below contains **3 real live sample records** pulled directly from official public registries during the latest automated showcase refresh.
 
@@ -10,9 +10,9 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | Company Name | CIK | Form | Filing Date | Location | Accession Number |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| Keystone Grid LLC | `0002167226` | `D` | `2026-11-25` | Sheridan, WY | `0002167226-26-000001` |
-| GrittGene Therapeutics Inc. | `0002167176` | `D` | `2026-11-25` | Pasadena, CA | `0002167176-26-000001` |
-| Counterfact Labs, Inc. | `0002167117` | `D` | `2026-11-25` | San Francisco, CA | `0002167117-26-000001` |
+| Ardenwood Ventures, LLC - Series I | `0002167262` | `D` | `2026-11-27` | Palo Alto, CA | `0002167262-26-000001` |
+| RnL1994, a Series of A Master Series, LLC | `0002167218` | `D` | `2026-11-27` | Miami, FL | `0002167218-26-000001` |
+| Kestrel 0x2 LP | `0002167058` | `D` | `2026-11-27` | George Town | `0002167058-26-000001` |
 
 ## 2. USASpending.gov Federal Prime Contracts (`federal-govcon-recompete-radar`)
 
@@ -42,17 +42,17 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | NCT ID | Study Title | Lead Sponsor | Phase | Central Contact | Email |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `NCT03876223` | Women's Ischemia Syndrome Evaluation (WISE) Pre-HFpEF | Cedars-Sinai Medical Center | `N/A` | BSWHC Research | `BSWHC.Research@cshs.org` |
-| `NCT06139523` | Optimize Pediatric OCT Imaging | Duke University | `N/A` | Xi Chen, MD | `xi2.chen@duke.edu` |
-| `NCT07875959` | 18F-N230A PET/CT Imaging of Nectin-4 Expression in Renal Tumors | Peking University First Hospital | `NA` | Jianhua Zhang | `zjhjn820@163.com` |
+| `NCT05174351` | Beta-blocker Discontinuation in Heart Failure With Preserved Ejection Fraction | UConn Health | `NA` | Kai Chen, MD,PhD | `kachen@uchc.edu` |
+| `NCT06360822` | Increasing Equity in Lung Cancer Screening | Indiana University | `NA` | Site Contact | `See NCT record` |
+| `NCT07189637` | The Combined Effect of the Mediterranean Diet and Intermittent Fasting on Hypertension | Nadide Gizem Tarakci Filiz | `NA` | Mehmet KOÇAK, PhD | `mehmetkocak@medipol.edu.tr` |
 
 ## 6. SEC EDGAR Form 4 Insider Transactions (`sec-form4-insider-cluster-signals`)
 
 | Issuer | Reporting Insider | Form | Filing Date | Accession Number |
 | :--- | :--- | :--- | :--- | :--- |
-| CytoDyn Inc. | Wilcoxen Lauren Michelle | `4` | `2026-11-25` | `0002166516-26-000004` |
-| Galaxy Digital Inc. | Muneka Dritan | `4` | `2026-11-25` | `0002154593-26-000005` |
-| Carlyle Group Inc. | Heinzelman Kate Elizabeth | `4` | `2026-11-25` | `0002143781-26-000009` |
+| OBOOK HOLDINGS INC. | WANG CHUN KAI | `4` | `2026-11-27` | `0002109337-26-000021` |
+| New Oriental Education & Technology Group Inc. | Hsieh Louis | `4` | `2026-11-27` | `0001686218-26-000006` |
+| FRANKLIN FINANCIAL SERVICES CORP /PA/ | Duffey Gregory A | `4` | `2026-11-27` | `0001638509-26-000010` |
 
 ## 7. US FDA 510(k) Medical Device Clearances (`fda-medtech-510k-approval-tracker`)
 
@@ -82,9 +82,9 @@ Each table below contains **3 real live sample records** pulled directly from of
 
 | Institutional Manager | CIK | Form | Period Ending | Filing Date | Location | Accession Number |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Regatta Research & Money Management | `0002137529` | `13F-HR` | `2026-03-31` | `2026-11-25` | Metairie, LA | `0002137529-26-000004` |
-| Regatta Research & Money Management | `0002137529` | `13F-HR` | `2025-12-31` | `2026-11-25` | Metairie, LA | `0002137529-26-000003` |
-| Allied Private Wealth LLC | `0002132253` | `13F-HR` | `2026-09-30` | `2026-11-25` | Boca Raton, FL | `0002132253-26-000002` |
+| BI Asset Management Fondsmaeglerselskab A/S | `0001778131` | `13F-HR/A` | `2026-09-30` | `2026-11-27` | Kobenhavn, G7 | `0001778131-26-000023` |
+| BI Asset Management Fondsmaeglerselskab A/S | `0001778131` | `13F-HR/A` | `2026-06-30` | `2026-11-27` | Kobenhavn, G7 | `0001778131-26-000022` |
+| BI Asset Management Fondsmaeglerselskab A/S | `0001778131` | `13F-HR/A` | `2025-12-31` | `2026-11-27` | Kobenhavn, G7 | `0001778131-26-000021` |
 
 ## 11. US Treasury OFAC SDN Sanctions List (`ofac-sanctions-aml-pep-screener-mcp`)
 
@@ -93,3 +93,11 @@ Each table below contains **3 real live sample records** pulled directly from of
 | `59253` | SERVATI, Mohammadhossein | `individual` | `SDGT, IFSR` | 0 | DOB 06 Nov 1984; POB Tehran, Iran; nationality Iran; Additional Sanctions Informat... |
 | `59252` | TAJ, Majid | `individual` | `IRAN-EO13902` | 0 | DOB 22 Mar 1969; nationality Iran; Additional Sanctions Information - Subject to S... |
 | `59251` | BAVAND, Mohammad Javad | `individual` | `IRAN-EO13902` | 0 | DOB 08 May 1984; nationality Iran; Additional Sanctions Information - Subject to S... |
+
+## 12. US Federal Register Rules & Executive Orders (`federal-register-regulatory-rule-radar`)
+
+| Doc # | Title | Type | Primary Agency | Published | Deadline / Effective | CFR |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `2026-24236` | Expeditious Enforcement of Capital Sentences and the Pursuit of Justice for Victim... | `Presidential Document` | Executive Office of the President | `2026-11-27` | `—` | `—` |
+| `2026-24149` | Heightened Import Disclosures for Supply Chain Visibility; Extension of Comment Pe... | `Proposed Rule` | Homeland Security Department | `2026-11-27` | `Comments: 2027-01-15` | `19 CFR 141, 19 CFR 142` |
+| `2026-24144` | Special Local Regulation; Savannah River, Savannah, GA | `Rule` | Homeland Security Department | `2026-11-27` | `Effective: 2026-11-28` | `33 CFR 100` |
