@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.desastreger/open-data-mcp-servers",
   "title": "Open Data B2B & Compliance MCP Servers",
-  "description": "17 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
-  "version": "1.5.0",
+  "description": "20 production-ready, zero-key remote Streamable HTTP MCP servers & Apify Actors backed by official US/EU government registries and RFC protocols.",
+  "version": "1.6.0",
   "repository": {
     "url": "https://github.com/desastreger/open-data-mcp-servers",
     "source": "github"
@@ -707,7 +707,136 @@
           "description": "Look up a specific US Federal Register document by official document number (e.g., \"2026-24141\") with full normalized CFR citations, agencies, dockets, RINs, comment counts, effective/comment countdowns, and regulatory impact score."
         }
       ]
+    },
+    {
+      "id": "fdic-bank-financial-health-screener",
+      "name": "FDIC Bank Financial Health, Call Reports & Risk Scraper",
+      "description": "Screen US FDIC-insured banks via official FDIC BankFind Suite REST API (institutions, quarterly Call Report financials, bank failures) enriched with CFPB consumer complaints. Extracts Tier 1 leverage (RBC1AAJ), ROA/ROE, non-current loans, and 0-100 bankHealthScore.",
+      "storeUrl": "https://apify.com/desastreger/fdic-bank-financial-health-screener",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/fdic-bank-financial-health-screener.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/fdic-bank-financial-health-screener",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--fdic-bank-financial-health-screener.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "FDIC BankFind Suite REST API (Institutions, Financials, Failures), CFPB Consumer Complaints",
+      "tools": [
+        {
+          "name": "screen_us_bank_health",
+          "description": "Screen US FDIC-insured banks via official FDIC BankFind Suite REST API (institutions, latest Call Report financials, failure registry) and CFPB Consumer Complaint Database. Returns normalized assets/deposits/equity in $k and USD, Tier 1 leverage (RBC1AAJ), ROA/ROE, non-current loan ratio, CFPB complaint count, deterministic 0-100 bankHealthScore, and riskTier."
+        },
+        {
+          "name": "search_fdic_bank_failures",
+          "description": "Search the official FDIC Bank Failures & Assistance Transactions registry (/api/failures) by bank name, FDIC CERT number, state, or failure year range. Returns failure dates, resolution type (RESTYPE), insurance fund (DIF/BIF/SAIF), assets/deposits at failure, and estimated DIF loss cost."
+        },
+        {
+          "name": "compare_bank_financial_ratios",
+          "description": "Compare 2 or more US FDIC-insured banks side-by-side across Call Report capital adequacy (Tier 1 leverage RBC1AAJ, equity/assets), profitability (ROA, ROE), asset quality (non-current loan ratio), CFPB complaint counts, and 0-100 bankHealthScore for sponsor-bank or treasury counterparty selection."
+        }
+      ]
+    },
+    {
+      "id": "cpsc-consumer-product-recall-monitor",
+      "name": "US Product, Vehicle, Food & Drug Recalls Scraper (CPSC, FDA)",
+      "description": "Unified US Federal Recall Monitor across CPSC SaferProducts consumer goods, NHTSA vehicle/equipment recalls (DO_NOT_DRIVE & PARK_OUTSIDE flags), and openFDA Class I/II/III food & drug enforcement recalls with UPCs, retailers, hazards, remedies, and 0-100 recallSeverityScore.",
+      "storeUrl": "https://apify.com/desastreger/cpsc-consumer-product-recall-monitor",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/cpsc-consumer-product-recall-monitor.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/cpsc-consumer-product-recall-monitor",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--cpsc-consumer-product-recall-monitor.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.5,
+        "standardRatePer1kUsd": 1.5,
+        "currency": "USD"
+      },
+      "dataSources": "US CPSC SaferProducts API, US NHTSA Recalls API, US openFDA Food & Drug Enforcement API",
+      "tools": [
+        {
+          "name": "search_cpsc_product_recalls",
+          "description": "Search official US CPSC SaferProducts consumer product recalls by keyword, retailer (Amazon, Walmart, Target, Costco), lookback window (daysBack), and minimum severity score. Returns normalized UPCs, models, retailers, hazards, injuries, remedies, and 0-100 recallSeverityScore."
+        },
+        {
+          "name": "check_nhtsa_vehicle_recalls",
+          "description": "Check official US NHTSA Vehicle & Equipment Recalls by make/model/modelYear or NHTSA campaignNumber. Returns parkOutSide / DO_NOT_DRIVE flags, affected components, crash/fire consequences, dealer remedies, and 0-100 recallSeverityScore."
+        },
+        {
+          "name": "search_fda_enforcement_recalls",
+          "description": "Search official openFDA Food & Drug Enforcement recalls (Class I / II / III) by productType (\"food\", \"drug\", or \"both\"), keyword query, retailer/distribution channel, FDA classification, and daysBack. Handles 0-match queries cleanly and returns normalized UPCs/NDCs, recalling firms, and 0-100 severity scores."
+        }
+      ]
+    },
+    {
+      "id": "sec-8k-material-events-cyber-ma-radar",
+      "name": "SEC Form 8-K Material Events, M&A, Cyber & CEO Scraper",
+      "description": "Monitor real-time SEC EDGAR Form 8-K & 8-K/A material corporate events: Item 1.05 cybersecurity incidents, Item 1.01/2.01 M&A deals, Item 5.02 CEO/CFO departures, Item 2.05/2.06 layoffs, Item 1.03/3.01 bankruptcy/delisting, and Item 4.02 restatements with 0-100 materialityScore.",
+      "storeUrl": "https://apify.com/desastreger/sec-8k-material-events-cyber-ma-radar",
+      "iconUrl": "https://raw.githubusercontent.com/desastreger/open-data-mcp-servers/main/icons/sec-8k-material-events-cyber-ma-radar.png",
+      "oauthUrl": "https://mcp.apify.com/?tools=desastreger/sec-8k-material-events-cyber-ma-radar",
+      "remotes": [
+        {
+          "type": "streamable-http",
+          "url": "https://desastreger--sec-8k-material-events-cyber-ma-radar.apify.actor/mcp",
+          "headers": [
+            {
+              "name": "Authorization",
+              "description": "Bearer <YOUR_APIFY_TOKEN>",
+              "isRequired": true,
+              "isSecret": true
+            }
+          ]
+        }
+      ],
+      "pricing": {
+        "model": "PAY_PER_EVENT",
+        "launchRatePer1kUsd": 0.8,
+        "standardRatePer1kUsd": 2,
+        "currency": "USD"
+      },
+      "dataSources": "SEC EDGAR Full-Text Search (EFTS efts.sec.gov), SEC Submissions API (data.sec.gov)",
+      "tools": [
+        {
+          "name": "search_sec_8k_material_events",
+          "description": "Search US public company SEC Form 8-K & 8-K/A material event filings via official SEC EDGAR EFTS API. Filter by eventCategory (cybersecurity, ma_deals, exec_changes, layoffs_distress, accounting), explicit 8-K itemCodes (e.g. [\"1.05\",\"5.02\"]), keyword query, or stock tickers/CIKs. Returns decoded item labels, materialityScore (0-100), severityTier, B2B outreachAngle, and direct EDGAR filing URLs."
+        },
+        {
+          "name": "scan_cyber_and_distress_8k_alerts",
+          "description": "Scan high-severity SEC Form 8-K & 8-K/A trigger alerts across Item 1.05 (material cybersecurity incidents), Item 1.03 (bankruptcy), Item 2.04/2.05/2.06 (debt acceleration, layoffs, impairments), Item 3.01 (exchange delisting), Item 4.01/4.02 (auditor changes & restatements), and Item 5.02 (CEO/CFO turnover), ranked by highest materialityScore."
+        },
+        {
+          "name": "get_company_8k_event_timeline",
+          "description": "Retrieve a complete Form 8-K / 8-K/A material event timeline for a specific US public company by stock ticker (e.g., \"AAPL\", \"CRWD\") or 10-digit SEC CIK via official data.sec.gov/submissions, including SIC classification, exchanges, decoded item codes, materiality scores, and direct filing URLs."
+        }
+      ]
     }
   ],
-  "oauthGatewayUrl": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp,desastreger/federal-register-regulatory-rule-radar"
+  "oauthGatewayUrl": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp,desastreger/federal-register-regulatory-rule-radar,desastreger/fdic-bank-financial-health-screener,desastreger/cpsc-consumer-product-recall-monitor,desastreger/sec-8k-material-events-cyber-ma-radar"
 }

@@ -1,0 +1,187 @@
+{
+  "name": "SEC Form 8-K Cyber Breach, M&A & CEO Turnover Trigger Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sec-8k-trigger-scan",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e5f6a7b8-0009-4000-8000-000000000001",
+      "name": "SEC 8-K Trigger Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        300
+      ],
+      "webhookId": "sec-8k-trigger-scan"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/desastreger~sec-8k-material-events-cyber-ma-radar/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$env.APIFY_TOKEN}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"eventCategory\": \"{{$json.body?.eventCategory || $json.eventCategory || 'cybersecurity'}}\",\n  \"ciksOrTickers\": {{ ($json.body?.ciksOrTickers || $json.ciksOrTickers) ? JSON.stringify($json.body?.ciksOrTickers || $json.ciksOrTickers) : \"[]\" }},\n  \"query\": \"{{$json.body?.query || $json.query || ''}}\",\n  \"daysBack\": {{ Number($json.body?.daysBack || $json.daysBack || 30) }},\n  \"excludeRegFdOnly\": true,\n  \"enrichSubmissions\": true,\n  \"maxResults\": {{ Number($json.body?.maxResults || $json.maxResults || 15) }}\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "e5f6a7b8-0009-4000-8000-000000000002",
+      "name": "Scan SEC EDGAR Form 8-K Filings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-8k-materiality",
+              "leftValue": "={{ Number($json.materialityScore || 0) }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "e5f6a7b8-0009-4000-8000-000000000003",
+      "name": "High-Materiality Event (>= 70)?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        740,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"highSeverityTrigger\": true,\n  \"companyName\": \"{{$json.companyName || ''}}\",\n  \"primaryTicker\": \"{{$json.primaryTicker || ''}}\",\n  \"cik\": \"{{$json.cik || ''}}\",\n  \"formType\": \"{{$json.formType || '8-K'}}\",\n  \"filingDate\": \"{{$json.filingDate || ''}}\",\n  \"primaryCategory\": \"{{$json.primaryCategory || ''}}\",\n  \"itemCodes\": {{ JSON.stringify($json.itemCodes || []) }},\n  \"materialityScore\": {{ Number($json.materialityScore || 0) }},\n  \"severityTier\": \"{{$json.severityTier || 'HIGH'}}\",\n  \"outreachAngle\": \"{{$json.outreachAngle || ''}}\",\n  \"edgarFilingIndexUrl\": \"{{$json.edgarFilingIndexUrl || ''}}\"\n}",
+        "options": {}
+      },
+      "id": "e5f6a7b8-0009-4000-8000-000000000004",
+      "name": "Respond High-Severity 8-K Trigger",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1000,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"highSeverityTrigger\": false,\n  \"companyName\": \"{{$json.companyName || ''}}\",\n  \"primaryTicker\": \"{{$json.primaryTicker || ''}}\",\n  \"filingDate\": \"{{$json.filingDate || ''}}\",\n  \"primaryCategory\": \"{{$json.primaryCategory || ''}}\",\n  \"materialityScore\": {{ Number($json.materialityScore || 0) }},\n  \"edgarFilingIndexUrl\": \"{{$json.edgarFilingIndexUrl || ''}}\"\n}",
+        "options": {}
+      },
+      "id": "e5f6a7b8-0009-4000-8000-000000000005",
+      "name": "Respond Standard 8-K Event",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1000,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "SEC 8-K Trigger Webhook": {
+      "main": [
+        [
+          {
+            "node": "Scan SEC EDGAR Form 8-K Filings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scan SEC EDGAR Form 8-K Filings": {
+      "main": [
+        [
+          {
+            "node": "High-Materiality Event (>= 70)?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High-Materiality Event (>= 70)?": {
+      "main": [
+        [
+          {
+            "node": "Respond High-Severity 8-K Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Standard 8-K Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "sec-8k"
+    },
+    {
+      "name": "cybersecurity"
+    },
+    {
+      "name": "ma-deals"
+    },
+    {
+      "name": "webhook"
+    },
+    {
+      "name": "apify"
+    }
+  ]
+}

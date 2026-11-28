@@ -133,7 +133,76 @@ Use **Clay HTTP API** columns to enrich any Clay prospect, vendor, or clinic tab
 
 ---
 
-## All 10 Supported Apify Actor Slugs for Clay
+## Recipe 6: Screen Counterparty & Sponsor Banks via FDIC Call Reports & CFPB Complaints
+
+- **Endpoint:** `https://api.apify.com/v2/acts/desastreger~fdic-bank-financial-health-screener/run-sync-get-dataset-items`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "mode": "screen",
+    "bankNames": ["/Bank Name"],
+    "includeFailureHistory": true,
+    "includeCfpbComplaints": true,
+    "maxResults": 1
+  }
+  ```
+- **Recommended Clay Output Columns:**
+  - `FDIC CERT`: `[0].cert`
+  - `Bank Health Score`: `[0].bankHealthScore`
+  - `Risk Tier`: `[0].riskTier`
+  - `Tier 1 Leverage (%)`: `[0].tier1LeverageRatioPercent`
+  - `ROA (%)`: `[0].roaPercent`
+  - `Failed Bank Flag`: `[0].failedBank`
+
+---
+
+## Recipe 7: Check CPSC, NHTSA & openFDA Product Recalls for Brands or Retailers
+
+- **Endpoint:** `https://api.apify.com/v2/acts/desastreger~cpsc-consumer-product-recall-monitor/run-sync-get-dataset-items`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "sources": ["cpsc", "fda_food", "fda_drug"],
+    "query": "/Product or Brand",
+    "daysBack": 90,
+    "maxResults": 3
+  }
+  ```
+- **Recommended Clay Output Columns:**
+  - `Recall Agency`: `[0].agency`
+  - `Severity Tier`: `[0].severityTier`
+  - `Severity Score`: `[0].recallSeverityScore`
+  - `Retailers Sold At`: `[0].retailersSoldAt`
+  - `Official Notice URL`: `[0].sourceUrl`
+
+---
+
+## Recipe 8: Monitor Public Accounts for SEC Form 8-K Cyber Breaches, M&A & CEO Changes
+
+- **Endpoint:** `https://api.apify.com/v2/acts/desastreger~sec-8k-material-events-cyber-ma-radar/run-sync-get-dataset-items`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "ciksOrTickers": ["/Ticker"],
+    "eventCategory": "all",
+    "daysBack": 30,
+    "excludeRegFdOnly": true,
+    "maxResults": 3
+  }
+  ```
+- **Recommended Clay Output Columns:**
+  - `8-K Trigger Category`: `[0].primaryCategory`
+  - `Item Codes`: `[0].itemCodes`
+  - `Materiality Score`: `[0].materialityScore`
+  - `Outreach Angle`: `[0].outreachAngle`
+  - `EDGAR Filing URL`: `[0].edgarFilingIndexUrl`
+
+---
+
+## Featured Apify Actor Slugs for Clay (All 20 RegPulse Actors Supported)
 
 | Actor Slug | Registry / Protocol | Launch Rate |
 | :--- | :--- | :--- |
@@ -147,3 +216,6 @@ Use **Clay HTTP API** columns to enrich any Clay prospect, vendor, or clinic tab
 | `desastreger~us-municipal-code-violation-distressed-leads` | 6 US Municipal Socrata Portals | `$0.80 / 1k` |
 | `desastreger~epa-echo-industrial-facility-compliance` | US EPA ECHO (CWA / CAA / RCRA) | `$0.50 / 1k` |
 | `desastreger~openalex-pubmed-expert-finder-mcp` | ClinicalTrials.gov v2 + Europe PMC / PubMed | `$0.50 / 1k` |
+| `desastreger~fdic-bank-financial-health-screener` | FDIC BankFind Call Reports + Failures + CFPB | `$0.80 / 1k` |
+| `desastreger~cpsc-consumer-product-recall-monitor` | CPSC SaferProducts + NHTSA + openFDA Recalls | `$0.50 / 1k` |
+| `desastreger~sec-8k-material-events-cyber-ma-radar` | SEC EDGAR Form 8-K / 8-K/A (Cyber, M&A, CEO) | `$0.80 / 1k` |

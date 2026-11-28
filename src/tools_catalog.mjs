@@ -1,10 +1,10 @@
 // Auto-generated deterministic read-only MCP tool schemas & frozen endpoint allowlist.
-// Zero filesystem or shell access. All 43 tools are strictly read-only public-registry queries.
+// Zero filesystem or shell access. All 52 tools are strictly read-only public-registry queries.
 
 export const SERVER_INFO = Object.freeze({
   "name": "open-data-mcp-servers",
-  "version": "1.5.0",
-  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 17 official US/EU public-registry & RFC security MCP servers (43 read-only tools)."
+  "version": "1.6.0",
+  "description": "Unified STDIO-to-Streamable-HTTP MCP router for 20 official US/EU public-registry & RFC security MCP servers (52 read-only tools)."
 });
 
 export const TOOL_ROUTES = Object.freeze({
@@ -179,6 +179,42 @@ export const TOOL_ROUTES = Object.freeze({
   "get_federal_register_document": {
     "slug": "federal-register-regulatory-rule-radar",
     "endpoint": "https://desastreger--federal-register-regulatory-rule-radar.apify.actor/mcp"
+  },
+  "screen_us_bank_health": {
+    "slug": "fdic-bank-financial-health-screener",
+    "endpoint": "https://desastreger--fdic-bank-financial-health-screener.apify.actor/mcp"
+  },
+  "search_fdic_bank_failures": {
+    "slug": "fdic-bank-financial-health-screener",
+    "endpoint": "https://desastreger--fdic-bank-financial-health-screener.apify.actor/mcp"
+  },
+  "compare_bank_financial_ratios": {
+    "slug": "fdic-bank-financial-health-screener",
+    "endpoint": "https://desastreger--fdic-bank-financial-health-screener.apify.actor/mcp"
+  },
+  "search_cpsc_product_recalls": {
+    "slug": "cpsc-consumer-product-recall-monitor",
+    "endpoint": "https://desastreger--cpsc-consumer-product-recall-monitor.apify.actor/mcp"
+  },
+  "check_nhtsa_vehicle_recalls": {
+    "slug": "cpsc-consumer-product-recall-monitor",
+    "endpoint": "https://desastreger--cpsc-consumer-product-recall-monitor.apify.actor/mcp"
+  },
+  "search_fda_enforcement_recalls": {
+    "slug": "cpsc-consumer-product-recall-monitor",
+    "endpoint": "https://desastreger--cpsc-consumer-product-recall-monitor.apify.actor/mcp"
+  },
+  "search_sec_8k_material_events": {
+    "slug": "sec-8k-material-events-cyber-ma-radar",
+    "endpoint": "https://desastreger--sec-8k-material-events-cyber-ma-radar.apify.actor/mcp"
+  },
+  "scan_cyber_and_distress_8k_alerts": {
+    "slug": "sec-8k-material-events-cyber-ma-radar",
+    "endpoint": "https://desastreger--sec-8k-material-events-cyber-ma-radar.apify.actor/mcp"
+  },
+  "get_company_8k_event_timeline": {
+    "slug": "sec-8k-material-events-cyber-ma-radar",
+    "endpoint": "https://desastreger--sec-8k-material-events-cyber-ma-radar.apify.actor/mcp"
   }
 });
 
@@ -2200,6 +2236,477 @@ export const MCP_TOOLS = Object.freeze([
     },
     "annotations": {
       "title": "Get Federal Register Document by Number",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "screen_us_bank_health",
+    "description": "Screen US FDIC-insured banks via official FDIC BankFind Suite REST API (institutions, latest Call Report financials, failure registry) and CFPB Consumer Complaint Database. Returns normalized assets/deposits/equity in $k and USD, Tier 1 leverage (RBC1AAJ), ROA/ROE, non-current loan ratio, CFPB complaint count, deterministic 0-100 bankHealthScore, and riskTier.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bankNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional bank names to screen (e.g., [\"JPMorgan Chase\", \"Cross River\", \"Evolve Bank\"]). Leave empty to pull largest active banks matching state/asset filters."
+        },
+        "certNumbers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional FDIC Certificate Numbers (e.g., [\"628\", \"58410\", \"1299\"])."
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional 2-letter US state codes (e.g., [\"CA\", \"NY\", \"NJ\"])."
+        },
+        "minAssetsMillions": {
+          "type": "integer",
+          "description": "Optional minimum total assets in USD millions (e.g., 1000 for $1B+).",
+          "default": 0
+        },
+        "activeOnly": {
+          "type": "boolean",
+          "description": "Restrict to active FDIC charters (true) or include closed/failed banks (false). Default: true.",
+          "default": true
+        },
+        "includeFailureHistory": {
+          "type": "boolean",
+          "description": "Cross-check FDIC failure registry for closed/CERT matches. Default: true.",
+          "default": true
+        },
+        "includeCfpbComplaints": {
+          "type": "boolean",
+          "description": "Include total CFPB complaint volume and latest 3 complaints. Default: true.",
+          "default": true
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": [
+            "ASSET",
+            "BANK_HEALTH_SCORE",
+            "ROA"
+          ],
+          "description": "Sort order for returned banks. Default: \"ASSET\".",
+          "default": "ASSET"
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum banks to return (1-50 in MCP mode). Default: 5.",
+          "default": 5
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Screen US FDIC Bank Financial Health",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_fdic_bank_failures",
+    "description": "Search the official FDIC Bank Failures & Assistance Transactions registry (/api/failures) by bank name, FDIC CERT number, state, or failure year range. Returns failure dates, resolution type (RESTYPE), insurance fund (DIF/BIF/SAIF), assets/deposits at failure, and estimated DIF loss cost.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bankName": {
+          "type": "string",
+          "description": "Optional failed bank name search term (e.g., \"Silicon Valley\", \"First Republic\", \"Signature\")."
+        },
+        "certNumber": {
+          "type": "string",
+          "description": "Optional exact FDIC CERT number (e.g., \"24735\")."
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional 2-letter state codes (e.g., [\"CA\", \"NY\"])."
+        },
+        "startYear": {
+          "type": "integer",
+          "description": "Optional earliest failure year (e.g., 2023)."
+        },
+        "endYear": {
+          "type": "integer",
+          "description": "Optional latest failure year (e.g., 2026)."
+        },
+        "includeCfpbComplaints": {
+          "type": "boolean",
+          "description": "Optionally enrich with CFPB consumer complaint history. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum failure records to return (1-50). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search FDIC Bank Failures Registry",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "compare_bank_financial_ratios",
+    "description": "Compare 2 or more US FDIC-insured banks side-by-side across Call Report capital adequacy (Tier 1 leverage RBC1AAJ, equity/assets), profitability (ROA, ROE), asset quality (non-current loan ratio), CFPB complaint counts, and 0-100 bankHealthScore for sponsor-bank or treasury counterparty selection.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bankNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of bank names to compare (e.g., [\"Cross River\", \"Evolve Bank\", \"JPMorgan Chase\"])."
+        },
+        "certNumbers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of exact FDIC CERT numbers to compare (e.g., [\"58410\", \"1299\", \"628\"])."
+        },
+        "includeCfpbComplaints": {
+          "type": "boolean",
+          "description": "Include CFPB complaint counts in comparison. Default: true.",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Compare US Bank Financial Ratios",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_cpsc_product_recalls",
+    "description": "Search official US CPSC SaferProducts consumer product recalls by keyword, retailer (Amazon, Walmart, Target, Costco), lookback window (daysBack), and minimum severity score. Returns normalized UPCs, models, retailers, hazards, injuries, remedies, and 0-100 recallSeverityScore.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional keyword filter across product name, description, hazard, or manufacturer (e.g., \"lithium\", \"magnet\", \"bouncer\")."
+        },
+        "retailer": {
+          "type": "string",
+          "description": "Optional retailer or marketplace channel filter (e.g., \"Amazon\", \"Walmart\", \"Target\", \"Costco\")."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-3650). Default: 30 (keeps payload fast and compact).",
+          "default": 30
+        },
+        "minSeverityScore": {
+          "type": "integer",
+          "description": "Optional minimum recallSeverityScore (0-100). Default: 0.",
+          "default": 0
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum recall alerts to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search US CPSC Product Recalls",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "check_nhtsa_vehicle_recalls",
+    "description": "Check official US NHTSA Vehicle & Equipment Recalls by make/model/modelYear or NHTSA campaignNumber. Returns parkOutSide / DO_NOT_DRIVE flags, affected components, crash/fire consequences, dealer remedies, and 0-100 recallSeverityScore.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "make": {
+          "type": "string",
+          "description": "Vehicle make (e.g., \"Toyota\", \"Ford\", \"Tesla\"). Pair with model and modelYear."
+        },
+        "model": {
+          "type": "string",
+          "description": "Vehicle model (e.g., \"Camry\", \"F-150\", \"Model Y\")."
+        },
+        "modelYear": {
+          "type": "integer",
+          "description": "Vehicle model year (e.g., 2023)."
+        },
+        "campaignNumber": {
+          "type": "string",
+          "description": "Official NHTSA recall campaign number (e.g., \"23V432000\", \"24V854000\")."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum NHTSA recalls to return (1-50). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Check NHTSA Vehicle Recalls",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_fda_enforcement_recalls",
+    "description": "Search official openFDA Food & Drug Enforcement recalls (Class I / II / III) by productType (\"food\", \"drug\", or \"both\"), keyword query, retailer/distribution channel, FDA classification, and daysBack. Handles 0-match queries cleanly and returns normalized UPCs/NDCs, recalling firms, and 0-100 severity scores.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "productType": {
+          "type": "string",
+          "enum": [
+            "food",
+            "drug",
+            "both"
+          ],
+          "description": "openFDA enforcement feed to query: \"food\", \"drug\", or \"both\". Default: \"both\".",
+          "default": "both"
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional keyword filter across reason_for_recall, product_description, recalling_firm, or lot codes (e.g., \"salmonella\", \"undeclared\", \"acetaminophen\")."
+        },
+        "retailer": {
+          "type": "string",
+          "description": "Optional retailer or distribution pattern filter (e.g., \"Walmart\", \"Costco\", \"nationwide\")."
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "Class I",
+            "Class II",
+            "Class III"
+          ],
+          "description": "Optional FDA hazard classification filter (\"Class I\", \"Class II\", \"Class III\")."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Report date lookback window in days (1-3650). Default: 30.",
+          "default": 30
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum FDA enforcement recalls to return (1-50). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search openFDA Food & Drug Recalls",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_sec_8k_material_events",
+    "description": "Search US public company SEC Form 8-K & 8-K/A material event filings via official SEC EDGAR EFTS API. Filter by eventCategory (cybersecurity, ma_deals, exec_changes, layoffs_distress, accounting), explicit 8-K itemCodes (e.g. [\"1.05\",\"5.02\"]), keyword query, or stock tickers/CIKs. Returns decoded item labels, materialityScore (0-100), severityTier, B2B outreachAngle, and direct EDGAR filing URLs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "eventCategory": {
+          "type": "string",
+          "enum": [
+            "all",
+            "cybersecurity",
+            "ma_deals",
+            "exec_changes",
+            "layoffs_distress",
+            "accounting"
+          ],
+          "description": "High-intent B2B trigger category filter. Default: \"all\".",
+          "default": "all"
+        },
+        "itemCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional explicit Form 8-K item codes (e.g., [\"1.05\", \"2.01\", \"5.02\"]). Overrides eventCategory if provided."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional full-text search phrase across Form 8-K filings (e.g., \"ransomware\", \"chief financial officer\")."
+        },
+        "ciksOrTickers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional stock tickers (e.g., [\"AAPL\", \"MSFT\"]) or 10-digit SEC CIKs."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-3650); automatically widens to 90 days if 0 hits. Default: 7.",
+          "default": 7
+        },
+        "excludeRegFdOnly": {
+          "type": "boolean",
+          "description": "Skip routine filings that contain only Item 7.01 (Reg FD), 8.01 (Other), or 9.01 (Exhibits). Default: false.",
+          "default": false
+        },
+        "enrichSubmissions": {
+          "type": "boolean",
+          "description": "Enrich each hit with SIC description, stock exchange, and full ticker list from data.sec.gov/submissions. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum Form 8-K events to return (1-50 in MCP mode). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Search SEC Form 8-K Material Events",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "scan_cyber_and_distress_8k_alerts",
+    "description": "Scan high-severity SEC Form 8-K & 8-K/A trigger alerts across Item 1.05 (material cybersecurity incidents), Item 1.03 (bankruptcy), Item 2.04/2.05/2.06 (debt acceleration, layoffs, impairments), Item 3.01 (exchange delisting), Item 4.01/4.02 (auditor changes & restatements), and Item 5.02 (CEO/CFO turnover), ranked by highest materialityScore.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "focus": {
+          "type": "string",
+          "enum": [
+            "all_alerts",
+            "cyber_only",
+            "distress_and_layoffs",
+            "restatements_and_auditors",
+            "exec_turnover"
+          ],
+          "description": "Alert focus bucket. Default: \"all_alerts\".",
+          "default": "all_alerts"
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional keyword filter within alert filings."
+        },
+        "minMaterialityScore": {
+          "type": "integer",
+          "description": "Minimum materialityScore threshold (0-100). Default: 70.",
+          "default": 70
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-3650). Default: 30.",
+          "default": 30
+        },
+        "enrichSubmissions": {
+          "type": "boolean",
+          "description": "Enrich matched issuers via data.sec.gov/submissions. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum high-severity alerts to return (1-50). Default: 10.",
+          "default": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Scan SEC Form 8-K Cyber & Distress Alerts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "get_company_8k_event_timeline",
+    "description": "Retrieve a complete Form 8-K / 8-K/A material event timeline for a specific US public company by stock ticker (e.g., \"AAPL\", \"CRWD\") or 10-digit SEC CIK via official data.sec.gov/submissions, including SIC classification, exchanges, decoded item codes, materiality scores, and direct filing URLs.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "tickerOrCik"
+      ],
+      "properties": {
+        "tickerOrCik": {
+          "type": "string",
+          "description": "Stock ticker (e.g., \"AAPL\", \"MSFT\") or SEC CIK (e.g., \"0000320193\")."
+        },
+        "eventCategory": {
+          "type": "string",
+          "enum": [
+            "all",
+            "cybersecurity",
+            "ma_deals",
+            "exec_changes",
+            "layoffs_distress",
+            "accounting"
+          ],
+          "description": "Optional trigger category filter. Default: \"all\".",
+          "default": "all"
+        },
+        "itemCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional explicit 8-K item codes filter."
+        },
+        "daysBack": {
+          "type": "integer",
+          "description": "Lookback window in days (1-3650). Default: 365.",
+          "default": 365
+        },
+        "excludeRegFdOnly": {
+          "type": "boolean",
+          "description": "Exclude routine Reg FD / Exhibits-only filings. Default: false.",
+          "default": false
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum 8-K filings to return (1-50). Default: 15.",
+          "default": 15
+        }
+      },
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get Company Form 8-K Event Timeline",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,

@@ -1,0 +1,181 @@
+{
+  "name": "CPSC & openFDA High-Severity Product Recall Alerts to Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "e5f6a7b8-0008-4000-8000-000000000001",
+      "name": "Daily 09:00 Recall Scan",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/desastreger~cpsc-consumer-product-recall-monitor/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$env.APIFY_TOKEN}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"sources\": [\"cpsc\", \"fda_food\", \"fda_drug\"],\n  \"daysBack\": 14,\n  \"minSeverityScore\": 55,\n  \"maxResults\": 25\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "e5f6a7b8-0008-4000-8000-000000000002",
+      "name": "Fetch CPSC & openFDA Recalls",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-recall-severity",
+              "leftValue": "={{ Number($json.recallSeverityScore || 0) }}",
+              "rightValue": 60,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "e5f6a7b8-0008-4000-8000-000000000003",
+      "name": "Filter Severity >= 60 (HIGH / CRITICAL)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        740,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEBHOOK_URL}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"*[{{$json.agency}} {{$json.severityTier || 'HIGH'}} RECALL — {{$json.recallSeverityScore || 0}}/100] {{$json.title}}*\\n*Recall ID:* {{$json.recallId}} | *Date:* {{$json.recallDate}} | *Firm:* {{$json.recallingFirmOrManufacturer || 'N/A'}}\\n*Retailers:* {{Array.isArray($json.retailersSoldAt) && $json.retailersSoldAt.length ? $json.retailersSoldAt.join(', ') : 'N/A'}} | *UPCs/Codes:* {{Array.isArray($json.upcsOrCodes) && $json.upcsOrCodes.length ? $json.upcsOrCodes.join(', ') : 'None listed'}}\\n*Hazard:* {{$json.hazardSummary || 'See notice'}}\\n*Remedy:* {{$json.remedySummary || 'See notice'}}\\n*Official Notice:* {{$json.sourceUrl}}\"\n}",
+        "options": {}
+      },
+      "id": "e5f6a7b8-0008-4000-8000-000000000004",
+      "name": "Post Recall Compliance Alert to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        240
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 09:00 Recall Scan": {
+      "main": [
+        [
+          {
+            "node": "Fetch CPSC & openFDA Recalls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch CPSC & openFDA Recalls": {
+      "main": [
+        [
+          {
+            "node": "Filter Severity >= 60 (HIGH / CRITICAL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Severity >= 60 (HIGH / CRITICAL)": {
+      "main": [
+        [
+          {
+            "node": "Post Recall Compliance Alert to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "cpsc"
+    },
+    {
+      "name": "openfda"
+    },
+    {
+      "name": "product-recalls"
+    },
+    {
+      "name": "ecommerce-safety"
+    },
+    {
+      "name": "apify"
+    }
+  ]
+}

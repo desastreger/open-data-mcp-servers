@@ -1,0 +1,190 @@
+{
+  "name": "FDIC Bank Counterparty Financial Health & Failure Risk Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "e5f6a7b8-0007-4000-8000-000000000001",
+      "name": "Daily 08:00 Treasury Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/desastreger~fdic-bank-financial-health-screener/run-sync-get-dataset-items",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "token",
+              "value": "={{$env.APIFY_TOKEN}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"mode\": \"screen\",\n  \"bankNames\": [\"JPMorgan Chase\", \"Cross River\", \"Evolve Bank\"],\n  \"activeOnly\": false,\n  \"includeFailureHistory\": true,\n  \"includeCfpbComplaints\": true,\n  \"sortBy\": \"BANK_HEALTH_SCORE\",\n  \"maxResults\": 10\n}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "e5f6a7b8-0007-4000-8000-000000000002",
+      "name": "Screen Counterparty Banks via FDIC API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "cond-bank-score-low",
+              "leftValue": "={{ Number($json.bankHealthScore ?? 100) }}",
+              "rightValue": 65,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            },
+            {
+              "id": "cond-bank-failed",
+              "leftValue": "={{ Boolean($json.failedBank) }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "id": "e5f6a7b8-0007-4000-8000-000000000003",
+      "name": "Flag WATCH / ELEVATED_RISK / FAILED_BANK",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        740,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$env.SLACK_WEBHOOK_URL}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"*[FDIC RISK ALERT — {{$json.riskTier || 'WATCH'}}] {{$json.name}} (CERT #{{$json.cert}})*\\n*Health Score:* {{$json.bankHealthScore ?? 'N/A'}}/100 | *Failed Bank:* {{$json.failedBank ? 'YES (' + ($json.failureDate || 'closed') + ')' : 'No'}}\\n*Tier 1 Leverage (RBC1AAJ):* {{$json.tier1LeverageRatioPercent ?? 'N/A'}}% | *ROA:* {{$json.roaPercent ?? 'N/A'}}% | *Non-Current Loans:* {{$json.nonCurrentLoanRatioPercent ?? 'N/A'}}%\\n*CFPB Complaints:* {{$json.cfpbComplaintsTotal ?? 0}} | *Call Report Date:* {{$json.callReportDate || 'N/A'}}\\n*FDIC BankFind:* {{$json.fdicProfileUrl || 'https://banks.data.fdic.gov/'}}\"\n}",
+        "options": {}
+      },
+      "id": "e5f6a7b8-0007-4000-8000-000000000004",
+      "name": "Post Bank Counterparty Risk Alert to Slack",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        240
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 08:00 Treasury Check": {
+      "main": [
+        [
+          {
+            "node": "Screen Counterparty Banks via FDIC API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Screen Counterparty Banks via FDIC API": {
+      "main": [
+        [
+          {
+            "node": "Flag WATCH / ELEVATED_RISK / FAILED_BANK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flag WATCH / ELEVATED_RISK / FAILED_BANK": {
+      "main": [
+        [
+          {
+            "node": "Post Bank Counterparty Risk Alert to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "fdic"
+    },
+    {
+      "name": "treasury-risk"
+    },
+    {
+      "name": "fintech"
+    },
+    {
+      "name": "apify"
+    },
+    {
+      "name": "slack"
+    }
+  ]
+}

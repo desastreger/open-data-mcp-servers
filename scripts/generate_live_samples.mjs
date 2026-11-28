@@ -338,6 +338,77 @@ async function fetchFederalRegister() {
   });
 }
 
+async function fetchFdicBanks() {
+  const url =
+    "https://banks.data.fdic.gov/api/institutions?filters=ACTIVE%3A1&sort_by=ASSET&sort_order=DESC&limit=3" +
+    "&fields=CERT%2CNAME%2CCITY%2CSTALP%2CASSET%2CDEP%2CROA%2CROE%2CREPDTE";
+  const data = await fetchJson(url);
+  return (data?.data || []).slice(0, 3).map((item) => {
+    const r = item?.data || item || {};
+    const assetsUsd = Number(r.ASSET || 0) * 1000;
+    const depositsUsd = Number(r.DEP || 0) * 1000;
+    const repDateRaw = String(r.REPDTE || "");
+    const callReportDate =
+      /^\d{8}$/.test(repDateRaw)
+        ? `${repDateRaw.slice(0, 4)}-${repDateRaw.slice(4, 6)}-${repDateRaw.slice(6, 8)}`
+        : repDateRaw || "N/A";
+    return {
+      cert: String(r.CERT || "N/A"),
+      name: r.NAME || "N/A",
+      location: [r.CITY, r.STALP].filter(Boolean).join(", ") || "US",
+      assetsUsd,
+      depositsUsd,
+      roaPct: Number.isFinite(Number(r.ROA)) ? `${Number(r.ROA).toFixed(2)}%` : "—",
+      roePct: Number.isFinite(Number(r.ROE)) ? `${Number(r.ROE).toFixed(2)}%` : "—",
+      callReportDate,
+    };
+  });
+}
+
+async function fetchCpscRecalls() {
+  const startDate = new Date(Date.now() - 60 * 86_400_000).toISOString().slice(0, 10);
+  const url = `https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=${startDate}`;
+  const data = await fetchJson(url);
+  const items = Array.isArray(data) ? data : [];
+  return items.slice(0, 3).map((r) => {
+    const rawTitle = String(r.Title || r.Products?.[0]?.Name || "N/A");
+    const retailers = (r.Retailers || []).map((x) => x?.Name).filter(Boolean);
+    const hazards = (r.Hazards || []).map((x) => x?.Name).filter(Boolean);
+    const mfg = (r.Manufacturers || []).map((x) => x?.Name).filter(Boolean)[0] || (r.Importers || []).map((x) => x?.Name).filter(Boolean)[0] || "—";
+    const hazardText = hazards[0] || "See CPSC notice";
+    return {
+      recallNumber: String(r.RecallNumber || r.RecallID || "N/A"),
+      recallDate: String(r.RecallDate || "").slice(0, 10) || "N/A",
+      title: rawTitle.length > 78 ? `${rawTitle.slice(0, 75)}...` : rawTitle,
+      manufacturer: mfg.length > 36 ? `${mfg.slice(0, 33)}...` : mfg,
+      retailers: retailers.slice(0, 2).join(", ") || "Nationwide",
+      hazard: hazardText.length > 60 ? `${hazardText.slice(0, 57)}...` : hazardText,
+    };
+  });
+}
+
+async function fetchSec8k() {
+  const data = await fetchJson("https://efts.sec.gov/LATEST/search-index?forms=8-K");
+  const hits = (data?.hits?.hits || []).slice(0, 3);
+  return hits.map((h) => {
+    const src = h._source || {};
+    const rawName = Array.isArray(src.display_names) ? src.display_names[0] || "" : "";
+    const cikMatch = rawName.match(/\(CIK\s+(\d+)\)/i);
+    const cik = cikMatch ? cikMatch[1] : Array.isArray(src.ciks) ? src.ciks[0] : "";
+    const companyName = rawName.replace(/\s*\(CIK\s+\d+\)\s*/i, "").trim() || "N/A";
+    const items = Array.isArray(src.items) ? src.items.slice(0, 4).join(", ") : "—";
+    const accession = String(h._id || "").split(":")[0];
+    return {
+      companyName,
+      cik: cik || "N/A",
+      form: src.form || "8-K",
+      items: items || "—",
+      filingDate: src.file_date || "N/A",
+      accessionNumber: accession || "N/A",
+    };
+  });
+}
+
 async function safeCollect(label, fn) {
   try {
     const records = await fn();
@@ -577,6 +648,54 @@ function buildMarkdown(generatedAt, catalog, sources) {
   }
   lines.push("");
 
+  // 13. FDIC BankFind Institutions & Call Reports
+  lines.push("## 13. FDIC Bank Financial Health & Call Reports (`fdic-bank-financial-health-screener`)");
+  lines.push("");
+  if (sources.fdic.ok && sources.fdic.records.length) {
+    lines.push("| CERT | Bank Name | Location | Total Assets | Total Deposits | ROA | ROE | Call Report |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.fdic.records) {
+      lines.push(
+        `| \`${mdCell(r.cert)}\` | ${mdCell(r.name)} | ${mdCell(r.location)} | **${formatUsd(r.assetsUsd)}** | ${formatUsd(r.depositsUsd)} | \`${mdCell(r.roaPct)}\` | \`${mdCell(r.roePct)}\` | \`${mdCell(r.callReportDate)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.fdic.error || "No records returned")}_`);
+  }
+  lines.push("");
+
+  // 14. US CPSC Consumer Product Recalls
+  lines.push("## 14. US CPSC Consumer Product Recalls (`cpsc-consumer-product-recall-monitor`)");
+  lines.push("");
+  if (sources.cpsc.ok && sources.cpsc.records.length) {
+    lines.push("| Recall # | Date | Title | Firm | Retailers | Hazard |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.cpsc.records) {
+      lines.push(
+        `| \`${mdCell(r.recallNumber)}\` | \`${mdCell(r.recallDate)}\` | ${mdCell(r.title)} | ${mdCell(r.manufacturer)} | ${mdCell(r.retailers)} | ${mdCell(r.hazard)} |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.cpsc.error || "No records returned")}_`);
+  }
+  lines.push("");
+
+  // 15. SEC EDGAR Form 8-K Material Events
+  lines.push("## 15. SEC EDGAR Form 8-K Material Corporate Events (`sec-8k-material-events-cyber-ma-radar`)");
+  lines.push("");
+  if (sources.sec8k.ok && sources.sec8k.records.length) {
+    lines.push("| Company Name | CIK | Form | Item Codes | Filing Date | Accession Number |");
+    lines.push("| :--- | :--- | :--- | :--- | :--- | :--- |");
+    for (const r of sources.sec8k.records) {
+      lines.push(
+        `| ${mdCell(r.companyName)} | \`${mdCell(r.cik)}\` | \`${mdCell(r.form)}\` | \`${mdCell(r.items)}\` | \`${mdCell(r.filingDate)}\` | \`${mdCell(r.accessionNumber)}\` |`
+      );
+    }
+  } else {
+    lines.push(`_Upstream fetch note: ${mdCell(sources.sec8k.error || "No records returned")}_`);
+  }
+  lines.push("");
+
   return lines.join("\n");
 }
 
@@ -605,10 +724,10 @@ function buildHtml(generatedAt, catalog, sources) {
     operatingSystem: "Cross-platform (Streamable HTTP MCP / STDIO)",
     url: "https://desastreger.github.io/open-data-mcp-servers/",
     downloadUrl: "https://github.com/desastreger/open-data-mcp-servers",
-    softwareVersion: "1.5.0",
+    softwareVersion: "1.6.0",
     license: "https://opensource.org/licenses/MIT",
     description:
-      "17 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for US Federal Register rules & Executive Orders, SEC Form D, Form 4 & Form 13F-HR, US Treasury OFAC SDN/AML, IRS Form 990, CISA KEV + EPSS + NVD, FDA 510(k)/PMA, US KYB, GovCon recompetes, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
+      "20 deterministic, zero-API-key Streamable HTTP MCP servers & Apify Actors for FDIC BankFind Call Reports, CPSC/NHTSA/FDA Product Recalls, SEC Form 8-K/D/4/13F, US Federal Register, US Treasury OFAC SDN/AML, IRS Form 990, CISA KEV + EPSS + NVD, US KYB, GovCon, building permits, tariffs, NPPES clinics, DNS/DMARC, code violations, EPA ECHO, and ClinicalTrials.gov.",
     author: {
       "@type": "Person",
       name: "desastreger",
@@ -675,10 +794,10 @@ function buildHtml(generatedAt, catalog, sources) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Data MCP Servers — 17 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
-  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 17 deterministic zero-API-key MCP servers for US Federal Register rules, SEC Form D/4/13F, OFAC SDN/AML, IRS Form 990, CISA KEV &amp; EPSS, FDA 510(k)/PMA, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
+  <title>Open Data MCP Servers — 20 Zero-Key US/EU Registry &amp; Compliance MCP Endpoints</title>
+  <meta name="description" content="Connect Claude, Cursor, VS Code, Windsurf, n8n, and Clay to 20 deterministic zero-API-key MCP servers for FDIC BankFind, CPSC/NHTSA/FDA Recalls, SEC Form 8-K/D/4/13F, US Federal Register, OFAC SDN/AML, IRS Form 990, CISA KEV &amp; EPSS, US KYB, GovCon, EPA ECHO, CMS NPPES, and ClinicalTrials.gov." />
   <meta property="og:title" content="Open Data B2B &amp; Compliance MCP Servers" />
-  <meta property="og:description" content="17 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
+  <meta property="og:description" content="20 production-ready Streamable HTTP MCP servers with 1-Click Browser OAuth, daily live government registry snapshots, and ready-to-import n8n/Clay templates." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://desastreger.github.io/open-data-mcp-servers/" />
   <link rel="canonical" href="https://desastreger.github.io/open-data-mcp-servers/" />
@@ -796,13 +915,13 @@ function buildHtml(generatedAt, catalog, sources) {
     <section class="hero">
       <div class="pill-row">
         <span class="badge green">1-Click Browser OAuth · Zero API Keys</span>
-        <span class="badge">43 Read-Only MCP Tools</span>
+        <span class="badge">52 Read-Only MCP Tools</span>
         <span class="badge">Official MCP Registry: io.github.desastreger/open-data-mcp-servers</span>
         <span class="badge">Live Snapshot: ${escapeHtml(generatedAt)}</span>
       </div>
       <h1>Open Data B2B &amp; Compliance MCP Servers</h1>
       <p class="subtitle">
-        Seventeen deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by US Federal Register API v1, SEC EDGAR (Form D, Form 4 &amp; Form 13F-HR), US Treasury OFAC SLS (SDN, ALT, ADD, Consolidated Non-SDN), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, US FDA openFDA (510(k), PMA, Recalls), GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
+        Twenty deterministic, zero-third-party-API-key remote Streamable HTTP MCP servers &amp; Apify Actors backed by FDIC BankFind Call Reports &amp; Failures, CPSC/NHTSA/FDA Recalls, SEC EDGAR (Form 8-K, Form D, Form 4 &amp; Form 13F-HR), US Federal Register API v1, US Treasury OFAC SLS (SDN, ALT, ADD, Consolidated Non-SDN), IRS Form 990 (ProPublica), CISA KEV + FIRST EPSS + NIST NVD, GLEIF LEI, USASpending, Grants.gov, CMS NPPES, US EPA ECHO, ClinicalTrials.gov, USITC HTS, EC VIES, EU TED, Socrata Municipal Portals, and RFC DNS/TLS/RDAP/BGP.
       </p>
       <div class="hero-actions">
         <div class="install-box">
@@ -813,7 +932,7 @@ function buildHtml(generatedAt, catalog, sources) {
           </div>
         </div>
         <div class="install-box">
-          <span class="label">Install All 17 Agent Skills (skills.sh)</span>
+          <span class="label">Install All 20 Agent Skills (skills.sh)</span>
           <div class="copy-row">
             <code>${escapeHtml(skillsCmd)}</code>
             <button type="button" class="copy-btn" data-copy="${escapeHtml(skillsCmd)}">Copy CLI</button>
@@ -830,7 +949,7 @@ function buildHtml(generatedAt, catalog, sources) {
     </section>
 
     <section>
-      <h2>17 Production MCP Servers &amp; Apify Actors</h2>
+      <h2>20 Production MCP Servers &amp; Apify Actors</h2>
       <p class="section-note">Connect via 1-Click Browser OAuth (no manual API key) or direct Apify Standby Streamable HTTP (<code>Bearer $APIFY_TOKEN</code>).</p>
       <div class="grid">
         ${serverCardsHtml}
@@ -1047,6 +1166,59 @@ function buildHtml(generatedAt, catalog, sources) {
           </tbody>
         </table>
       </div>
+
+      <div class="table-card">
+        <h3>13. FDIC Bank Financial Health &amp; Call Reports (<code>fdic-bank-financial-health-screener</code>)</h3>
+        <table>
+          <thead><tr><th>CERT</th><th>Bank Name</th><th>Location</th><th>Total Assets</th><th>Total Deposits</th><th>ROA</th><th>ROE</th><th>Call Report</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.fdic.records, [
+              { raw: (r) => `<code>${escapeHtml(r.cert)}</code>` },
+              { get: (r) => r.name },
+              { get: (r) => r.location },
+              { raw: (r) => `<strong>${escapeHtml(formatUsd(r.assetsUsd))}</strong>` },
+              { get: (r) => formatUsd(r.depositsUsd) },
+              { raw: (r) => `<code>${escapeHtml(r.roaPct)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.roePct)}</code>` },
+              { get: (r) => r.callReportDate },
+            ])}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>14. US CPSC Consumer Product Recalls (<code>cpsc-consumer-product-recall-monitor</code>)</h3>
+        <table>
+          <thead><tr><th>Recall #</th><th>Date</th><th>Title</th><th>Firm</th><th>Retailers</th><th>Hazard</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.cpsc.records, [
+              { raw: (r) => `<code>${escapeHtml(r.recallNumber)}</code>` },
+              { get: (r) => r.recallDate },
+              { get: (r) => r.title },
+              { get: (r) => r.manufacturer },
+              { get: (r) => r.retailers },
+              { get: (r) => r.hazard },
+            ])}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-card">
+        <h3>15. SEC EDGAR Form 8-K Material Corporate Events (<code>sec-8k-material-events-cyber-ma-radar</code>)</h3>
+        <table>
+          <thead><tr><th>Company Name</th><th>CIK</th><th>Form</th><th>Item Codes</th><th>Filing Date</th><th>Accession</th></tr></thead>
+          <tbody>
+            ${renderTableRows(sources.sec8k.records, [
+              { get: (r) => r.companyName },
+              { raw: (r) => `<code>${escapeHtml(r.cik)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.form)}</code>` },
+              { raw: (r) => `<code>${escapeHtml(r.items)}</code>` },
+              { get: (r) => r.filingDate },
+              { raw: (r) => `<code>${escapeHtml(r.accessionNumber)}</code>` },
+            ])}
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <footer>
@@ -1082,7 +1254,7 @@ async function main() {
   const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   const generatedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 
-  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac, fedreg] = await Promise.all([
+  const [sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac, fedreg, fdic, cpsc, sec8k] = await Promise.all([
     safeCollect("SEC EDGAR", fetchSecFormD),
     safeCollect("USASpending", fetchUsaSpending),
     safeCollect("CMS NPPES", fetchCmsNppes),
@@ -1095,9 +1267,12 @@ async function main() {
     safeCollect("SEC Form 13F", fetchSec13f),
     safeCollect("OFAC SDN", fetchOfacSanctions),
     safeCollect("Federal Register", fetchFederalRegister),
+    safeCollect("FDIC BankFind", fetchFdicBanks),
+    safeCollect("CPSC Recalls", fetchCpscRecalls),
+    safeCollect("SEC Form 8-K", fetchSec8k),
   ]);
 
-  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac, fedreg };
+  const sources = { sec, usaspending, nppes, epa, trials, form4, fda510k, irs990, cisaKev, sec13f, ofac, fedreg, fdic, cpsc, sec8k };
 
   fs.mkdirSync(path.join(ROOT, "samples"), { recursive: true });
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
@@ -1125,6 +1300,9 @@ async function main() {
           sec13f: sec13f.records.length,
           ofac: ofac.records.length,
           fedreg: fedreg.records.length,
+          fdic: fdic.records.length,
+          cpsc: cpsc.records.length,
+          sec8k: sec8k.records.length,
         },
         errors: Object.fromEntries(
           Object.entries(sources)

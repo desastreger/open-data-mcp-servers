@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.desastreger/open-data-mcp-servers",
   "title": "Open Data B2B & Compliance MCP Servers",
-  "description": "17 zero-key US/EU public-registry & compliance MCP servers (FedReg, SEC 13F, OFAC, CISA, IRS, FDA).",
-  "version": "1.5.0",
+  "description": "20 zero-key US/EU public-registry & compliance MCP servers (SEC 8-K, FDIC, Recalls, OFAC, FedReg).",
+  "version": "1.6.0",
   "websiteUrl": "https://desastreger.github.io/open-data-mcp-servers/",
   "repository": {
     "url": "https://github.com/desastreger/open-data-mcp-servers",
@@ -23,7 +23,7 @@
     {
       "registryType": "npm",
       "identifier": "open-data-mcp-servers",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "transport": {
         "type": "stdio"
       },
@@ -40,7 +40,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp,desastreger/federal-register-regulatory-rule-radar"
+      "url": "https://mcp.apify.com/?tools=desastreger/sec-form-d-funding-leads,desastreger/us-kyb-compliance-dossier,desastreger/federal-govcon-recompete-radar,desastreger/us-metro-building-trade-permits,desastreger/cross-border-tariff-eu-trade-mcp,desastreger/us-healthcare-practice-owners,desastreger/b2b-domain-mail-security-posture,desastreger/us-municipal-code-violation-distressed-leads,desastreger/epa-echo-industrial-facility-compliance,desastreger/openalex-pubmed-expert-finder-mcp,desastreger/sec-form4-insider-cluster-signals,desastreger/fda-medtech-510k-approval-tracker,desastreger/irs-990-nonprofit-grantmaker-leads,desastreger/cisa-kev-nvd-exploit-prioritizer-mcp,desastreger/sec-13f-institutional-whale-holdings,desastreger/ofac-sanctions-aml-pep-screener-mcp,desastreger/federal-register-regulatory-rule-radar,desastreger/fdic-bank-financial-health-screener,desastreger/cpsc-consumer-product-recall-monitor,desastreger/sec-8k-material-events-cyber-ma-radar"
     },
     {
       "type": "streamable-http",
@@ -237,6 +237,42 @@
     {
       "type": "streamable-http",
       "url": "https://desastreger--federal-register-regulatory-rule-radar.apify.actor/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <YOUR_APIFY_TOKEN>",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    },
+    {
+      "type": "streamable-http",
+      "url": "https://desastreger--fdic-bank-financial-health-screener.apify.actor/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <YOUR_APIFY_TOKEN>",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    },
+    {
+      "type": "streamable-http",
+      "url": "https://desastreger--cpsc-consumer-product-recall-monitor.apify.actor/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer <YOUR_APIFY_TOKEN>",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    },
+    {
+      "type": "streamable-http",
+      "url": "https://desastreger--sec-8k-material-events-cyber-ma-radar.apify.actor/mcp",
       "headers": [
         {
           "name": "Authorization",
